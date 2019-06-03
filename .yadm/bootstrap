@@ -1,0 +1,7 @@
+#! /bin/bash
+
+# Code setup
+# echo -e "\033[1;36mInstalling Code settings sync extension..\033[0m"
+# code --install-extension Shan.code-settings-sync
+
+# echo -e "\n\033[1;32mTo install VSCode Settings, install Shan.code-settings-sync extension,\nfork my https://gist.github.com/vypxl/f0648b4d9ab3b383b9874641b00efb97 gist\nand provide its id to the extension after creating a github token\033[0m"

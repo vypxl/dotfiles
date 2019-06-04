@@ -10,14 +10,23 @@ call vundle#begin('$BASEDIR/vundle/')
 
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'dracula/vim'
+Plugin 'vim-airline/vim-airline'
+
+Plugin 'airblade/vim-gitgutter'
 
 call vundle#end()
+
+" airline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
+
 
 " config
 
 syntax enable
-color dracula
+let g:dracula_colorterm = 0
 set termguicolors
+color dracula
 
 set hidden
 
@@ -41,6 +50,8 @@ set list
 set listchars=tab:▸\ ,trail:.,extends:#
 set ignorecase
 set smartcase
+
+set laststatus=2
 
 set pastetoggle=<F2>
 set splitright
@@ -75,6 +86,17 @@ nnoremap <UP> <NOP>
 nnoremap <DOWN> <NOP>
 nnoremap <LEFT> <NOP>
 nnoremap <RIGHT> <NOP>
+
+" Moving lines
+nnoremap <A-j> :m .+1<CR>==
+nnoremap <A-k> :m .-2<CR>==
+inoremap <A-j> <Esc>:m .+1<CR>==gi
+inoremap <A-k> <Esc>:m .-2<CR>==gi
+vnoremap <A-j> :m '>+1<CR>gv=gv
+vnoremap <A-k> :m '<-2<CR>gv=gv
+
+" Add blank line
+nnoremap <Enter> o<ESC>
 
 " Backup autosave swapfile
 set backup

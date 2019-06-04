@@ -1,4 +1,15 @@
 #! /bin/bash
+IMG_URL=https://wallpapershome.com/images/wallpapers/yosemite-5120x2880-5k-4k-wallpaper-8k-forest-osx-apple-mountains-3944.jpg 
+
+# download image if not present
+if [[ ! -f "~/.config/misc/image.png" ]]; then
+  wget "$IMG_URL" -O /tmp/background_img 
+  convert /tmp/background_img ~/.config/misc/image.png
+  rm /tmp/background_img
+fi
+
+# install vim plugins
+nvim +PluginInstall +q +q
 
 # Code setup
 # echo -e "\033[1;36mInstalling Code settings sync extension..\033[0m"

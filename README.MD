@@ -18,11 +18,6 @@ $ yadm clone https://github.com/vypxl/dotfiles
 $ yadm bootstrap # to install image, omf, ...
 ```
 
-### Background Image
-Url: https://www.pexels.com/de/foto/abstrakt-astrologie-astronomie-dunkel-1169754/
-
-Just copy it as `~/.dotfiles/misc/image.png`
-
 ### VSCode
 To install VSCode Settings
  - (install Shan.code-settings-sync extension) only if not already installed by `./install`

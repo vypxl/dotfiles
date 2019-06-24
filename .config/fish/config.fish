@@ -4,6 +4,7 @@ set -gx PATH $PATH $HOME/.nimble/bin
 set -gx PATH $PATH (ruby -r rubygems -e 'puts Gem.dir+ "/bin"')
 set -gx PATH $PATH (ruby -r rubygems -e 'puts Gem.user_dir+ "/bin"')
 set -gx PATH $PATH /usr/lib/emscripten
+set -gx PATH /usr/lib/ccache/bin $PATH
 set -gx XDG_CONFIG_HOME $HOME/.config
 set -gx SXHKD_SHELL /bin/sh
 set -gx PYTHONSTARTUP $XDG_CONFIG_HOME/python/init.py
@@ -41,6 +42,7 @@ alias .=ll
 alias vim=nvim
 alias md=mkdir
 alias cclip="xclip -selection clipboard"
+alias beep="aplay -q ~/.config/misc/beep.wav"
 
 alias g=git
 alias ga.="git add ."

@@ -13,6 +13,13 @@ Plugin 'dracula/vim'
 Plugin 'vim-airline/vim-airline'
 
 Plugin 'airblade/vim-gitgutter'
+Plugin 'jiangmiao/auto-pairs'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-commentary'
+Plugin 'tpope/vim-repeat'
+Plugin 'ctrlpvim/ctrlp.vim'
+
+Plugin 'sheerun/vim-polyglot'
 
 call vundle#end()
 
@@ -81,11 +88,11 @@ nnoremap <leader>h :set hlsearch! hlsearch?<CR>
 " Make :; usable
 nnoremap ; :
 
-" Disable Arrow keys
-nnoremap <UP> <NOP>
-nnoremap <DOWN> <NOP>
-nnoremap <LEFT> <NOP>
-nnoremap <RIGHT> <NOP>
+" Arrow keys as Buffer and Tab switchers
+nnoremap <UP> :tabnext<CR>
+nnoremap <DOWN> :tabprev<CR>
+nnoremap <LEFT> :bp<CR>
+nnoremap <RIGHT> :bn<CR>
 
 " Moving lines
 nnoremap <A-j> :m .+1<CR>==
@@ -103,3 +110,24 @@ set backup
 set backupdir=$BASEDIR/backup/
 set directory=$BASEDIR/swapfiles
 set writebackup
+
+" functions
+
+" :rc to read in ex commands like :rc ruby (1..9).map(&:to_s).join(', ')
+function! _readcommand(cmd)
+  try
+    let l:result = execute(a:cmd, "silent")[1:] " strip the lf at the front which I cannot get rid of for some reason
+    call setreg("r", l:result)
+    normal "rp
+  catch
+    echoe v:exception
+  endtry
+  " echoerr v:exception
+endfunction
+command! -nargs=+ -complete=command ReadCommand call _readcommand(<q-args>)
+cnoreabbrev rc ReadCommand
+
+" shortcut for reading in ruby expressions (they will be `print`-ed out)
+command! -nargs=+ -complete=command ReadRuby call _readcommand("ruby print " . <q-args>)
+cnoreabbrev rr ReadRuby
+

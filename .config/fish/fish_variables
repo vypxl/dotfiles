@@ -7,6 +7,14 @@ SETUVAR Z_DATA_DIR:/home/thomas/\x2elocal/share/z
 SETUVAR Z_EXCLUDE:/home/thomas
 SETUVAR __fish_init_2_39_8:\x1d
 SETUVAR __fish_init_2_3_0:\x1d
+SETUVAR _fish_abbr_g:git
+SETUVAR _fish_abbr_ga:git\x20add
+SETUVAR _fish_abbr_ga_2E_:git\x20add\x20\x2e
+SETUVAR _fish_abbr_gcm:git\x20commit\x20\x2dm
+SETUVAR _fish_abbr_gst:git\x20status
+SETUVAR _fish_abbr_npm:pnpm
+SETUVAR _fish_abbr_pn:pnpm
+SETUVAR _fish_abbr_rem:remember
 SETUVAR fish_color_autosuggestion:555\x1ebrblack
 SETUVAR fish_color_cancel:\x2dr
 SETUVAR fish_color_command:\x2d\x2dbold

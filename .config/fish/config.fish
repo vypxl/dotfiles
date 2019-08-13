@@ -1,5 +1,5 @@
 # Env
-set -gx PATH $PATH $HOME/.yarn/bin 
+set -gx PATH $PATH $HOME/.pnpm-global/bin 
 set -gx PATH $PATH $HOME/.nimble/bin
 set -gx PATH $PATH (ruby -r rubygems -e 'puts Gem.dir+ "/bin"')
 set -gx PATH $PATH (ruby -r rubygems -e 'puts Gem.user_dir+ "/bin"')
@@ -8,8 +8,6 @@ set -gx PATH /usr/lib/ccache/bin $PATH
 set -gx XDG_CONFIG_HOME $HOME/.config
 set -gx SXHKD_SHELL /bin/sh
 set -gx PYTHONSTARTUP $XDG_CONFIG_HOME/python/init.py
-
-source ~/.opam/opam-init/init.fish > /dev/null 2> /dev/null; or true
 
 # Fisher
 if not functions -q fisher
@@ -32,6 +30,12 @@ function fork
   end
 end
 
+function _latest_command
+  commandline -r $history[1]
+  commandline -f execute
+end
+bind \cr _latest_command
+
 # Convenience Aliases
 alias ls="ls -h --color=always"
 alias la="ls -Al"
@@ -44,13 +48,17 @@ alias md=mkdir
 alias cclip="xclip -selection clipboard"
 alias beep="aplay -q ~/.config/misc/beep.wav"
 
-alias g=git
-alias ga.="git add ."
-alias ga="git add"
-alias gst="git status"
-alias gcm="git commit -m"
+abbr -a g   git
+abbr -a ga. git add .
+abbr -a ga  git add
+abbr -a gst git status
+abbr -a gcm git commit -m
 
-alias rem=remember
+abbr -a npm pnpm
+abbr -a pn pnpm
+abbr -a pn pnpm
+
+abbr -a rem remember
 function c
     set r (_c $argv)
     if test $status -eq 0

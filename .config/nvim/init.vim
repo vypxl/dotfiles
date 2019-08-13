@@ -21,6 +21,9 @@ Plugin 'ctrlpvim/ctrlp.vim'
 
 Plugin 'sheerun/vim-polyglot'
 
+Plugin 'vim-syntastic/syntastic'
+Plugin 'jdonaldson/vaxe'
+
 call vundle#end()
 
 " airline
@@ -37,6 +40,7 @@ color dracula
 
 set hidden
 
+set autowrite
 set tabstop=2
 set softtabstop=2
 set smarttab

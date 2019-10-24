@@ -3,6 +3,7 @@ set -gx PATH $PATH $HOME/.pnpm-global/bin
 set -gx PATH $PATH $HOME/.nimble/bin
 set -gx PATH $PATH (ruby -r rubygems -e 'puts Gem.dir+ "/bin"')
 set -gx PATH $PATH (ruby -r rubygems -e 'puts Gem.user_dir+ "/bin"')
+set -gx PATH $PATH $HOME/.cargo/bin
 set -gx PATH $PATH /usr/lib/emscripten
 set -gx PATH /usr/lib/ccache/bin $PATH
 set -gx XDG_CONFIG_HOME $HOME/.config
@@ -36,6 +37,19 @@ function _latest_command
 end
 bind \cr _latest_command
 
+function update
+  echo "==> Updating repository and AUR <=="
+  yay -Syu
+  echo "==> Updating ruby gems <=="
+  gem update (gem outdated | cut -d ' ' -f 1)
+  echo "==> Updating npm packages <=="
+  pnpm update -g
+  echo "==> Updating pip packages <=="
+  pip list --format=freeze --user | cut -d = -f 1 \
+    | xargs pip install --user --upgrade | grep -v "already"
+  true
+end
+
 # Convenience Aliases
 alias ls="ls -h --color=always"
 alias la="ls -Al"
@@ -54,8 +68,6 @@ abbr -a ga  git add
 abbr -a gst git status
 abbr -a gcm git commit -m
 
-abbr -a npm pnpm
-abbr -a pn pnpm
 abbr -a pn pnpm
 
 abbr -a rem remember

@@ -69,6 +69,7 @@ abbr -a gst git status
 abbr -a gcm git commit -m
 
 abbr -a pn pnpm
+abbr -a cht cht.sh
 
 abbr -a rem remember
 function c

@@ -7,6 +7,7 @@ SETUVAR Z_DATA_DIR:/home/thomas/\x2elocal/share/z
 SETUVAR Z_EXCLUDE:/home/thomas
 SETUVAR __fish_init_2_39_8:\x1d
 SETUVAR __fish_init_2_3_0:\x1d
+SETUVAR _fish_abbr_cht:cht\x2esh
 SETUVAR _fish_abbr_g:git
 SETUVAR _fish_abbr_ga:git\x20add
 SETUVAR _fish_abbr_ga_2E_:git\x20add\x20\x2e

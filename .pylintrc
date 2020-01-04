@@ -1,0 +1,2 @@
+[MESSAGES CONTROL]
+disable=invalid-name, missing-module-docstring, missing-function-docstring, line-too-long, redefined-builtin, wildcard-import

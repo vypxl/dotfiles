@@ -10,12 +10,6 @@ set -gx XDG_CONFIG_HOME $HOME/.config
 set -gx SXHKD_SHELL /bin/sh
 set -gx PYTHONSTARTUP $XDG_CONFIG_HOME/python/init.py
 
-# Fisher
-if not functions -q fisher
-    curl https://git.io/fisher --create-dirs -sLo ~/.dotfiles/files/fish/functions/fisher.fish
-    fish -c fisher
-end
-
 # Convenience Functions
 function cdd
   command mkdir -p $argv
@@ -48,6 +42,18 @@ function update
   pip list --format=freeze --user | cut -d = -f 1 \
     | xargs pip install --user --upgrade | grep -v "already"
   true
+end
+
+function dev
+    if test -e "package-lock.json"
+        npm run dev
+    else if test -e "pnpm-lock.yaml"
+        pnpm run dev
+    else if test -e "yarn.lock"
+        yarn dev
+    else
+        live-server
+    end
 end
 
 # Convenience Aliases

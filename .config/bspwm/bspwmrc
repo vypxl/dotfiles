@@ -5,7 +5,7 @@ pgrep -x sxhkd > /dev/null || sxhkd &
 pgrep -x compton > /dev/null || compton &
 xrandr --output DP-2 --primary --auto --right-of HDMI-0
 
-feh --bg-center ~/.config/misc/image.png &
+feh --bg-fill ~/.config/misc/image.png &
 ~/.config/polybar/launch.sh &
 setxkbmap us
 setxkbmap -option compose:ralt

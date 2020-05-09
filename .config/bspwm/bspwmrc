@@ -5,6 +5,10 @@ pgrep -x sxhkd > /dev/null || sxhkd &
 pgrep -x compton > /dev/null || compton &
 xrandr --output DP-2 --primary --auto --right-of HDMI-0
 
+# fixing my setup's problems...
+xrandr --output DP-2 --mode 3440x1440 --rate 100
+amixer -c 0 set Headphone unmute
+
 feh --bg-fill ~/.config/misc/image.png &
 ~/.config/polybar/launch.sh &
 setxkbmap us
@@ -32,7 +36,7 @@ bspc config left_padding $gap
 bspc config right_padding $gap
 
 bspc rule -a Chromium desktop='^2'
-bscp rule -a polybar manage=off
+bspc rule -a polybar manage=off
 
 echo "before subscribe"
 

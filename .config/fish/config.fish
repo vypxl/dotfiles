@@ -9,6 +9,10 @@ set -gx PATH /usr/lib/ccache/bin $PATH
 set -gx XDG_CONFIG_HOME $HOME/.config
 set -gx SXHKD_SHELL /bin/sh
 set -gx PYTHONSTARTUP $XDG_CONFIG_HOME/python/init.py
+set -gx EDITOR "vim"
+
+# Completions
+gh completion --shell fish | source
 
 # Convenience Functions
 function cdd
@@ -23,6 +27,10 @@ function fork
   else
     ruby -e "require 'open3'; fork do; Open3.capture3(ARGV.join('')); end" $argv
   end
+end
+
+function join
+    ruby -e "if not STDIN.tty? then puts STDIN.read.split(\"\n\").join(ARGV.length > 0 ? ARGV[0] : '') else puts File.read(ARGV[0]).split(\"\n\").join(ARGV.length > 1 ? ARGV[1] : '') end" $argv
 end
 
 function _latest_command
@@ -57,17 +65,17 @@ function dev
 end
 
 # Convenience Aliases
-alias ls="ls -h --color=always"
-alias la="ls -Al"
-alias lr="ls -AlR"
-alias li="ls -Ali"
+alias ls="exa --git"
+alias ll="ls -l"
+alias la="ls -al"
+alias lr="la -R"
 alias .=ll
 
 alias vim=nvim
-alias md=mkdir
 alias cclip="xclip -selection clipboard"
 alias beep="aplay -q ~/.config/misc/beep.wav"
 
+abbr md mkdir
 abbr -a g   git
 abbr -a ga. git add .
 abbr -a ga  git add

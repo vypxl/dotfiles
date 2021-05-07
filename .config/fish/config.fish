@@ -74,6 +74,7 @@ alias .=ll
 alias vim=nvim
 alias cclip="xclip -selection clipboard"
 alias beep="aplay -q ~/.config/misc/beep.wav"
+alias pluto="julia -ie 'import Pluto; Pluto.run()'"
 
 abbr md mkdir
 abbr -a g   git

@@ -1,9 +1,6 @@
 # vypxl's Dotfiles
 
- - VSCode
- - compton
  - fish / fisher
- - bspwm / sxhkd
  - neofetch
  - nvim
  - polybar
@@ -17,17 +14,6 @@ To install, install yadm, then
 $ yadm clone https://github.com/vypxl/dotfiles
 $ yadm bootstrap # to install image, omf, ...
 ```
-
-### VSCode
-To install VSCode Settings
- - (install Shan.code-settings-sync extension) only if not already installed by `./install`
- - From Command Palette `> Sync : Advance Options > Download Settings from public Gist.`
- - Use gist id `f0648b4d9ab3b383b9874641b00efb97`
-
-If you want to fork my settings
- - fork my https://gist.github.com/vypxl/f0648b4d9ab3b383b9874641b00efb97 gist 
- - Create a Github Gist access token
- - provide it and your gist id to the extension using `> Sync Download Settings`
 
 ### Fish
 Install Oh My Fish and the bobthefish theme

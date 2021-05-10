@@ -1,5 +1,5 @@
 #! /bin/bash
-IMG_URL=https://wallpapershome.com/images/wallpapers/yosemite-5120x2880-5k-4k-wallpaper-8k-forest-osx-apple-mountains-3944.jpg 
+IMG_URL=https://images.wallpapersden.com/image/download/cool-landscape-night-minimal-art_bGxna2aUmZqaraWkpJRobWllrWdma2U.jpg
 
 # download image if not present
 if [[ ! -f "~/.config/misc/image.png" ]]; then
@@ -9,10 +9,12 @@ if [[ ! -f "~/.config/misc/image.png" ]]; then
 fi
 
 # install vim plugins
+mkdir -p ~/.config/nvim/vundle
+mkdir -p ~/.config/nvim/backup
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.config/nvim/vundle/Vundle.vim
 nvim +PluginInstall +q +q
 
-# Code setup
-# echo -e "\033[1;36mInstalling Code settings sync extension..\033[0m"
-# code --install-extension Shan.code-settings-sync
+# install omf
+curl -L https://get.oh-my.fish | fish
+omf i bobthefish
 
-# echo -e "\n\033[1;32mTo install VSCode Settings, install Shan.code-settings-sync extension,\nfork my https://gist.github.com/vypxl/f0648b4d9ab3b383b9874641b00efb97 gist\nand provide its id to the extension after creating a github token\033[0m"

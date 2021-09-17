@@ -1,5 +1,5 @@
 # Env
-set -gx PATH $PATH $HOME/.pnpm-global/bin 
+set -gx PATH $PATH $HOME/.local/bin 
 set -gx PATH $PATH $HOME/.nimble/bin
 set -gx PATH $PATH (ruby -r rubygems -e 'puts Gem.dir+ "/bin"')
 set -gx PATH $PATH (ruby -r rubygems -e 'puts Gem.user_dir+ "/bin"')

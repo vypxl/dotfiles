@@ -11,6 +11,9 @@ set -gx SXHKD_SHELL /bin/sh
 set -gx PYTHONSTARTUP $XDG_CONFIG_HOME/python/init.py
 set -gx EDITOR "vim"
 
+# Prompt
+starship init fish | source
+
 # Completions
 gh completion --shell fish | source
 
@@ -76,7 +79,7 @@ alias cclip="xclip -selection clipboard"
 alias beep="aplay -q ~/.config/misc/beep.wav"
 alias pluto="julia -ie 'import Pluto; Pluto.run()'"
 
-abbr md mkdir
+abbr -a md mkdir
 abbr -a g   git
 abbr -a ga. git add .
 abbr -a ga  git add
@@ -95,17 +98,3 @@ function c
         echo $r
     end
 end
-
-#lol
-function "commit die"
-  systemctl poweroff
-end
-function "commit live"
-  systemctl reboot
-end
-function "commit sin"
-  sudo /usr/bin/startwin
-end
-
-
-bind "&&" 'commandline -i ";"'

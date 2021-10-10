@@ -13,8 +13,3 @@ mkdir -p ~/.config/nvim/vundle
 mkdir -p ~/.config/nvim/backup
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.config/nvim/vundle/Vundle.vim
 nvim +PluginInstall +q +q
-
-# install omf
-curl -L https://get.oh-my.fish | fish
-omf i bobthefish
-

@@ -85,7 +85,6 @@ format="[@](bold cyan)[$hostname]($style)"
 disabled = false
 format = '[\[ $time \]]($style) '
 time_format = "%T"
-utc_time_offset = "-5"
 
 [username]
 show_always=true

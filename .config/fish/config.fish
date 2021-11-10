@@ -42,6 +42,19 @@ function _latest_command
 end
 bind \cr _latest_command
 
+function pls
+  if test (count $argv) -lt 1
+    commandline -r "sudo $history[1]"
+    commandline -f execute
+  else
+    sudo $argv
+  end
+end
+
+function reload
+  source ~/.config/fish/config.fish
+end
+
 function update
   echo "==> Updating repository and AUR <=="
   yay -Syu
@@ -78,6 +91,7 @@ alias vim=nvim
 alias cclip="xclip -selection clipboard"
 alias beep="aplay -q ~/.config/misc/beep.wav"
 alias pluto="julia -ie 'import Pluto; Pluto.run()'"
+alias icat="kitty +kitten icat"
 
 abbr -a md mkdir
 abbr -a g   git
@@ -85,6 +99,9 @@ abbr -a ga. git add .
 abbr -a ga  git add
 abbr -a gst git status
 abbr -a gcm git commit -m
+abbr -a gc  git checkout
+abbr -a gp  git push --all
+abbr -a gpl git pull
 
 abbr -a pn pnpm
 abbr -a cht cht.sh

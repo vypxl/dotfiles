@@ -89,3 +89,8 @@ time_format = "%T"
 [username]
 show_always=true
 format="[$user]($style)"
+
+[character]
+success_symbol = "[λ](bold green)"
+error_symbol = "[λ](bold red)"
+vicmd_symbol = "[❮](bold green)"

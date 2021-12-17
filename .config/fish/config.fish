@@ -68,18 +68,6 @@ function update
   true
 end
 
-function dev
-    if test -e "package-lock.json"
-        npm run dev
-    else if test -e "pnpm-lock.yaml"
-        pnpm run dev
-    else if test -e "yarn.lock"
-        yarn dev
-    else
-        live-server
-    end
-end
-
 # Convenience Aliases
 alias ls="exa --git"
 alias ll="ls -l"

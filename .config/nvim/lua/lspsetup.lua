@@ -5,6 +5,7 @@ return function(lsp, coq)
     'gopls',
     'svelte',
     'tsserver',
+    'pyright',
   }
 
   for _, serv in ipairs(servers) do

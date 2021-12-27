@@ -44,10 +44,6 @@ return require('packer').startup(function(use)
     default = true
   }
 
-  -- Set colorscheme
-  vim.g.dracula_transparent_bg = false
-  vim.cmd[[colorscheme dracula]]
-
   -- Indent guides
   require('indent_blankline').setup {}
 
@@ -74,6 +70,7 @@ return require('packer').startup(function(use)
   }
 
   -- Status line
+  vim.opt.termguicolors = true
   require('feline').setup({
     preset = 'round'
   })
@@ -90,7 +87,8 @@ return require('packer').startup(function(use)
 
   -- TreeSitter
   require('nvim-treesitter.configs').setup {
-    ensure_installed = "maintained"
+    ensure_installed = "maintained",
+    highlight = { enable = true },
   }
 
   -- Autocomplete
@@ -105,6 +103,10 @@ return require('packer').startup(function(use)
   local lsp = require("lspconfig")
   local coq = require("coq")
   require('lspsetup')(lsp, coq)
+
+  -- Set colorscheme
+  vim.g.dracula_transparent_bg = false
+  vim.cmd[[colorscheme dracula]]
 
 end)
 

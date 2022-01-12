@@ -1,3 +1,11 @@
+local install_path = vim.fn.stdpath('data')..'/site/pack/packer/opt/packer.nvim'
+
+if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
+  vim.api.nvim_command('!git clone https://github.com/wbthomason/packer.nvim '..install_path)
+  vim.api.nvim_command 'packadd packer.nvim'
+  vim.api.nvim_command 'PackerSync'
+end
+
 vim.api.nvim_exec([[
   augroup packer_user_config
     autocmd!
@@ -29,6 +37,7 @@ return require('packer').startup(function(use)
     'windwp/nvim-autopairs',
     'numToStr/Comment.nvim',
     'tpope/vim-surround',
+    'iamcco/markdown-preview.nvim',
 
     -- smartness
     'nvim-treesitter/nvim-treesitter',

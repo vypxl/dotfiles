@@ -26,6 +26,14 @@ vim.api.nvim_exec([[
   augroup END
 ]], false)
 
+-- Remember cursor position when reopening files
+vim.api.nvim_exec([[
+  augroup vimrc-remember-cursor-position
+      autocmd!
+      autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | call timer_start(1, {tid -> execute("normal! zz")}) | endif
+  augroup END
+]], false)
+
 -- Arrow keys as Buffer and Tab switchers
 nmap('<UP>', ':tabnext<CR>')
 nmap('<DOWN>', ':tabprev<CR>')

@@ -17,6 +17,36 @@ starship init fish | source
 # Completions
 gh completion --shell fish | source
 
+# fzf, fd, rg and friends
+set -gx FZF_DEFAULT_COMMAND fd -Htf
+set -gx FZF_DEFAULT_OPTS --height=20% --min-height=8 --border=rounded --margin=0,2 --layout=reverse
+alias z=fzf
+alias rg="rg --hidden"
+
+function vz
+  set f (zp)
+  test -n "$f" && vim "$f"
+end
+
+alias z=fzf
+
+function vgz
+  if test (count $argv) -lt 1; set argv ""; end
+  set f (rg $argv | zpg | cut -d: -f1)
+  test -n "$f" && vim "$f"
+end
+
+function cz
+  set d (fd -Htd | fzf)
+  test -n "$d" && cd "$d"
+end
+
+function cgz
+  if test (count $argv) -lt 1; set argv ""; end
+  set d (rg $argv | zpg | cut -d: -f1 | xargs dirname)
+  test -n "$d" && cd "$d"
+end
+
 # Convenience Functions
 function cdd
   command mkdir -p $argv

@@ -1,11 +1,3 @@
-local install_path = vim.fn.stdpath('data')..'/site/pack/packer/opt/packer.nvim'
-
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-  vim.api.nvim_command('!git clone https://github.com/wbthomason/packer.nvim '..install_path)
-  vim.api.nvim_command 'packadd packer.nvim'
-  vim.api.nvim_command 'PackerSync'
-end
-
 vim.api.nvim_exec([[
   augroup packer_user_config
     autocmd!
@@ -43,10 +35,6 @@ return require('packer').startup(function(use)
     'nvim-treesitter/nvim-treesitter',
     'neovim/nvim-lspconfig',
   }
-
-  use { 'ms-jpq/coq_nvim', { branch = 'coq'} }
-  use { 'ms-jpq/coq.artifacts', { branch = 'artifacts' } }
-  use { 'ms-jpq/coq.thirdparty', { branch = '3p' } }
 
   -- Setup icons
   require('nvim-web-devicons').setup {
@@ -101,17 +89,6 @@ return require('packer').startup(function(use)
   }
 
   -- Autocomplete
-  vim.g.coq_settings = {
-    auto_start = 'shut-up',
-    display = { pum = { fast_close = false } },
-    keymap = {
-      jump_to_mark = '',
-      bigger_preview = '',
-    }
-  }
-  local lsp = require("lspconfig")
-  local coq = require("coq")
-  require('lspsetup')(lsp, coq)
 
   -- Set colorscheme
   vim.g.dracula_transparent_bg = false

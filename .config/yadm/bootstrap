@@ -1,15 +1,35 @@
-#! /bin/bash
-IMG_URL=https://images.wallpapersden.com/image/download/cool-landscape-night-minimal-art_bGxna2aUmZqaraWkpJRobWllrWdma2U.jpg
+#! /usr/bin/env bash
 
-# download image if not present
-if [[ ! -f "~/.config/misc/image.png" ]]; then
-  wget "$IMG_URL" -O /tmp/background_img 
-  convert /tmp/background_img ~/.config/misc/image.png
-  rm /tmp/background_img
+logfile=/tmp/bootstrap.log
+
+echo -e "\n\n------\nBootstrap start" >> $logfile
+date >> $logfile
+echo "------" >> $logfile
+# Update
+echo "Started bootstrap, log in /tmp/bootstrap.log"
+echo "Updating pacman-mirrors"
+sudo pacman-mirrors >> $logfile
+echo "Upgrading current system"
+sudo pacman -Syu --noconfirm >> $logfile
+
+# Install paru and ruby
+if ! command -v paru &> /dev/null; then
+  echo "Installing paru..."
+  sudo pacman -S --needed --noconfirm base-devel >> $logfile 2>&1
+  git clone https://aur.archlinux.org/paru-bin.git >> $logfile 2>&1
+  cd paru-bin
+  makepkg -si --noconfirm >> $logfile 2>&1
+  cd ..
+  paru -S --noconfirm paru-bin >> $logfile 2>&1
+  rm -rf paru-bin
 fi
 
-# install vim plugins
-mkdir -p ~/.config/nvim/vundle
-mkdir -p ~/.config/nvim/backup
-git clone https://github.com/VundleVim/Vundle.vim.git ~/.config/nvim/vundle/Vundle.vim
-nvim +PluginInstall +q +q
+if ! command -v ruby &> /dev/null; then
+  echo "Installing ruby..."
+  sudo pacman -S --noconfirm ruby >> $logfile 2>&1
+fi
+
+echo "Bootstrapping system..."
+cd ~/.bootstrap
+ruby bootstrap.rb
+

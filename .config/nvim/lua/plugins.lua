@@ -1,10 +1,3 @@
-vim.api.nvim_exec([[
-  augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost plugins.lua source <afile> | PackerCompile
-  augroup end
-]], false)
-
 return require('packer').startup(function(use)
   -- Let packer self-manage
   use "wbthomason/packer.nvim"
@@ -15,7 +8,7 @@ return require('packer').startup(function(use)
     'kyazdani42/nvim-web-devicons',
 
     -- ui
-    'Mofiqul/dracula.nvim',
+
     'norcalli/nvim-colorizer.lua',
     'lukas-reineke/indent-blankline.nvim',
     'akinsho/bufferline.nvim',
@@ -34,7 +27,10 @@ return require('packer').startup(function(use)
     -- smartness
     'nvim-treesitter/nvim-treesitter',
     'neovim/nvim-lspconfig',
+    'cohama/lexima.vim'
+
   }
+  use { 'neoclide/coc.nvim', branch = 'release' }
 
   -- Setup icons
   require('nvim-web-devicons').setup {
@@ -72,7 +68,6 @@ return require('packer').startup(function(use)
     preset = 'round'
   })
 
-
   -- Gitsigns
   require('gitsigns').setup()
 
@@ -89,10 +84,40 @@ return require('packer').startup(function(use)
   }
 
   -- Autocomplete
+  vim.g.coc_global_extensions = {
+    'coc-lua',
+    'coc-html',
+    'coc-tsserver',
+    'coc-css',
+    'coc-json',
+    'coc-clangd',
+    'coc-cmake',
+    'coc-discord',
+    'coc-dot-complete',
+    'coc-elixir',
+    'coc-emmet',
+    'coc-eslint',
+    'coc-fzf-preview',
+    'coc-git',
+    'coc-go',
+    'coc-glslx',
+    'coc-graphql',
+    'coc-java',
+    'coc-julia',
+    'coc-metals',
+    'coc-omnisharp',
+    'coc-prettier',
+    'coc-pyright',
+    'coc-rust-analyzer',
+    'coc-sh',
+    'coc-solargraph',
+    'coc-svelte',
+    'coc-vetur',
+    'coc-yaml'
+  }
 
   -- Set colorscheme
   vim.g.dracula_transparent_bg = false
   vim.cmd[[colorscheme dracula]]
 
 end)
-

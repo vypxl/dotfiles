@@ -42,6 +42,7 @@ PACKAGES = %w(
 
   jdk11-openjdk
   crystal
+  crystalline-bin
   rustup
   go
   stack
@@ -76,6 +77,7 @@ RUBY_PACKAGES = %w(
   terutil
   rake
   rails
+  solargraph
 )
 
 NPM_PACKAGES = %w(
@@ -89,6 +91,7 @@ PYTHON_PACKAGES = %w(
   numpy
   networkx
   toolz
+  pyright
 )
 
 def install_node

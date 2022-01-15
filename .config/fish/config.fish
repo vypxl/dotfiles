@@ -22,13 +22,13 @@ set -gx FZF_DEFAULT_COMMAND fd -Htf
 set -gx FZF_DEFAULT_OPTS --height=20% --min-height=8 --border=rounded --margin=0,2 --layout=reverse
 alias z=fzf
 alias rg="rg --hidden"
+alias zp="fzf --height=90% --preview-window=down:80% --preview='bat -n --color=always -r=:500 {}'"
+alias zpg="fzf --height=90% --preview-window=down:80% --preview='bat -n --color=always -r=:500 (echo {} | cut -d: -f1)'"
 
 function vz
   set f (zp)
   test -n "$f" && vim "$f"
 end
-
-alias z=fzf
 
 function vgz
   if test (count $argv) -lt 1; set argv ""; end

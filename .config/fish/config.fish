@@ -87,7 +87,7 @@ end
 
 function update
   echo "==> Updating repository and AUR <=="
-  yay -Syu
+  paru -Syu
   echo "==> Updating ruby gems <=="
   gem update (gem outdated | cut -d ' ' -f 1)
   echo "==> Updating npm packages <=="

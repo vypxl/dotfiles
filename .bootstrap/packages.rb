@@ -4,8 +4,10 @@ PACKAGES = %w(
   base-devel
   busybox
   inetutils
+  iputils
   binutils
   coreutils
+  nmap
   gnu-netcat
   htop
   imagemagick
@@ -13,6 +15,8 @@ PACKAGES = %w(
   unzip
   wget
   pandoc
+  ghostscript
+  texlive-core
 
   vim
   neovim
@@ -43,7 +47,9 @@ PACKAGES = %w(
   jdk11-openjdk
   crystal
   crystalline-bin
+  ameba
   rustup
+  rust-analyzer
   go
   stack
   ghc
@@ -51,7 +57,11 @@ PACKAGES = %w(
   python-pip
   pypy3
   clang
-  
+  cmake
+  bazel
+  gdb
+  emscripten
+
   touchegg
   touche
 
@@ -61,10 +71,11 @@ PACKAGES = %w(
   stretchly-bin
   spotify
   discord-canary
-  code
+  vlc
+  visual-studio-code-bin
 
   ttf-fira-code
-  otf-nerd-fonts-fira-code
+  nerd-fonts-complete-starship
 
   glm
   sdl
@@ -92,7 +103,14 @@ PYTHON_PACKAGES = %w(
   networkx
   toolz
   pyright
+  conan
 )
+
+# TODO!!!
+def install_rust
+  # if not installed:
+  log_exec_fail "sudo rustup install nightly"
+end
 
 def install_node
   `bash -c "command -v node"`

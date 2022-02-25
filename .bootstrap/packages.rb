@@ -56,11 +56,15 @@ PACKAGES = %w(
   python
   python-pip
   pypy3
+  julia
   clang
   cmake
   bazel
+  ninja
   gdb
   emscripten
+  docker
+  entr
 
   touchegg
   touche
@@ -96,6 +100,7 @@ NPM_PACKAGES = %w(
   yarn
   n
   live-server
+  firebase-tools
 )
 
 PYTHON_PACKAGES = %w(

@@ -68,3 +68,7 @@ nmap('<leader>fg', ':lua require("telescope.builtin").live_grep()<CR>')
 nmap('<leader>fb', ':lua require("telescope.builtin").buffers()<CR>')
 nmap('<leader>fh', ':lua require("telescope.builtin").help_tags()<CR>')
 
+-- coc
+
+-- Confirm completion with <TAB>
+map('i', '<TAB>', 'pumvisible() ? coc#_select_confirm() : "\\<C-g>u\\<CR>"', true)

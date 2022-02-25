@@ -1,1 +1,1 @@
-launch fish -C "neofetch | lolcat"
+launch fish -C "fastfetch | lolcat"

@@ -40,7 +40,7 @@ PACKAGES = %w(
   sl
   bash-pipes
   cmatrix
-  neofetch
+  fastfetch
   onefetch
   scc
 

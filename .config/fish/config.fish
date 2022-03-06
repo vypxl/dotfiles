@@ -1,8 +1,10 @@
 # Env
 set -gx PATH $PATH $HOME/.local/bin 
 set -gx PATH $PATH $HOME/.nimble/bin
-set -gx PATH $PATH (ruby -r rubygems -e 'puts Gem.dir+ "/bin"')
-set -gx PATH $PATH (ruby -r rubygems -e 'puts Gem.user_dir+ "/bin"')
+if type -q ruby
+  set -gx PATH $PATH (ruby -r rubygems -e 'puts Gem.dir+ "/bin"')
+  set -gx PATH $PATH (ruby -r rubygems -e 'puts Gem.user_dir+ "/bin"')
+end
 set -gx PATH $PATH $HOME/.cargo/bin
 set -gx PATH $PATH /usr/lib/emscripten
 set -gx PATH /usr/lib/ccache/bin $PATH
@@ -12,10 +14,14 @@ set -gx PYTHONSTARTUP $XDG_CONFIG_HOME/python/init.py
 set -gx EDITOR "vim"
 
 # Prompt
-starship init fish | source
+if type -q starship
+  starship init fish | source
+end
 
 # Completions
-gh completion --shell fish | source
+if type -q gh
+  gh completion --shell fish | source
+end
 
 # fzf, fd, rg and friends
 set -gx FZF_DEFAULT_COMMAND fd -Htf

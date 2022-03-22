@@ -71,4 +71,4 @@ nmap('<leader>fh', ':lua require("telescope.builtin").help_tags()<CR>')
 -- coc
 
 -- Confirm completion with <TAB>
-map('i', '<TAB>', 'pumvisible() ? coc#_select_confirm() : "\\<C-g>u\\<CR>"', true)
+map('i', '<TAB>', 'pumvisible() ? coc#_select_confirm() : "<TAB>"', true)

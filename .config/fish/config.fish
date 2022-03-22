@@ -123,6 +123,7 @@ abbr -a ga. git add .
 abbr -a ga  git add
 abbr -a gst git status
 abbr -a gcm git commit -m
+abbr -a gcam git commit -am
 abbr -a gc  git checkout
 abbr -a gp  git push --all
 abbr -a gpl git pull

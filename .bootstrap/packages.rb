@@ -89,26 +89,30 @@ PACKAGES = %w(
 )
 
 RUBY_PACKAGES = %w(
-  terutil
+  neovim
   rake
   rails
   solargraph
+  terutil
 )
 
 NPM_PACKAGES = %w(
+  firebase-tools
+  live-server
+  n
+  neovim
   pnpm
   yarn
-  n
-  live-server
-  firebase-tools
 )
 
 PYTHON_PACKAGES = %w(
-  numpy
-  networkx
-  toolz
-  pyright
   conan
+  neovim
+  networkx
+  numpy
+  pyright
+  pwntools
+  toolz
 )
 
 # TODO!!!

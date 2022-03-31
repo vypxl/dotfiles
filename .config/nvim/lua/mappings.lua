@@ -10,6 +10,10 @@ end
 
 vim.g.mapleader = " "
 
+-- Save with tt and C-s
+nmap('tt', ':w<CR>')
+map('i', '<C-s>', '<C-o>:w<CR>')
+
 -- Quick edit and reload config
 nmap("<leader>ev", ":edit $MYVIMRC")
 nmap("<leader>sv", ":w,<CR>:source $MYVIMRC")
@@ -43,8 +47,8 @@ nmap('<RIGHT>', ':bn<CR>')
 -- Moving lines with alt
 map('n', '<A-j>', ':m .+1<CR>==')
 map('n', '<A-k>', ':m .-2<CR>==')
-map('i', '<A-j>', '<Esc>:m .+1<CR>==gi')
-map('i', '<A-k>', '<Esc>:m .-2<CR>==gi')
+map('i', '<A-j>', '<C-o>:m .+1<CR>')
+map('i', '<A-k>', '<C-o>:m .-2<CR>')
 map('v', '<A-j>', ":m '>+1<CR>gv=gv")
 map('v', '<A-k>', ":m '<-2<CR>gv=gv')")
 
@@ -71,4 +75,19 @@ nmap('<leader>fh', ':lua require("telescope.builtin").help_tags()<CR>')
 -- coc
 
 -- Confirm completion with <TAB>
-map('i', '<TAB>', 'pumvisible() ? coc#_select_confirm() : "<TAB>"', true)
+-- map('i', '<TAB>', 'pumvisible() ? coc#_select_confirm() : "<TAB>"', true)
+
+vim.api.nvim_exec([[
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ Mappings_check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+
+function! Mappings_check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+let g:coc_snippet_next = '<tab>'
+]], false)

@@ -8,7 +8,7 @@ return require('packer').startup(function(use)
     'kyazdani42/nvim-web-devicons',
 
     -- ui
-
+    'dracula/vim',
     'norcalli/nvim-colorizer.lua',
     'lukas-reineke/indent-blankline.nvim',
     'akinsho/bufferline.nvim',
@@ -23,11 +23,17 @@ return require('packer').startup(function(use)
     'numToStr/Comment.nvim',
     'tpope/vim-surround',
     'iamcco/markdown-preview.nvim',
+    'honza/vim-snippets',
+
+    -- language plugins
+    'lervag/vimtex',
+
 
     -- smartness
     'nvim-treesitter/nvim-treesitter',
     'neovim/nvim-lspconfig',
-    'cohama/lexima.vim'
+    'cohama/lexima.vim',
+    'dense-analysis/ale',
 
   }
   use { 'neoclide/coc.nvim', branch = 'release' }
@@ -50,10 +56,9 @@ return require('packer').startup(function(use)
   -- Tree
   vim.g.nvim_tree_highlight_opened_files = 1
   vim.g.nvim_tree_add_trailing = 1
-  vim.g.nvim_tree_disable_window_picker = 1
   require('nvim-tree').setup {
     diagnostics = { enable = true, },
-    auto_close = true,
+    disable_window_picker = true,
   }
 
   -- Buffer line
@@ -83,6 +88,9 @@ return require('packer').startup(function(use)
     highlight = { enable = true },
   }
 
+  -- Ale
+  vim.g.ale_disable_lsp = 1
+
   -- Autocomplete
   vim.g.coc_global_extensions = {
     'coc-lua',
@@ -110,9 +118,11 @@ return require('packer').startup(function(use)
     'coc-pyright',
     'coc-rust-analyzer',
     'coc-sh',
+    'coc-snippets',
     'coc-solargraph',
     'coc-svelte',
     'coc-vetur',
+    'coc-vimtex',
     'coc-yaml'
   }
 

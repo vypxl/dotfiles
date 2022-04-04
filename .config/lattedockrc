@@ -7,6 +7,9 @@ columnWidths=49,508,129,104
 sortColumn=3
 sortOrder=0
 
+[PlasmaThemeExtended]
+outlineWidth=1
+
 [ScreenConnectors]
 10=DP-2:::0,0 3440x1440
 

@@ -27,7 +27,7 @@ return require('packer').startup(function(use)
 
     -- language plugins
     'lervag/vimtex',
-
+    'benknoble/vim-mips',
 
     -- smartness
     'nvim-treesitter/nvim-treesitter',

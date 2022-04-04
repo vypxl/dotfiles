@@ -72,6 +72,8 @@ PACKAGES = %w(
   brave-bin
   google-chrome
   firefox
+  jellyfin-media-player
+  logseq-desktop-bin
   stretchly-bin
   spotify
   discord-canary
@@ -122,7 +124,7 @@ def install_rust
 end
 
 def install_node
-  `bash -c "command -v node"`
+  `bash -c "command -v n"`
   return if $?.success?
 
   puts "Installing NodeJS"

@@ -17,6 +17,8 @@ PACKAGES = %w(
   pandoc
   ghostscript
   texlive-core
+  syncthing
+  syncthingtray
 
   vim
   neovim

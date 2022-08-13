@@ -4,3 +4,5 @@
 [user]
 	email = "thomas@vypxl.io"
 	name = "vypxl"
+[pull]
+	rebase = false

@@ -12,6 +12,8 @@ outlineWidth=1
 
 [ScreenConnectors]
 10=DP-2:::0,0 3440x1440
+11=eDP-1:::0,0 1920x1200
+12=HDMI-1:::0,0 1920x1080
 
 [UniversalSettings]
 badges3DStyle=false

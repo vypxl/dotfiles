@@ -55,11 +55,13 @@ return require('packer').startup(function(use)
   }
 
   -- Tree
-  vim.g.nvim_tree_highlight_opened_files = 1
-  vim.g.nvim_tree_add_trailing = 1
   require('nvim-tree').setup {
     diagnostics = { enable = true, },
-    disable_window_picker = true,
+    renderer = {
+      highlight_opened_files = "icon",
+      highlight_git = true,
+      add_trailing = true,
+    },
   }
 
   -- Buffer line
@@ -85,8 +87,10 @@ return require('packer').startup(function(use)
 
   -- TreeSitter
   require('nvim-treesitter.configs').setup {
-    ensure_installed = "maintained",
+    ensure_installed = "all",
     highlight = { enable = true },
+    indent = { enable = true },
+    incremental_selection = { enable = true }
   }
 
   -- Ale
@@ -102,7 +106,6 @@ return require('packer').startup(function(use)
     'coc-clangd',
     'coc-cmake',
     'coc-discord',
-    'coc-dot-complete',
     'coc-elixir',
     'coc-emmet',
     'coc-eslint',

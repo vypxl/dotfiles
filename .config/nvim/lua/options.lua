@@ -21,7 +21,7 @@ set.encoding = 'utf-8'
 
 -- Folding
 set.foldlevelstart = 99
-set.foldnestmax = 2
+set.foldnestmax = 4
 set.foldmethod = 'expr'
 set.foldexpr = 'nvim_treesitter#foldexpr()'
 

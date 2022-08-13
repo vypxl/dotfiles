@@ -75,11 +75,9 @@ nmap('<leader>fh', ':lua require("telescope.builtin").help_tags()<CR>')
 -- coc
 
 -- Confirm completion with <TAB>
--- map('i', '<TAB>', 'pumvisible() ? coc#_select_confirm() : "<TAB>"', true)
-
 vim.api.nvim_exec([[
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#pum#visible() ? coc#pum#confirm() :
       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
       \ Mappings_check_back_space() ? "\<TAB>" :
       \ coc#refresh()
@@ -91,3 +89,6 @@ endfunction
 
 let g:coc_snippet_next = '<tab>'
 ]], false)
+
+vim.api.nvim_set_keymap('x', '<leader>ms', '<Plug>(coc-convert-snippet)', {})
+nmap('<leader>es', ':CocCommand snippets.editSnippets<CR>')

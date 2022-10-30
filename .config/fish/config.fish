@@ -1,4 +1,6 @@
 # Env
+set -gx PNPM_HOME "/home/thomas/.local/share/pnpm"
+set -gx PATH "$PNPM_HOME" $PATH
 set -gx PATH $PATH $HOME/.local/bin 
 set -gx PATH $PATH $HOME/.nimble/bin
 if type -q ruby
@@ -11,6 +13,7 @@ set -gx PATH /usr/lib/ccache/bin $PATH
 set -gx XDG_CONFIG_HOME $HOME/.config
 set -gx SXHKD_SHELL /bin/sh
 set -gx PYTHONSTARTUP $XDG_CONFIG_HOME/python/init.py
+set -gx DEBUGINFOD_URLS (cat "/etc/debuginfod"/*.urls 2> /dev/null | tr '\n' ' ')
 set -gx EDITOR "vim"
 
 # Prompt

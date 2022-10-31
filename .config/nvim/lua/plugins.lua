@@ -66,8 +66,10 @@ return require('packer').startup(function(use)
 
   -- Buffer line
   require("bufferline").setup {
-    diagnostics = 'nvim_lsp',
-    offsets = { { filetype = "NvimTree", text = function() return vim.fn.getcwd() end, highlight = "Directory", text_align = "center" } }
+    options = {
+      diagnostics = 'nvim_lsp',
+      offsets = { { filetype = "NvimTree", text = function() return vim.fn.getcwd() end, highlight = "Directory", text_align = "center" } },
+    },
   }
 
   -- Status line
@@ -113,7 +115,6 @@ return require('packer').startup(function(use)
     'coc-git',
     'coc-go',
     'coc-glslx',
-    'coc-graphql',
     'coc-java',
     'coc-julia',
     'coc-metals',

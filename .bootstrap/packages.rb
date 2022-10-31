@@ -107,6 +107,9 @@ NPM_PACKAGES = %w(
   neovim
   pnpm
   yarn
+  graphql
+  graphql-language-service-cli
+  typescript
 )
 
 PYTHON_PACKAGES = %w(

@@ -12,6 +12,11 @@ set -gx XDG_CONFIG_HOME $HOME/.config
 set -gx SXHKD_SHELL /bin/sh
 set -gx PYTHONSTARTUP $XDG_CONFIG_HOME/python/init.py
 set -gx EDITOR "vim"
+set -gx XMODIFIERS "@im=fcitx"
+set -gx XMODIFIER "@im=fcitx"
+set -gx GTK_IM_MODULE fcitx
+set -gx QT_IM_MODULE fcitx
+set -gx DefaultIMModule fcitx
 
 # Prompt
 if type -q starship

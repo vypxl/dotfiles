@@ -35,6 +35,7 @@ return require('packer').startup(function(use)
     'neovim/nvim-lspconfig',
     'cohama/lexima.vim',
     'dense-analysis/ale',
+    'github/copilot.vim'
 
   }
   use { 'neoclide/coc.nvim', branch = 'release' }

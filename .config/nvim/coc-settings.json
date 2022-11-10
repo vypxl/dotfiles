@@ -6,5 +6,6 @@
       "args": ["server", "-m", "stream"],
       "filetypes": ["typescript", "typescriptreact", "graphql", "javascript", "javascriptreact"]
     }
-  }
+  },
+  "svelte.enable-ts-plugin": true
 }

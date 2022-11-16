@@ -148,3 +148,6 @@ function c
         echo $r
     end
 end
+
+# tabtab source for packages
+[ -f ~/.config/tabtab/fish/__tabtab.fish ]; and source ~/.config/tabtab/fish/__tabtab.fish; or true

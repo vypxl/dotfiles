@@ -1,4 +1,5 @@
 # Env
+set -gx PATH $PATH $HOME/.dotnet/tools
 set -gx PNPM_HOME "/home/thomas/.local/share/pnpm"
 set -gx PATH "$PNPM_HOME" $PATH
 set -gx PATH $PATH $HOME/.local/bin 

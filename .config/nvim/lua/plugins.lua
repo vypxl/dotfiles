@@ -29,6 +29,8 @@ return require('packer').startup(function(use)
     'lervag/vimtex',
     'benknoble/vim-mips',
     'vim-crystal/vim-crystal',
+    -- 'adelarsq/neofsharp.vim',
+    'ionide/Ionide-vim',
 
     -- smartness
     'nvim-treesitter/nvim-treesitter',
@@ -98,6 +100,9 @@ return require('packer').startup(function(use)
 
   -- Ale
   vim.g.ale_disable_lsp = 1
+
+  -- TEMPORARY fix for ionide
+  vim.g['fsharp#fsautocomplete_command'] = { 'fsautocomplete', '--adaptive-lsp-server-enabled' }
 
   -- Autocomplete
   vim.g.coc_global_extensions = {

@@ -52,6 +52,7 @@ PACKAGES = %w(
   ameba
   rustup
   rust-analyzer
+  lua-language-server
   go
   ghcup-hs-bin
   python
@@ -109,6 +110,7 @@ NPM_PACKAGES = %w(
   graphql
   graphql-language-service-cli
   typescript
+  ls_emmet
 )
 
 PYTHON_PACKAGES = %w(

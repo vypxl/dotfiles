@@ -3,7 +3,7 @@
 -----------------------------------
 
 require('plugins')
-
+require('lspsetup')
 require('options')
 require('mappings')
 

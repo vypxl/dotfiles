@@ -14,7 +14,7 @@ PACKAGES = %w(
   zip
   unzip
   wget
-  pandoc
+  pandoc-bin
   ghostscript
   texlive-core
   syncthing
@@ -53,8 +53,7 @@ PACKAGES = %w(
   rustup
   rust-analyzer
   go
-  stack
-  ghc
+  ghcup-hs-bin
   python
   python-pip
   pypy3

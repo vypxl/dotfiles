@@ -71,24 +71,3 @@ nmap('<leader>ff', ':lua require("telescope.builtin").find_files()<CR>')
 nmap('<leader>fg', ':lua require("telescope.builtin").live_grep()<CR>')
 nmap('<leader>fb', ':lua require("telescope.builtin").buffers()<CR>')
 nmap('<leader>fh', ':lua require("telescope.builtin").help_tags()<CR>')
-
--- coc
-
--- Confirm completion with <TAB>
-vim.api.nvim_exec([[
-inoremap <silent><expr> <TAB>
-      \ coc#pum#visible() ? coc#pum#confirm() :
-      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-      \ Mappings_check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-
-function! Mappings_check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-let g:coc_snippet_next = '<tab>'
-]], false)
-
-vim.api.nvim_set_keymap('x', '<leader>ms', '<Plug>(coc-convert-snippet)', {})
-nmap('<leader>es', ':CocCommand snippets.editSnippets<CR>')

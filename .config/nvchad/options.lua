@@ -34,13 +34,6 @@ set.filetype = 'indent'
 set.number = true
 set.relativenumber = true
 
-set.completeopt = { 'menu', 'menuone', 'preview' }
-
-set.termguicolors = true
-set.lazyredraw = true
-
-set.wildignorecase = true
-
 set.title = true
 
 set.shell = 'bash'
@@ -52,10 +45,9 @@ set.clipboard = 'unnamedplus'
 set.mouse = 'a'
 set.mousefocus = false
 
--- Splitting
-set.splitright = true
-set.splitbelow = true
-
 -- Searching
 set.ignorecase = true
 set.smartcase = true
+
+-- Temporary fix for ionide
+g['fsharp#fsautocomplete_command'] = { 'fsautocomplete', '--adaptive-lsp-server-enabled' }

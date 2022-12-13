@@ -1,0 +1,1 @@
+/home/thomas/.config/nvchad/bootstrap_init.lua

@@ -11,8 +11,6 @@ set.tabstop = 2
 set.softtabstop = 2
 set.smarttab = true
 set.expandtab = true
-set.autoindent = true
-set.smartindent = true
 
 set.list = true
 set.listchars = { tab = '▸ ', trail = '·', extends = '#' }
@@ -29,7 +27,6 @@ set.foldcolumn = "1"
 
 -- Editor
 set.hidden = true
-set.filetype = 'indent'
 
 set.number = true
 set.relativenumber = true

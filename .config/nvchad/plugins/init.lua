@@ -46,19 +46,24 @@ return {
   },
 
   ["jose-elias-alvarez/null-ls.nvim"] = {
+      disable = false,
       after = "nvim-lspconfig",
       config = function()
          require "custom.plugins.null-ls"
       end,
- },
-
-  ["github/copilot.vim"] = {
-    after = 'nvim-lspconfig',
   },
+
+  ["github/copilot.vim"] = { after = 'nvim-lspconfig' },
 
   ["vim-crystal/vim-crystal"] = { },
 
-  ["andweeb/presence.nvim"] = { main_image = "file" },
+  ["andweeb/presence.nvim"] = {
+     config  = function()
+       require("presence"):setup {
+          main_image = "file"
+       }
+     end
+  },
 
   ["lervag/vimtex"] = { },
 

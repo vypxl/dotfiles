@@ -4,7 +4,6 @@ local capabilities = require("plugins.configs.lspconfig").capabilities
 local lspconfig = require "lspconfig"
 local configs = require "lspconfig.configs"
 local servers = {
-  "clangd",
   "rust_analyzer",
   "gopls",
   "svelte",
@@ -47,6 +46,13 @@ if not configs.ls_emmet then
   }
 end
 
+-- Fix clangd 'multiple different client offset encodings' warning
+local clangd_capabilities = capabilities
+clangd_capabilities.offsetEncoding = "utf-8"
+lspconfig.clangd.setup {
+  on_attach = on_attach,
+  capabilities = clangd_capabilities
+}
 
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {

@@ -1,5 +1,4 @@
 local set = vim.opt
-local g = vim.g
 
 -- Disable swap and backup
 set.swapfile = false
@@ -45,6 +44,3 @@ set.mousefocus = false
 -- Searching
 set.ignorecase = true
 set.smartcase = true
-
--- Temporary fix for ionide
-g['fsharp#fsautocomplete_command'] = { 'fsautocomplete', '--adaptive-lsp-server-enabled' }

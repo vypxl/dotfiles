@@ -40,6 +40,11 @@ return {
     disable = false,
   },
 
+  -- Load Comment.nvim eagerly to make mappings work
+  ["numToStr/Comment.nvim"] = {
+    event = "BufRead",
+  },
+
   ["jose-elias-alvarez/null-ls.nvim"] = {
       after = "nvim-lspconfig",
       config = function()
@@ -47,9 +52,9 @@ return {
       end,
  },
 
-  -- surround, markdown-preview, presence.nvim, vimtex, ionide, 
-
-  ["github/copilot.vim"] = { after = 'nvim-lspconfig' },
+  ["github/copilot.vim"] = {
+    after = 'nvim-lspconfig',
+  },
 
   ["vim-crystal/vim-crystal"] = { },
 
@@ -62,17 +67,4 @@ return {
   ["iamcco/markdown-preview.nvim"] = { },
 
   ["tpope/vim-surround"] = { },
-
-  --  ["hrsh7th/nvim-cmp"] = {
-  --   override_options = function()
-  --     local cmp = require "cmp"
-  --
-  --     return {
-  --       mapping = {
-  --         ["<C-d>"] = cmp.mapping.scroll_docs(-8),
-  --       },
-  --     }
-  --   end,
-  -- },
-
 }

@@ -1,9 +1,10 @@
 require("custom.options")
+require("custom.viml_plugin_options")
 
 -- Remember cursor position when reopening files
 vim.api.nvim_exec([[
-  augroup vimrc-remember-cursor-position
+  augroup remember-cursor-position
       autocmd!
-      autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | call timer_start(1, {tid -> execute("normal! zz")}) | endif
+      autocmd BufWinEnter * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"zz" | endif
   augroup END
 ]], false)

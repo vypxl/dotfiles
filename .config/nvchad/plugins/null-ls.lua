@@ -12,7 +12,7 @@ local sources = {
    b.formatting.prettier,
 
    -- Lua
-   b.formatting.stylua,
+   b.formatting.stylua.with({ extra_args = { "--indent-type", "Spaces", "--indent-width", "2" } }),
 }
 
 null_ls.setup {

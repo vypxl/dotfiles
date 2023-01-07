@@ -153,3 +153,6 @@ end
 
 # tabtab source for packages
 [ -f ~/.config/tabtab/fish/__tabtab.fish ]; and source ~/.config/tabtab/fish/__tabtab.fish; or true
+
+# opam configuration
+source /home/thomas/.opam/opam-init/init.fish > /dev/null 2> /dev/null; or true

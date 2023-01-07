@@ -48,15 +48,16 @@ PACKAGES = %w(
 
   jdk11-openjdk
   crystal
-  crystalline-bin
   ameba
   rustup
-  rust-analyzer
-  lua-language-server
   go
   ghcup-hs-bin
   python
   python-pip
+  ocaml
+  opam
+  haxe
+  nimble
   pypy3
   julia
   clang

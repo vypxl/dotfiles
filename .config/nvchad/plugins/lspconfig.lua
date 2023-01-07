@@ -3,19 +3,9 @@ local capabilities = require("plugins.configs.lspconfig").capabilities
 
 local lspconfig = require "lspconfig"
 local configs = require "lspconfig.configs"
-local servers = {
-  "rust_analyzer",
-  "gopls",
-  "svelte",
-  "pyright",
-  "emmet-ls",
-  "hls",
-  "tsserver",
-  "crystalline",
-}
 
 if not configs.ls_emmet then
-  configs["emmet-ls"] = {
+  configs["ls_emmet"] = {
     default_config = {
       cmd = { 'ls_emmet', '--stdio' };
       filetypes = {
@@ -46,6 +36,11 @@ if not configs.ls_emmet then
   }
 end
 
+lspconfig.ls_emmet.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+}
+
 -- Fix clangd 'multiple different client offset encodings' warning
 local clangd_capabilities = capabilities
 clangd_capabilities.offsetEncoding = "utf-8"
@@ -53,10 +48,3 @@ lspconfig.clangd.setup {
   on_attach = on_attach,
   capabilities = clangd_capabilities
 }
-
-for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup {
-    on_attach = on_attach,
-    capabilities = capabilities,
-  }
-end

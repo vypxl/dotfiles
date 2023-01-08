@@ -5,18 +5,6 @@ return {
     },
   },
 
-  ["williamboman/mason.nvim"] = {
-    override_options = {
-      ensure_installed = {
-        "clang-format",
-        "rustfmt",
-        "autopep8",
-        "stylua",
-        "prettier",
-      },
-    },
-  },
-
   ["williamboman/mason-lspconfig.nvim"] = {
     after = "mason.nvim",
     config = function()
@@ -117,6 +105,7 @@ return {
 
   ["goolord/alpha-nvim"] = {
     disable = false,
+    override_options = require("custom.plugins.alpha"),
   },
 
   ["folke/drop.nvim"] = {

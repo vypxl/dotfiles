@@ -55,7 +55,6 @@ local sources = {
   fmt.swiftformat,
   fmt.taplo,
   fmt.tidy,
-  fmt.trim_whitespace,
   fmt.yamlfmt,
   fmt.zigfmt,
 

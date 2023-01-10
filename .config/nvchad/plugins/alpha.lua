@@ -29,7 +29,7 @@ end
 -- dynamic header padding
 local fn = vim.fn
 local marginTopPercent = 0.225
-local headerPadding = fn.max { 2, fn.floor(fn.winheight(0) * marginTopPercent) }
+local headerPadding = fn.max({ 2, fn.floor(fn.winheight(0) * marginTopPercent) })
 
 return {
   header = {
@@ -53,15 +53,15 @@ return {
       "               ██████████▄░░▀▀█▄░░░░░▄██▀▀▀░▄▄▄███▀▄██",
       "               ███████████░██░▄██▄▄▄▄█▄░▄░████████░███",
       "                                                                       ",
-	    "                                                                     ",
-	    "       ████ ██████           █████      ██                     ",
-	    "      ███████████             █████                             ",
-	    "      █████████ ███████████████████ ███   ███████████   ",
-	    "     █████████  ███    █████████████ █████ ██████████████   ",
-	    "    █████████ ██████████ █████████ █████ █████ ████ █████   ",
-	    "  ███████████ ███    ███ █████████ █████ █████ ████ █████  ",
-	    " ██████  █████████████████████ ████ █████ █████ ████ ██████ ",
-	    "                                                                       ",
+      "                                                                     ",
+      "       ████ ██████           █████      ██                     ",
+      "      ███████████             █████                             ",
+      "      █████████ ███████████████████ ███   ███████████   ",
+      "     █████████  ███    █████████████ █████ ██████████████   ",
+      "    █████████ ██████████ █████████ █████ █████ ████ █████   ",
+      "  ███████████ ███    ███ █████████ █████ █████ ████ █████  ",
+      " ██████  █████████████████████ ████ █████ █████ ████ ██████ ",
+      "                                                                       ",
     },
     opts = {
       position = "center",
@@ -73,6 +73,8 @@ return {
     type = "group",
     val = {
       button("Enter", "  Just type", ":enew<CR>"),
+      button("SPC s d", "  Restore local session", ":lua require('persistence').load()<CR>"),
+      button("SPC s l", "  Restore last session", ":lua require('persistence').load({ last = true })<CR>"),
       button("SPC f f", "  Find File  ", ":Telescope find_files<CR>"),
       button("SPC f o", "  Recent File  ", ":Telescope oldfiles<CR>"),
       button("SPC f w", "  Find Word  ", ":Telescope live_grep<CR>"),

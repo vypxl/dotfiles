@@ -16,6 +16,9 @@ return {
   ["nvim-treesitter/nvim-treesitter"] = {
     override_options = {
       ensure_installed = "all",
+      highlight = {
+        additional_vim_regex_highlighting = { "org" },
+      },
     },
   },
 
@@ -82,6 +85,17 @@ return {
 
   ["lervag/vimtex"] = { ft = { "tex", "latex", "plaintex" } },
 
+  ["nvim-orgmode/orgmode"] = {
+    requires = "nvim-treesitter",
+    config = function()
+      require("orgmode").setup({
+        org_agenda_files = { "~/zettelkasten/**/*" },
+        org_default_notes_file = "~/zettelkasten/pages/notes.org",
+      })
+      require("orgmode").setup_ts_grammar()
+    end,
+  },
+
   ["ionide/Ionide-vim"] = { ft = "fsharp" },
 
   ["iamcco/markdown-preview.nvim"] = { ft = "markdown" },
@@ -104,7 +118,10 @@ return {
     event = "BufReadPre",
     module = "persistence",
     config = function()
-      require("persistence").setup({ min_buffers = 2 })
+      require("persistence").setup({
+        options = { "blank", "buffers", "curdir", "folds", "tabpages", "terminal", "winsize" },
+        min_buffers = 2,
+      })
     end,
   },
 
@@ -118,7 +135,7 @@ return {
   ["glepnir/lspsaga.nvim"] = {
     after = "nvim-lspconfig",
     config = function()
-      require("lspsaga").init_lsp_saga({
+      require("lspsaga").setup({
         border_style = "rounded",
         preview_lines_above = 3,
         rename_action_quit = "<ESC>",

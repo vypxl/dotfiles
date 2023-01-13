@@ -58,7 +58,6 @@ local sources = {
   fmt.yamlfmt,
   fmt.zigfmt,
 
-  diag.alex,
   diag.buf,
   diag.buildifier,
   diag.checkmake,
@@ -67,8 +66,6 @@ local sources = {
   diag.clj_kondo,
   diag.cmake_lint,
   diag.codespell,
-  diag.cppcheck,
-  diag.cpplint,
   diag.credo,
   diag.dotenv_linter,
   diag.eslint_d,
@@ -78,7 +75,6 @@ local sources = {
   diag.jshint,
   diag.jsonlint,
   diag.ktlint,
-  diag.markdownlint,
   diag.misspell,
   diag.protolint,
   diag.pycodestyle,
@@ -96,7 +92,6 @@ local sources = {
 
   ca.cspell,
   ca.eslint_d,
-  ca.gitsigns,
   ca.shellcheck,
   ca.statix,
 }

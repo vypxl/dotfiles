@@ -20,7 +20,7 @@ local servers = {
   "ocamllsp",
   "omnisharp",
   "pyright",
-  "remark_ls",
+  "marksman",
   "rnix",
   "rust_analyzer",
   "solargraph",

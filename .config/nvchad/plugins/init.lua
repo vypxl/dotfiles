@@ -16,9 +16,6 @@ return {
   ["nvim-treesitter/nvim-treesitter"] = {
     override_options = {
       ensure_installed = "all",
-      highlight = {
-        additional_vim_regex_highlighting = { "org" },
-      },
     },
   },
 
@@ -84,17 +81,6 @@ return {
   },
 
   ["lervag/vimtex"] = { ft = { "tex", "latex", "plaintex" } },
-
-  ["nvim-orgmode/orgmode"] = {
-    requires = "nvim-treesitter",
-    config = function()
-      require("orgmode").setup({
-        org_agenda_files = { "~/zettelkasten/**/*" },
-        org_default_notes_file = "~/zettelkasten/pages/notes.org",
-      })
-      require("orgmode").setup_ts_grammar()
-    end,
-  },
 
   ["ionide/Ionide-vim"] = { ft = "fsharp" },
 

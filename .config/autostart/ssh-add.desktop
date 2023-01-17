@@ -1,4 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=ssh-add
-Exec=ssh-add -q .ssh/id_ed25519 .ssh/id_rsa

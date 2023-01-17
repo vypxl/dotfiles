@@ -37,6 +37,43 @@ M.plugin = {
   },
 }
 
+local term = require("custom.plugins.toggleterm")
+
+M.terminal = {
+  n = {
+    ["<leader>gg"] = {
+      function()
+        term.lazygit:toggle()
+      end,
+      "Toggle lazygit",
+    },
+    ["<leader>gy"] = {
+      function()
+        term.lazygit_yadm:toggle()
+      end,
+      "Toggle lazygit for dotfiles (yadm)",
+    },
+    ["<leader>gh"] = {
+      function()
+        term.htop:toggle()
+      end,
+      "Toggle htop",
+    },
+    ["<leader>gp"] = {
+      function()
+        term.python:toggle()
+      end,
+      "Toggle python",
+    },
+    ["<leader>gj"] = {
+      function()
+        term.julia:toggle()
+      end,
+      "Toggle julia",
+    },
+  },
+}
+
 -- Make <leader>/ dot-repeatable (use Comment.nvim's <Plug> mapping instead of calling it via lua)
 M.comment = {
   n = {

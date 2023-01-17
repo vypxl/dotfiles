@@ -78,6 +78,13 @@ return {
     disable = false,
   },
 
+  ["akinsho/toggleterm.nvim"] = {
+    tag = "*",
+    config = function()
+      require("custom.plugins.toggleterm").setup()
+    end,
+  },
+
   -- Load Comment.nvim eagerly to make mappings work
   ["numToStr/Comment.nvim"] = {
     event = "BufEnter",
@@ -130,6 +137,28 @@ return {
     requires = "nvim-lua/plenary.nvim",
     config = function()
       require("todo-comments").setup()
+    end,
+  },
+
+  ["chrisgrieser/nvim-various-textobjs"] = {
+    event = "BufEnter",
+    config = function()
+      require("various-textobjs").setup({ useDefaultKeymaps = true })
+    end,
+  },
+
+  ["cvigilv/esqueleto.nvim"] = {
+    config = function()
+      require("esqueleto").setup({
+        directories = { "~/.config/file_templates" },
+        patterns = {
+          "python",
+          "ruby",
+          "LICENSE",
+          "c",
+          "cpp",
+        },
+      })
     end,
   },
 

@@ -26,6 +26,17 @@ M.general = {
   },
 }
 
+M.plugin = {
+  n = {
+    ["<leader>a"] = {
+      function()
+        require("ts-node-action").node_action()
+      end,
+      "Treesitter node action",
+    },
+  },
+}
+
 -- Make <leader>/ dot-repeatable (use Comment.nvim's <Plug> mapping instead of calling it via lua)
 M.comment = {
   n = {
@@ -34,6 +45,16 @@ M.comment = {
 
   v = {
     ["<leader>/"] = { "<Plug>(comment_toggle_linewise_visual)", "toggle comment" },
+  },
+}
+
+M.copilot = {
+  i = {
+    ["<C-a>"] = {
+      "copilot#Accept()",
+      "copilot accept suggestion",
+      opts = { silent = true, expr = true, script = true },
+    },
   },
 }
 
@@ -68,7 +89,7 @@ M.lspconfig = {
 
     ["gd"] = {
       function()
-        vim.cmd([[Lspsaga peek_definition]])
+        vim.lsp.buf.definition()
       end,
       "lsp definition",
     },

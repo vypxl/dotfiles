@@ -147,9 +147,8 @@ return {
           tabe = "t",
           quit = "q",
         },
-        symbol_in_winbar = {
-          enable = true,
-        },
+        symbol_in_winbar = { enable = true },
+        lightbulb = { virtual_text = false },
       })
     end,
   },
@@ -172,14 +171,11 @@ return {
     end,
   },
 
-  ["nguyenvukhang/nvim-toggler"] = {
-    keys = "<leader>i",
+  ["ckolkey/ts-node-action"] = {
+    module = "ts-node-action",
+    requires = "nvim-treesitter",
     config = function()
-      require("nvim-toggler").setup({
-        inverses = {
-          ["True"] = "False",
-        },
-      })
+      require("ts-node-action").setup({})
     end,
   },
 
@@ -191,8 +187,16 @@ return {
     end,
   },
 
+  ["rcarriga/nvim-notify"] = {
+    config = function()
+      require("notify").setup({
+        stages = "fade",
+      })
+    end,
+  },
+
   ["folke/noice.nvim"] = {
-    requires = { "MunifTanjim/nui.nvim", "rcarriga/nvim-notify" },
+    requires = { "MunifTanjim/nui.nvim" },
     config = function()
       require("noice").setup({
         lsp = {

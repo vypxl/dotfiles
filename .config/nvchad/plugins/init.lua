@@ -16,8 +16,23 @@ return {
   ["nvim-treesitter/nvim-treesitter"] = {
     override_options = {
       ensure_installed = "all",
+      rainbow = {
+        enable = true,
+        extended_mode = true,
+        max_file_lines = 2500,
+        colors = {
+          "#E8E9ED",
+          "#009DDC",
+          "#F26430",
+          "#009B72",
+          "#F2B134",
+          "#DF57BC",
+        },
+      },
     },
   },
+
+  ["mrjones2014/nvim-ts-rainbow"] = {},
 
   ["williamboman/mason-lspconfig.nvim"] = {
     after = "mason.nvim",

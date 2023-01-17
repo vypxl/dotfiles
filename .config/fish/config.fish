@@ -23,6 +23,14 @@ set -gx GTK_IM_MODULE fcitx
 set -gx QT_IM_MODULE fcitx
 set -gx DefaultIMModule fcitx
 
+# ssh agent
+if not pgrep -u $USER ssh-agent >/dev/null
+    ssh-agent -c >$XDG_RUNTIME_DIR/ssh-agent.env
+end
+source $XDG_RUNTIME_DIR/ssh-agent.env >/dev/null
+set -gx SSH_ASKPASS /usr/bin/ksshaskpass
+set -gx SSH_ASKPASS_REQUIRE prefer
+
 # Prompt
 if type -q starship
     starship init fish | source

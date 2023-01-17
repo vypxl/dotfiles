@@ -34,6 +34,7 @@ M.plugin = {
       end,
       "Treesitter node action",
     },
+    ["<leader>gm"] = { "<cmd> Telescope notify<CR>", "List notifications" },
   },
 }
 

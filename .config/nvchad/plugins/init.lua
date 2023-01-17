@@ -34,6 +34,13 @@ return {
 
   ["mrjones2014/nvim-ts-rainbow"] = {},
 
+  ["nvim-telescope/telescope.nvim"] = {
+    module = "telescope",
+    override_options = {
+      extensions_list = { "themes", "terms", "notify" },
+    },
+  },
+
   ["williamboman/mason-lspconfig.nvim"] = {
     after = "mason.nvim",
     config = function()
@@ -217,6 +224,7 @@ return {
   },
 
   ["rcarriga/nvim-notify"] = {
+    module = "notify",
     config = function()
       require("notify").setup({
         stages = "fade",

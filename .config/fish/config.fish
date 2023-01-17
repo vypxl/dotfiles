@@ -30,9 +30,6 @@ end
 source $XDG_RUNTIME_DIR/ssh-agent.env >/dev/null
 set -gx SSH_ASKPASS /usr/bin/ksshaskpass
 set -gx SSH_ASKPASS_REQUIRE prefer
-if not ssh-add -l >/dev/null
-    ssh-add -q ~/.ssh/id_ed25519
-end
 
 # Prompt
 if type -q starship

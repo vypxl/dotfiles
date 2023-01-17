@@ -11,3 +11,8 @@
 	format = ssh
 [commit]
 	gpgsign = true
+[gpg "ssh"]
+	allowedSignersFile = /home/thomas/.ssh/allowed_signers
+[alias]
+	history = log --pretty='%C(yellow)%h %C(cyan)%cd %Cblue%aN%C(auto)%d %C(green)(%G?) %Creset%s' --graph --date=relative --date-order
+	uncommit = reset --soft HEAD^

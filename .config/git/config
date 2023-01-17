@@ -4,5 +4,10 @@
 [user]
 	email = "thomas@vypxl.io"
 	name = "vypxl"
+	signingkey = /home/thomas/.ssh/id_rsa.pub
 [pull]
 	rebase = false
+[gpg]
+	format = ssh
+[commit]
+	gpgsign = true

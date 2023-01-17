@@ -132,6 +132,7 @@ alias cclip="xclip -selection clipboard"
 alias beep="aplay -q ~/.config/misc/beep.wav"
 alias pluto="julia -ie 'import Pluto; Pluto.run()'"
 alias icat="kitty +kitten icat"
+alias lazyyadm="lazygit -w ~ -g ~/.local/share/yadm/repo.git"
 
 abbr -a md mkdir
 abbr -a g git

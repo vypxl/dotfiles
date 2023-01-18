@@ -48,13 +48,11 @@ local sources = {
   fmt.ptop,
   fmt.rubocop,
   fmt.rustfmt,
-  fmt.rustywind,
   fmt.scalafmt,
   fmt.stylua.with({ extra_args = { "--indent-type", "Spaces", "--indent-width", "2" } }),
   fmt.surface, -- Phoenix
   fmt.swiftformat,
   fmt.taplo,
-  fmt.tidy,
   fmt.yamlfmt,
   fmt.zigfmt,
 

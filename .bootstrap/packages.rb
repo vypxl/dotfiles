@@ -68,6 +68,7 @@ PACKAGES = %w[
   emscripten
   docker
   entr
+  tidy
 
   touchegg
   touche

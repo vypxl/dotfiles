@@ -257,4 +257,40 @@ return {
       })
     end,
   },
+
+  ["folke/twilight.nvim"] = {
+    module = "twilight",
+    config = function()
+      require("twilight").setup({})
+    end,
+  },
+
+  ["folke/zen-mode.nvim"] = {
+    module = "zen-mode",
+    requires = "folke/twilight.nvim",
+    config = function()
+      require("zen-mode").setup({
+        window = {
+          options = {
+            signcolumn = "no",
+            number = false,
+            relativenumber = false,
+            cursorline = false,
+            cursorcolumn = false,
+            foldcolumn = "0",
+            statuscolumn = "",
+          },
+        },
+        plugins = {
+          enabled = true,
+          ruler = true,
+          gitsigns = { enabled = true },
+          kitty = {
+            enabled = true,
+            font = "+1.5",
+          },
+        },
+      })
+    end,
+  },
 }

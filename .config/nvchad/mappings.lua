@@ -114,6 +114,25 @@ M.persistence = {
   },
 }
 
+M.zen = {
+  n = {
+    ["<leader>z"] = {
+      function()
+        require("zen-mode").toggle()
+      end,
+      "Zen mode",
+    },
+  },
+  v = {
+    ["<leader>z"] = {
+      function()
+        require("zen-mode").toggle()
+      end,
+      "Zen mode",
+    },
+  },
+}
+
 M.lspconfig = {
   plugin = true,
 

@@ -151,6 +151,18 @@ M.lspconfig = {
       "lsp definition",
     },
 
+    ["gt"] = {
+      function()
+        vim.lsp.buf.type_definition()
+      end,
+    },
+
+    ["gh"] = {
+      function()
+        vim.cmd([[ ClangdSwitchSourceHeader ]])
+      end,
+    },
+
     ["K"] = {
       function()
         vim.cmd([[Lspsaga hover_doc]])

@@ -1,5 +1,12 @@
 local M = {}
 
+M.disable = {
+  n = {
+    ["<TAB>"] = {},
+    ["<S-Tab>"] = {},
+  },
+}
+
 M.nvimtree = {
   n = {
     ["<C-b>"] = { "<cmd> NvimTreeToggle <CR>", "toggle nvimtree" },
@@ -9,20 +16,30 @@ M.nvimtree = {
 M.general = {
   n = {
     ["tt"] = { "<cmd> w<CR>", "Save file" },
-    ["<LEFT>"] = { "<cmd> bp<CR>", "Switch to previous buffer" },
-    ["<Right>"] = { "<cmd> bn<CR>", "Switch to next buffer", opts = { silent = true } },
-    ["<A-j>"] = { "<cmd> m .+1<CR>==", "Move line down" },
-    ["<A-k>"] = { "<cmd> m .-2<CR>==", "Move line up" },
+    ["<M-S-Left>"] = {
+      function()
+        require("nvchad_ui.tabufline").tabuflinePrev()
+      end,
+      "Switch to previous buffer",
+    },
+    ["<M-S-Right>"] = {
+      function()
+        require("nvchad_ui.tabufline").tabuflineNext()
+      end,
+      "Switch to next buffer",
+    },
+    ["<A-Down>"] = { "<cmd> m .+1<CR>==", "Move line down" },
+    ["<A-Up>"] = { "<cmd> m .-2<CR>==", "Move line up" },
     ["<Enter>"] = { "o<Esc>", "Insert blank line" },
   },
   i = {
     ["<C-s>"] = { "<cmd> w<CR>", "Save file" },
-    ["<A-j>"] = { "<cmd> m .+1<CR>", "Move line down" },
-    ["<A-k>"] = { "<cmd> m .-2<CR>", "Move line up" },
+    ["<A-Down>"] = { "<cmd> m .+1<CR>", "Move line down" },
+    ["<A-Up>"] = { "<cmd> m .-2<CR>", "Move line up" },
   },
   v = {
-    ["<A-j>"] = { ":m '>+1<CR>gv=gv", "Move selection one line down", opts = { silent = true } },
-    ["<A-k>"] = { ":m '<-2<CR>gv=gv", "Move selection one line up", opts = { silent = true } },
+    ["<A-Down>"] = { ":m '>+1<CR>gv=gv", "Move selection one line down", opts = { silent = true } },
+    ["<A-Up>"] = { ":m '<-2<CR>gv=gv", "Move selection one line up", opts = { silent = true } },
   },
 }
 

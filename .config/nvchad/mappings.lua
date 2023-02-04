@@ -1,9 +1,9 @@
 local M = {}
 
-M.disable = {
+M.disabled = {
   n = {
-    ["<TAB>"] = {},
-    ["<S-Tab>"] = {},
+    ["<TAB>"] = "",
+    ["<S-Tab>"] = "",
   },
 }
 

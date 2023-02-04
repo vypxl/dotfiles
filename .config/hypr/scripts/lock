@@ -1,0 +1,15 @@
+#!/bin/sh
+exec swaylock --screenshots --clock --submit-on-touch --effect-blur 16x4 --effect-vignette 0.7:0.8 --grace 1 --indicator --indicator-radius 100 --indicator-thickness 10 --ring-color 6272a4 --ring-clear-color 6272a4 --ring-caps-lock-color 6272a4 --ring-ver-color 50fa7b --ring-wrong-color ff5555 --key-hl-color 50fa7b --line-color 00000000 --inside-color 00000000 --separator-color 8be9fd --inside-ver-color 00000000 --inside-clear-color 00000000 --inside-wrong-color 00000000 --text-color ffb86c --text-clear-color ffb86c --text-caps-lock-color ffb86c --text-ver-color ffb86c --text-wrong-color ff5555 --line-uses-inside
+
+# drac-bgd: #282a36;
+# drac-cur: #44475a;
+# drac-fgd: #f8f8f2;
+# drac-cmt: #6272a4;
+# drac-cya: #8be9fd;
+# drac-grn: #50fa7b;
+# drac-ora: #ffb86c;
+# drac-pnk: #ff79c6;
+# drac-pur: #bd93f9;
+# drac-red: #ff5555;
+# drac-yel: #f1fa8c;
+

@@ -1,0 +1,27 @@
+{
+  "layer": "top",
+  "height": 30,
+  "modules-left": [],
+  "modules-center": [],
+  "modules-right": [
+    "battery",
+    "clock"
+  ],
+  "sway/window": {
+    "max-length": 50
+  },
+  "battery": {
+    "format": "{capacity}% {icon}",
+    "format-icons": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "clock": {
+    "format": "{:%a, %d.%m.%y %H:%M}",
+    "format-alt": "{:%m/%d/%y %H:%M}"
+  }
+}

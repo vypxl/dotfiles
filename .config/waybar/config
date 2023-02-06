@@ -133,7 +133,7 @@
     "on-click": "~/.config/hypr/scripts/logout"
   },
   "custom/power": {
-    "format": " ",
+    "format": "",
     "on-click": "$HOME/.config/hypr/scripts/powermenu"
   }
 }

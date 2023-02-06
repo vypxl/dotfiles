@@ -84,22 +84,13 @@ button:hover {
 #mpris,
 #user,
 #workspaces,
-#window {
-  padding: 0 10px;
-  margin: 4px 5px;
+#window,
+#custom-power {
+  padding: 2px 14px 2px 10px;
+  margin: 4px 5px 0px 4px;
   color: #f8f8f2;
   background-color: rgba(40, 42, 54, 0.8);
   border-radius: 16px;
-}
-
-/* If workspaces is the leftmost module, omit left margin */
-.modules-left > widget:first-child > #workspaces {
-  margin-left: 0;
-}
-
-/* If workspaces is the rightmost module, omit right margin */
-.modules-right > widget:last-child > #workspaces {
-  margin-right: 0;
 }
 
 #battery.charging,

@@ -1,3 +1,7 @@
+// Copyright (c) 2020 Dracula theme
+// License: https://opensource.org/licenses/MIT
+
+// https://draculatheme.com/rofi
 * {
     /* Dracula theme colour palette */
     drac-bgd: #282a36;

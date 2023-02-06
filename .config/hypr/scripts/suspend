@@ -1,0 +1,3 @@
+#! /bin/bash
+systemctl suspend
+$HOME/.config/hypr/scripts/lock

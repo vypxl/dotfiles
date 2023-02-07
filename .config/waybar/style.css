@@ -85,7 +85,8 @@ button:hover {
 #user,
 #workspaces,
 #window,
-#custom-power {
+#custom-power,
+#custom-kdeconnect {
   padding: 2px 14px 2px 10px;
   margin: 4px 5px 0px 4px;
   color: #f8f8f2;

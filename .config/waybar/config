@@ -13,6 +13,7 @@
     "backlight",
     "pulseaudio",
     "tray",
+    "custom/kdeconnect",
     "battery",
     "clock"
   ],
@@ -135,5 +136,9 @@
   "custom/power": {
     "format": "",
     "on-click": "$HOME/.config/hypr/scripts/powermenu"
+  },
+  "custom/kdeconnect": {
+    "format": "",
+    "on-click": "kdeconnect-app"
   }
 }

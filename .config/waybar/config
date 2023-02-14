@@ -33,7 +33,8 @@
       "warning": 20,
       "critical": 10
     },
-    "tooltip-format": "{timeTo}"
+    "tooltip-format": "{timeTo}",
+    "on-update": "~/.config/hypr/scripts/check_battery"
   },
   "clock": {
     "format": "{:%a %d.%m %H:%M}",

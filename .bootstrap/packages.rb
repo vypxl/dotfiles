@@ -11,6 +11,8 @@ PACKAGES = %w[
   gnu-netcat
   htop
   imagemagick
+  zathura
+  zathura-pdf-mupdf
   zip
   unzip
   wget

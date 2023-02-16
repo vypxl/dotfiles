@@ -47,7 +47,7 @@ local sources = {
   fmt.protolint,
   fmt.ptop,
   fmt.rubocop,
-  fmt.rustfmt,
+  fmt.rustfmt.with({ extra_args = { "--edition=2021" } }),
   fmt.scalafmt,
   fmt.stylua.with({ extra_args = { "--indent-type", "Spaces", "--indent-width", "2" } }),
   fmt.surface, -- Phoenix

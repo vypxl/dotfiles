@@ -136,10 +136,12 @@ alias .=ll
 alias vim=/usr/bin/nvim
 alias nvim='/usr/bin/nvim "+lua require(\'persistence\').load()"'
 alias hx=helix
-alias cclip="xclip -selection clipboard"
+alias ccopy="kitty +kitten clipboard"
+alias cpaste="kitty +kitten clipboard --get-clipboard"
 alias beep="aplay -q ~/.config/misc/beep.wav"
 alias pluto="julia -ie 'import Pluto; Pluto.run()'"
 alias icat="kitty +kitten icat"
+alias ssh="kitty +kitten ssh"
 alias lazyyadm="lazygit -w ~ -g ~/.local/share/yadm/repo.git"
 
 abbr -a md mkdir

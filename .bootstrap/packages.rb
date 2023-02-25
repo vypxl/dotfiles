@@ -21,6 +21,7 @@ PACKAGES = %w[
   texlive-core
   syncthing
   syncthingtray
+  udiskie
 
   vim
   neovim-nigthly-bin

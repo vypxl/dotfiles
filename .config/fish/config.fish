@@ -93,6 +93,14 @@ function join
     ruby -e "if not STDIN.tty? then puts STDIN.read.split(\"\n\").join(ARGV.length > 0 ? ARGV[0] : '') else puts File.read(ARGV[0]).split(\"\n\").join(ARGV.length > 1 ? ARGV[1] : '') end" $argv
 end
 
+function +
+    echo $argv | jq -s add
+end
+
+function x
+    echo $argv | jq -s 'reduce .[] as $item (1; . * $item)'
+end
+
 function _latest_command
     commandline -r $history[1]
     commandline -f execute
@@ -156,6 +164,7 @@ abbr -a gpl git pull
 
 abbr -a pn pnpm
 abbr -a cht cht.sh
+abbr -a m clac
 
 abbr -a rem remember
 function c

@@ -15,6 +15,7 @@ PACKAGES = %w[
   zathura-pdf-mupdf
   tealdeer
   zoxide
+  clac
   zip
   unzip
   wget

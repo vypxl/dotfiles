@@ -13,6 +13,8 @@ PACKAGES = %w[
   imagemagick
   zathura
   zathura-pdf-mupdf
+  tealdeer
+  zoxide
   zip
   unzip
   wget

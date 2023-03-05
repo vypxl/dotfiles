@@ -1,5 +1,9 @@
 #! /bin/bash
 
-if [[ $(acpi -b | awk '/Battery 0/{print $5;}') < 00:10:00 ]]; then
+BATINFO="$(acpi -b | grep -i discharging | awk '/Battery 0/{print $5;}')"
+if [ -z "$BATINFO" ]; then
+    exit
+fi
+if [[ "$BATINFO" < 00:10:00 ]]; then
     notify-send -a Battery -i Battery -u critical "Battery critical!" "Please plug in."
 fi

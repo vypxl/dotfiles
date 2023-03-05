@@ -131,7 +131,7 @@
     "on-click-right": "pavucontrol"
   },
   "user": {
-    "format": "λ vypxl (up {work_H}h {work_M}m)",
+    "format": "λ vypxl (up {work_d}d {work_H}h {work_M}m)",
     "on-click": "~/.config/hypr/scripts/logout"
   },
   "custom/power": {

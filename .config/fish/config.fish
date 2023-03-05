@@ -44,7 +44,6 @@ end
 # fzf, fd, rg and friends
 set -gx FZF_DEFAULT_COMMAND fd -Htf
 set -gx FZF_DEFAULT_OPTS --height=20% --min-height=8 --border=rounded --margin=0,2 --layout=reverse
-alias z=fzf
 alias rg="rg --hidden"
 alias zp="fzf --height=90% --preview-window=down:80% --preview='bat -n --color=always -r=:500 {}'"
 alias zpg="fzf --height=90% --preview-window=down:80% --preview='bat -n --color=always -r=:500 (echo {} | cut -d: -f1)'"
@@ -94,6 +93,14 @@ function join
     ruby -e "if not STDIN.tty? then puts STDIN.read.split(\"\n\").join(ARGV.length > 0 ? ARGV[0] : '') else puts File.read(ARGV[0]).split(\"\n\").join(ARGV.length > 1 ? ARGV[1] : '') end" $argv
 end
 
+function +
+    echo $argv | jq -s add
+end
+
+function x
+    echo $argv | jq -s 'reduce .[] as $item (1; . * $item)'
+end
+
 function _latest_command
     commandline -r $history[1]
     commandline -f execute
@@ -136,10 +143,12 @@ alias .=ll
 alias vim=/usr/bin/nvim
 alias nvim='/usr/bin/nvim "+lua require(\'persistence\').load()"'
 alias hx=helix
-alias cclip="xclip -selection clipboard"
+alias ccopy="kitty +kitten clipboard"
+alias cpaste="kitty +kitten clipboard --get-clipboard"
 alias beep="aplay -q ~/.config/misc/beep.wav"
 alias pluto="julia -ie 'import Pluto; Pluto.run()'"
 alias icat="kitty +kitten icat"
+alias ssh="kitty +kitten ssh"
 alias lazyyadm="lazygit -w ~ -g ~/.local/share/yadm/repo.git"
 
 abbr -a md mkdir
@@ -155,6 +164,7 @@ abbr -a gpl git pull
 
 abbr -a pn pnpm
 abbr -a cht cht.sh
+abbr -a m clac
 
 abbr -a rem remember
 function c
@@ -171,3 +181,6 @@ end
 
 # opam configuration
 source /home/thomas/.opam/opam-init/init.fish >/dev/null 2>/dev/null; or true
+
+# zoxide
+zoxide init fish | source

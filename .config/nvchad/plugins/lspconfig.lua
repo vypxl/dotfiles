@@ -79,3 +79,11 @@ lspconfig.clangd.setup({
   on_attach = on_attach,
   capabilities = clangd_capabilities,
 })
+
+-- Custom config for eslint
+local eslint_capabilities = capabilities
+eslint_capabilities.formatting = true
+lspconfig.eslint.setup({
+  on_attach = on_attach,
+  capabilities = eslint_capabilities,
+})

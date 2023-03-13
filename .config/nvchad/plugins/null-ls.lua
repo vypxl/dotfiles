@@ -66,7 +66,6 @@ local sources = {
   diag.codespell,
   diag.credo,
   diag.dotenv_linter,
-  diag.eslint_d,
   diag.fish,
   diag.gdlint,
   diag.hadolint,
@@ -87,7 +86,6 @@ local sources = {
   diag.yamllint,
 
   ca.cspell,
-  ca.eslint_d,
   ca.shellcheck,
   ca.statix,
 }

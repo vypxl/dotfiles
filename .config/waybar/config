@@ -8,7 +8,6 @@
   ],
   "modules-center": [],
   "modules-right": [
-    "mpris",
     "idle_inhibitor",
     "backlight",
     "pulseaudio",

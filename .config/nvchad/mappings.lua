@@ -55,6 +55,38 @@ M.plugin = {
   },
 }
 
+local spider = {
+  ["w"] = {
+    function()
+      require("spider").motion("w")
+    end,
+    "Spider-w",
+  },
+  ["e"] = {
+    function()
+      require("spider").motion("e")
+    end,
+    "Spider-e",
+  },
+  ["b"] = {
+    function()
+      require("spider").motion("b")
+    end,
+    "Spider-b",
+  },
+  ["ge"] = {
+    function()
+      require("spider").motion("ge")
+    end,
+    "Spider-ge",
+  },
+}
+M.spider = {
+  n = spider,
+  o = spider,
+  x = spider,
+}
+
 local term = require("custom.plugins.toggleterm")
 
 M.terminal = {

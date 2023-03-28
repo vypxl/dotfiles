@@ -34,6 +34,8 @@ return {
 
   ["mrjones2014/nvim-ts-rainbow"] = {},
 
+  ["chrisgrieser/nvim-spider"] = {},
+
   ["nvim-telescope/telescope.nvim"] = {
     module = "telescope",
     override_options = {

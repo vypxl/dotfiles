@@ -1,4 +1,4 @@
-local M = { "neovim/nvim-lspconfig" }
+local M = { "neovim/nvim-lspconfig", "mason-lspconfig.nvim" }
 
 M.config = function()
   require("plugins.configs.lspconfig")

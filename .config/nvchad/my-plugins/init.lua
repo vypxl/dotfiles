@@ -29,7 +29,8 @@ return {
 
   {
     "williamboman/mason-lspconfig.nvim",
-    dependencies = "williamboman/mason.nvim",
+    dependencies = { "williamboman/mason.nvim", "neovim/nvim-lspconfig" },
+    event = { "BufReadPre", "BufNewFile" },
     config = function()
       require("mason-lspconfig").setup({ automatic_installation = true })
     end,
@@ -38,10 +39,13 @@ return {
   {
     "jay-babu/mason-null-ls.nvim",
     dependencies = { "williamboman/mason.nvim", "jose-elias-alvarez/null-ls.nvim" },
+    event = { "BufReadPre", "BufNewFile" },
     config = function()
       require("mason-null-ls").setup({
         ensure_installed = nil,
         automatic_installation = true,
+        automatic_setup = false,
+        handlers = {},
       })
     end,
   },

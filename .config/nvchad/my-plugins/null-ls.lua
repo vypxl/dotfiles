@@ -2,7 +2,7 @@ local M = {
   "jose-elias-alvarez/null-ls.nvim",
   enabled = true,
   event = "VeryLazy",
-  dependencies = { "nvim-lspconfig", "mason-lspconfig.nvim", "mason-null-ls.nvim" },
+  dependencies = { "nvim-lspconfig" },
 }
 
 M.config = function()

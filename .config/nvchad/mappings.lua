@@ -57,34 +57,38 @@ M.plugin = {
 
 local spider = {
   ["w"] = {
-    function()
-      require("spider").motion("w")
-    end,
+    "<cmd>lua require('spider').motion('w')<CR>",
     "Spider-w",
   },
   ["e"] = {
-    function()
-      require("spider").motion("e")
-    end,
+    "<cmd>lua require('spider').motion('e')<CR>",
     "Spider-e",
   },
   ["b"] = {
-    function()
-      require("spider").motion("b")
-    end,
+    "<cmd>lua require('spider').motion('b')<CR>",
     "Spider-b",
   },
   ["ge"] = {
-    function()
-      require("spider").motion("ge")
-    end,
+    "<cmd>lua require('spider').motion('ge')<CR>",
     "Spider-ge",
   },
 }
+
 M.spider = {
   n = spider,
-  o = spider,
   x = spider,
+  o = {
+    ["w"] = {
+      spider.e[1],
+      "Spider-e motion (not w, because we don't want to delete the start of the next word)",
+    },
+    ["e"] = {
+      "<cmd>normal!w<CR>",
+      "Default word motion",
+    },
+    ["b"] = spider.b,
+    ["ge"] = spider.ge,
+  },
 }
 
 local term = require("custom.plugins.toggleterm")

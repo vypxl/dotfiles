@@ -35,8 +35,8 @@ local headerPadding = fn.max({ 2, fn.floor(fn.winheight(0) * marginTopPercent) }
 
 local opts = {
   layout = {
-    headerPaddingTop = { type = "padding", val = headerPadding },
-    header = {
+    { type = "padding", val = headerPadding },
+    {
       type = "text",
       val = {
         "               █████████████▀▀▀▀▀▀▀▀▀▀▀▀▀█████████████",
@@ -73,9 +73,9 @@ local opts = {
       },
     },
 
-    headerPaddingBottom = { type = "padding", val = 2 },
+    { type = "padding", val = 2 },
 
-    buttons = {
+    {
       type = "group",
       val = {
         button("Enter", "  Just type", ":enew<CR>"),

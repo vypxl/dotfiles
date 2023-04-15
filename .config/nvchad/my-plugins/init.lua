@@ -1,20 +1,7 @@
 return {
-  ["NvChad/ui"] = {
-    override_options = {
-      statusline = {
-        overriden_modules = function()
-          return {
-            LSP_progress = function()
-              return ""
-            end,
-          }
-        end,
-      },
-    },
-  },
-
-  ["nvim-treesitter/nvim-treesitter"] = {
-    override_options = {
+  {
+    "nvim-treesitter/nvim-treesitter",
+    opts = {
       ensure_installed = "all",
       rainbow = {
         enable = true,
@@ -32,35 +19,25 @@ return {
     },
   },
 
-  ["mrjones2014/nvim-ts-rainbow"] = {},
+  { "mrjones2014/nvim-ts-rainbow", event = "VeryLazy" },
 
-  ["chrisgrieser/nvim-spider"] = {},
+  { "chrisgrieser/nvim-spider" },
 
-  ["nvim-telescope/telescope.nvim"] = {
-    module = "telescope",
-    override_options = {
-      extensions_list = { "themes", "terms", "notify" },
-    },
-  },
+  { "nvim-telescope/telescope.nvim", opts = {
+    extensions_list = { "themes", "terms", "notify" },
+  } },
 
-  ["williamboman/mason-lspconfig.nvim"] = {
-    after = "mason.nvim",
+  {
+    "williamboman/mason-lspconfig.nvim",
+    dependencies = "williamboman/mason.nvim",
     config = function()
       require("mason-lspconfig").setup({ automatic_installation = true })
     end,
   },
 
-  ["jose-elias-alvarez/null-ls.nvim"] = {
-    disable = false,
-    event = "BufEnter",
-    after = { "nvim-lspconfig", "mason-lspconfig.nvim" },
-    config = function()
-      require("custom.plugins.null-ls")
-    end,
-  },
-
-  ["jayp0521/mason-null-ls.nvim"] = {
-    after = { "mason.nvim", "null-ls.nvim" },
+  {
+    "jay-babu/mason-null-ls.nvim",
+    dependencies = { "williamboman/mason.nvim", "jose-elias-alvarez/null-ls.nvim" },
     config = function()
       require("mason-null-ls").setup({
         ensure_installed = nil,
@@ -69,41 +46,30 @@ return {
     end,
   },
 
-  ["neovim/nvim-lspconfig"] = {
-    config = function()
-      require("plugins.configs.lspconfig")
-      require("custom.plugins.lspconfig")
-    end,
-  },
-
-  ["folke/trouble.nvim"] = {
-    commands = { "Trouble", "TroubleToggle" },
+  {
+    "folke/trouble.nvim",
+    cmd = { "Trouble", "TroubleToggle" },
     config = function()
       require("trouble").setup()
     end,
   },
 
-  ["folke/which-key.nvim"] = {
-    disable = false,
-  },
-
-  ["akinsho/toggleterm.nvim"] = {
-    tag = "*",
-    config = function()
-      require("custom.plugins.toggleterm").setup()
-    end,
-  },
+  { "folke/which-key.nvim", enabled = true },
 
   -- Load Comment.nvim eagerly to make mappings work
-  ["numToStr/Comment.nvim"] = {
-    event = "BufEnter",
+  { "numToStr/Comment.nvim", event = "VeryLazy" },
+
+  {
+    "github/copilot.vim",
+    event = "VeryLazy",
+    dependencies = "neovim/nvim-lspconfig",
   },
 
-  ["github/copilot.vim"] = { after = "nvim-lspconfig" },
+  { "vim-crystal/vim-crystal", ft = { "crystal" } },
 
-  ["vim-crystal/vim-crystal"] = { ft = { "crystal" } },
-
-  ["andweeb/presence.nvim"] = {
+  {
+    "andweeb/presence.nvim",
+    event = "VeryLazy",
     config = function()
       require("presence"):setup({
         main_image = "file",
@@ -111,29 +77,25 @@ return {
     end,
   },
 
-  ["lervag/vimtex"] = { ft = { "tex", "latex", "plaintex" } },
+  { "lervag/vimtex", ft = { "tex", "latex", "plaintex" } },
 
-  ["ionide/Ionide-vim"] = { ft = "fsharp" },
+  { "ionide/Ionide-vim", ft = "fsharp" },
 
-  ["iamcco/markdown-preview.nvim"] = { ft = "markdown" },
+  { "iamcco/markdown-preview.nvim", ft = "markdown" },
 
-  ["tpope/vim-surround"] = {},
+  { "tpope/vim-surround", event = "VeryLazy" },
 
-  ["goolord/alpha-nvim"] = {
-    disable = false,
-    override_options = require("custom.plugins.alpha"),
-  },
-
-  ["folke/drop.nvim"] = {
-    event = "VimEnter",
+  {
+    "folke/drop.nvim",
+    event = "VeryLazy",
     config = function()
       require("drop").setup({ theme = "snow" })
     end,
   },
 
-  ["vypxl/persistence.nvim"] = {
+  {
+    "vypxl/persistence.nvim",
     event = "BufReadPre",
-    module = "persistence",
     config = function()
       require("persistence").setup({
         options = { "blank", "buffers", "curdir", "folds", "tabpages", "terminal", "winsize" },
@@ -142,21 +104,26 @@ return {
     end,
   },
 
-  ["folke/todo-comments.nvim"] = {
-    requires = "nvim-lua/plenary.nvim",
+  {
+    "folke/todo-comments.nvim",
+    dependencies = "nvim-lua/plenary.nvim",
+    event = "VeryLazy",
     config = function()
       require("todo-comments").setup()
     end,
   },
 
-  ["chrisgrieser/nvim-various-textobjs"] = {
-    event = "BufEnter",
+  {
+    "chrisgrieser/nvim-various-textobjs",
+    event = "VeryLazy",
     config = function()
       require("various-textobjs").setup({ useDefaultKeymaps = true })
     end,
   },
 
-  ["cvigilv/esqueleto.nvim"] = {
+  {
+    "cvigilv/esqueleto.nvim",
+    lazy = false,
     config = function()
       require("esqueleto").setup({
         directories = { "~/.config/file_templates" },
@@ -171,8 +138,10 @@ return {
     end,
   },
 
-  ["glepnir/lspsaga.nvim"] = {
-    after = "nvim-lspconfig",
+  {
+    "glepnir/lspsaga.nvim",
+    dependencies = "neovim/nvim-lspconfig",
+    event = "VeryLazy",
     config = function()
       require("lspsaga").setup({
         border_style = "rounded",
@@ -191,8 +160,10 @@ return {
     end,
   },
 
-  ["j-hui/fidget.nvim"] = {
-    after = "nvim-lspconfig",
+  {
+    "j-hui/fidget.nvim",
+    dependencies = "neovim/nvim-lspconfig",
+    event = "VeryLazy",
     config = function()
       require("fidget").setup({
         text = {
@@ -203,30 +174,32 @@ return {
           task_decay = 0,
         },
         sources = {
-          ["null-ls"] = { ignore = true },
+          { "null-ls", ignore = true },
         },
       })
     end,
   },
 
-  ["ckolkey/ts-node-action"] = {
-    module = "ts-node-action",
-    requires = "nvim-treesitter",
+  {
+    "ckolkey/ts-node-action",
+    dependencies = "nvim-treesitter/nvim-treesitter",
+    event = "VeryLazy",
     config = function()
       require("ts-node-action").setup({})
     end,
   },
 
-  ["ggandor/leap.nvim"] = {
-    requires = "tpope/vim-repeat",
+  {
+    "ggandor/leap.nvim",
+    dependencies = "tpope/vim-repeat",
     keys = { "x", "X", "s", "S" },
     config = function()
       require("leap").add_default_mappings()
     end,
   },
 
-  ["rcarriga/nvim-notify"] = {
-    module = "notify",
+  {
+    "rcarriga/nvim-notify",
     config = function()
       require("notify").setup({
         stages = "fade",
@@ -234,8 +207,12 @@ return {
     end,
   },
 
-  ["folke/noice.nvim"] = {
-    requires = { "MunifTanjim/nui.nvim" },
+  -- TODO:
+
+  {
+    "folke/noice.nvim",
+    dependencies = { "MunifTanjim/nui.nvim", "rcarriga/nvim-notify" },
+    event = "VeryLazy",
     config = function()
       require("noice").setup({
         lsp = {
@@ -260,16 +237,16 @@ return {
     end,
   },
 
-  ["folke/twilight.nvim"] = {
-    module = "twilight",
+  {
+    "folke/twilight.nvim",
     config = function()
       require("twilight").setup({})
     end,
   },
 
-  ["folke/zen-mode.nvim"] = {
-    module = "zen-mode",
-    requires = "folke/twilight.nvim",
+  {
+    "folke/zen-mode.nvim",
+    dependencies = "folke/twilight.nvim",
     config = function()
       require("zen-mode").setup({
         window = {

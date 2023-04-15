@@ -91,37 +91,35 @@ M.spider = {
   },
 }
 
-local term = require("custom.plugins.toggleterm")
-
 M.terminal = {
   n = {
     ["<leader>gg"] = {
       function()
-        term.lazygit:toggle()
+        Toggleterms.lazygit:toggle()
       end,
       "Toggle lazygit",
     },
     ["<leader>gy"] = {
       function()
-        term.lazygit_yadm:toggle()
+        Toggleterms.lazygit_yadm:toggle()
       end,
       "Toggle lazygit for dotfiles (yadm)",
     },
     ["<leader>gh"] = {
       function()
-        term.htop:toggle()
+        Toggleterms.htop:toggle()
       end,
       "Toggle htop",
     },
     ["<leader>gp"] = {
       function()
-        term.python:toggle()
+        Toggleterms.python:toggle()
       end,
       "Toggle python",
     },
     ["<leader>gj"] = {
       function()
-        term.julia:toggle()
+        Toggleterms.julia:toggle()
       end,
       "Toggle julia",
     },

@@ -66,7 +66,7 @@ M.config = function()
     diag.chktex,
     diag.clj_kondo,
     diag.cmake_lint,
-    diag.codespell,
+    diag.codespell.with({ extra_args = { "--ignore-words", "~/.config/.codespell_ignore" } }),
     diag.credo,
     diag.dotenv_linter,
     diag.fish,

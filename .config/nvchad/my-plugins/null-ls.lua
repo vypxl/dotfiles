@@ -18,7 +18,6 @@ M.config = function()
     fmt.beautysh,
     fmt.black,
     fmt.brittany, -- Haskell
-    fmt.buf,
     fmt.buildifier,
     fmt.cabal_fmt,
     fmt.cbfmt,
@@ -59,7 +58,6 @@ M.config = function()
     fmt.yamlfmt,
     fmt.zigfmt,
 
-    diag.buf,
     diag.buildifier,
     diag.checkmake,
     diag.checkstyle,

@@ -137,6 +137,7 @@ return {
           "LICENSE",
           "c",
           "cpp",
+          "svelte",
         },
       })
     end,

@@ -162,6 +162,7 @@ abbr -a gc git checkout
 abbr -a gp git push --all
 abbr -a gpl git pull
 
+abbr -a dc docker compose
 abbr -a pn pnpm
 abbr -a cht cht.sh
 abbr -a m clac

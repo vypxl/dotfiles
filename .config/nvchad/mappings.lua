@@ -16,6 +16,7 @@ M.nvimtree = {
 M.general = {
   n = {
     ["tt"] = { "<cmd> w<CR>", "Save file" },
+    ["<ESC>"] = { "<cmd> noh<CR>", "clear highlights" },
     ["<M-S-Left>"] = {
       function()
         require("nvchad_ui.tabufline").tabuflinePrev()

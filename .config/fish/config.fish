@@ -152,7 +152,8 @@ alias icat="kitty +kitten icat"
 alias ssh="kitty +kitten ssh"
 alias lazyyadm="lazygit -w ~ -g ~/.local/share/yadm/repo.git"
 
-abbr -a md mkdir
+alias killbg="jobs -p | tail -n 1 | xargs kill -9; fg"
+
 abbr -a g git
 abbr -a ga. git add .
 abbr -a ga git add
@@ -163,7 +164,14 @@ abbr -a gc git checkout
 abbr -a gp git push --all
 abbr -a gpl git pull
 
+abbr -a d docker
 abbr -a dc docker compose
+abbr -a dcu docker compose up
+abbr -a dcud docker compose up -d
+abbr -a dcd docker compose down
+abbr -a dcs docker compose stop
+
+abbr -a md mkdir
 abbr -a pn pnpm
 abbr -a cht cht.sh
 abbr -a m clac

@@ -27,7 +27,6 @@ M.config = function()
     "pyright",
     "marksman",
     "rnix",
-    "rust_analyzer",
     "solargraph",
     "svelte",
     "tailwindcss",
@@ -69,6 +68,16 @@ M.config = function()
       },
     }
   end
+
+  lspconfig.rust_analyzer.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+    settings = {
+      ["rust-analyzer"] = {
+        check = { command = "clippy" },
+      },
+    },
+  })
 
   for _, lsp in ipairs(servers) do
     lspconfig[lsp].setup({

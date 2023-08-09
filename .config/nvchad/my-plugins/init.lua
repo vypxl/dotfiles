@@ -185,6 +185,7 @@ return {
 
   {
     "j-hui/fidget.nvim",
+    tag = "legacy",
     dependencies = "neovim/nvim-lspconfig",
     event = "VeryLazy",
     config = function()

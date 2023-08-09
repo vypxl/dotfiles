@@ -23,9 +23,12 @@ return {
 
   { "chrisgrieser/nvim-spider" },
 
-  { "nvim-telescope/telescope.nvim", opts = {
-    extensions_list = { "themes", "terms", "notify" },
-  } },
+  {
+    "nvim-telescope/telescope.nvim",
+    opts = {
+      extensions_list = { "themes", "terms", "notify" },
+    },
+  },
 
   {
     "williamboman/mason-lspconfig.nvim",
@@ -98,7 +101,6 @@ return {
   },
 
   { "lervag/vimtex", ft = { "tex", "latex", "plaintex" } },
-
   { "ionide/Ionide-vim", ft = "fsharp" },
 
   { "iamcco/markdown-preview.nvim", ft = "markdown" },
@@ -223,7 +225,11 @@ return {
     "rcarriga/nvim-notify",
     config = function()
       require("notify").setup({
-        stages = "fade",
+        render = "compact",
+        top_down = false,
+        max_width = 40,
+        max_height = 5,
+        fps = 60,
       })
     end,
   },

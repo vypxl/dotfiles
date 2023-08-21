@@ -32,6 +32,7 @@ M.config = function()
     "tailwindcss",
     "taplo",
     "tsserver",
+    "typst_lsp",
     "volar",
     "yamlls",
     "zls",

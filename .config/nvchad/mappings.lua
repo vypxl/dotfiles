@@ -138,16 +138,6 @@ M.comment = {
   },
 }
 
-M.copilot = {
-  i = {
-    ["<C-a>"] = {
-      "copilot#Accept()",
-      "copilot accept suggestion",
-      opts = { silent = true, expr = true, script = true },
-    },
-  },
-}
-
 M.trouble = {
   n = {
     ["<leader>dd"] = { "<cmd>TroubleToggle<CR>", "Toggle trouble" },

@@ -67,9 +67,41 @@ return {
   { "numToStr/Comment.nvim", event = "VeryLazy" },
 
   {
-    "github/copilot.vim",
+    "zbirenbaum/copilot.lua",
     event = "VeryLazy",
-    dependencies = "neovim/nvim-lspconfig",
+    config = function()
+      require("copilot").setup({
+        suggestion = { enabled = false },
+        panel = { enabled = false },
+        filetypes = {
+          yaml = true,
+          markdown = true,
+        },
+      })
+    end,
+  },
+
+  {
+    "zbirenbaum/copilot-cmp",
+    event = "VeryLazy",
+    dependencies = { "zbirenbaum/copilot.lua", "hrsh7th/nvim-cmp" },
+    config = function()
+      require("copilot_cmp").setup()
+
+      local cmp = require("cmp")
+      local conf = cmp.get_config()
+      table.insert(conf.sources, { name = "copilot", group_index = 2 })
+      cmp.setup(conf)
+    end,
+  },
+
+  {
+    "sustech-data/wildfire.nvim",
+    event = "VeryLazy",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    config = function()
+      require("wildfire").setup()
+    end,
   },
 
   { "vim-crystal/vim-crystal", ft = { "crystal" } },

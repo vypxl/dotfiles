@@ -31,7 +31,6 @@ M.general = {
     },
     ["<A-Down>"] = { "<cmd> m .+1<CR>==", "Move line down" },
     ["<A-Up>"] = { "<cmd> m .-2<CR>==", "Move line up" },
-    ["<Enter>"] = { "o<Esc>", "Insert blank line" },
   },
   i = {
     ["<C-s>"] = { "<cmd> w<CR>", "Save file" },

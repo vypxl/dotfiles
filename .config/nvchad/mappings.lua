@@ -16,16 +16,16 @@ M.nvimtree = {
 M.general = {
   n = {
     ["tt"] = { "<cmd> w<CR>", "Save file" },
-    ["<ESC>"] = { "<cmd> noh<CR>", "clear highlights" },
+    ["<Esc>"] = { "<cmd> noh<CR>", "clear highlights" },
     ["<M-S-Left>"] = {
       function()
-        require("nvchad_ui.tabufline").tabuflinePrev()
+        require("nvchad.tabufline").tabuflinePrev()
       end,
       "Switch to previous buffer",
     },
     ["<M-S-Right>"] = {
       function()
-        require("nvchad_ui.tabufline").tabuflineNext()
+        require("nvchad.tabufline").tabuflineNext()
       end,
       "Switch to next buffer",
     },
@@ -235,7 +235,7 @@ M.lspconfig = {
 
     ["<leader>ra"] = {
       function()
-        require("nvchad_ui.renamer").open()
+        require("nvchad.renamer").open()
       end,
       "lsp rename",
     },

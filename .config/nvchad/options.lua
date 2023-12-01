@@ -12,16 +12,16 @@ set.smarttab = true
 set.expandtab = true
 
 set.list = true
-set.listchars = { tab = '▸ ', trail = '·', extends = '#' }
-set.fillchars = { foldopen = '▾', foldclose = '▸', foldsep = '│' }
+set.listchars = { tab = "▸ ", trail = "·", extends = "#" }
+set.fillchars = { foldopen = "▾", foldclose = "▸", foldsep = "│" }
 
-set.encoding = 'utf-8'
+set.encoding = "utf-8"
 
 -- Folding
 set.foldlevelstart = 99
 set.foldnestmax = 4
-set.foldmethod = 'expr'
-set.foldexpr = 'nvim_treesitter#foldexpr()'
+set.foldmethod = "expr"
+set.foldexpr = "nvim_treesitter#foldexpr()"
 set.foldcolumn = "1"
 
 -- Editor
@@ -32,13 +32,17 @@ set.relativenumber = true
 
 set.title = true
 
-set.shell = 'bash'
+set.shell = "bash"
+
+-- local config
+set.exrc = true
+set.secure = true
 
 -- Clipboard
-set.clipboard = 'unnamedplus'
+set.clipboard = "unnamedplus"
 
 -- Mouse
-set.mouse = 'a'
+set.mouse = "a"
 set.mousefocus = false
 
 -- Searching

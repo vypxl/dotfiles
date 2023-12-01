@@ -1,5 +1,5 @@
 local M = {
-  "jose-elias-alvarez/null-ls.nvim",
+  "nvimtools/none-ls.nvim",
   enabled = true,
   event = "VeryLazy",
   dependencies = { "nvim-lspconfig" },
@@ -86,7 +86,6 @@ M.config = function()
     diag.tsc,
     diag.yamllint,
 
-    ca.cspell,
     ca.shellcheck,
     ca.statix,
   }

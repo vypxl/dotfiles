@@ -18,6 +18,7 @@ M.config = function()
     "csharp_ls",
     "elixirls",
     "emmet_ls",
+    "gdscript",
     "gopls",
     "haxe_language_server",
     "hls",

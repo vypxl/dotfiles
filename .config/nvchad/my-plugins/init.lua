@@ -78,6 +78,10 @@ return {
           markdown = true,
         },
       })
+      -- disable if .nvimrc / .exrc or another place sets g:copilot = 0
+      if vim.g.copilot == 0 then
+        vim.api.nvim_command("Copilot disable")
+      end
     end,
   },
 

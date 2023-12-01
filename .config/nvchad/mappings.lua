@@ -43,6 +43,18 @@ M.general = {
   },
 }
 
+M.task = {
+  n = {
+    ["<F5>"] = {
+      function()
+        vim.api.nvim_command("wa")
+        Toggleterms.run:toggle()
+      end,
+      "Run",
+    },
+  },
+}
+
 M.plugin = {
   n = {
     ["<leader>a"] = {

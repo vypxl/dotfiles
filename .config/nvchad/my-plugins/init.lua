@@ -17,6 +17,17 @@ return {
         },
       },
     },
+    setup = function()
+      require("nvim-treesitter.parsers").get_parser_configs().just = {
+        install_info = {
+          url = "https://github.com/IndianBoy42/tree-sitter-just",
+          files = { "src/parser.c", "src/scanner.cc" },
+          branch = "main",
+          -- use_makefile = true -- this may be necessary on MacOS (try if you see compiler errors)
+        },
+        maintainers = { "@IndianBoy42" },
+      }
+    end,
   },
 
   { "mrjones2014/nvim-ts-rainbow", event = "VeryLazy" },
@@ -78,6 +89,7 @@ return {
           markdown = true,
         },
       })
+
       -- disable if .nvimrc / .exrc or another place sets g:copilot = 0
       if vim.g.copilot == 0 then
         vim.api.nvim_command("Copilot disable")
@@ -109,6 +121,8 @@ return {
   },
 
   { "vim-crystal/vim-crystal", ft = { "crystal" } },
+
+  { "IndianBoy42/tree-sitter-just", ft = { "just" } },
 
   {
     "scalameta/nvim-metals",

@@ -22,6 +22,7 @@ M.config = function()
   Toggleterms.htop = Terminal:new({ cmd = "htop", hidden = true })
   Toggleterms.python = Terminal:new({ cmd = "python", hidden = true })
   Toggleterms.julia = Terminal:new({ cmd = "julia", hidden = true })
+  Toggleterms.run = Terminal:new({ cmd = "just; read -s -n 1", hidden = true })
 end
 
 return M

@@ -110,6 +110,8 @@
       "chromium": "",
       "brave": ""
     },
+    "title-len": 24,
+    "artist-len": 16,
     "status-icons": {
       "paused": "⏸"
     }

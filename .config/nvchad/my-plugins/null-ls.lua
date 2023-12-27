@@ -74,7 +74,6 @@ M.config = function()
     diag.ktlint,
     diag.misspell,
     diag.protolint,
-    diag.pycodestyle,
     diag.pydocstyle,
     diag.pylint,
     diag.revive,

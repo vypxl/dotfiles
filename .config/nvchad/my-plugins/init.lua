@@ -98,6 +98,20 @@ return {
   },
 
   {
+    "hrsh7th/nvim-cmp",
+    opts = function()
+      local o = require("plugins.configs.cmp")
+      o.enabled = function()
+        -- disable if inside an ephemeral buffer (popups like renamer)
+        if vim.o.bufhidden == "wipe" then
+          return false
+        end
+        return true
+      end
+    end,
+  },
+
+  {
     "zbirenbaum/copilot-cmp",
     event = "VeryLazy",
     dependencies = { "zbirenbaum/copilot.lua", "hrsh7th/nvim-cmp" },

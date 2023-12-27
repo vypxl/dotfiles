@@ -175,6 +175,7 @@ abbr -a md mkdir
 abbr -a pn pnpm
 abbr -a cht cht.sh
 abbr -a m clac
+abbr -a j just
 
 abbr -a rem remember
 function c
@@ -194,3 +195,6 @@ source /home/thomas/.opam/opam-init/init.fish >/dev/null 2>/dev/null; or true
 
 # zoxide
 zoxide init fish | source
+
+# pyenv
+pyenv init - | source

@@ -17,6 +17,7 @@ M.general = {
   n = {
     ["tt"] = { "<cmd> w<CR>", "Save file" },
     ["<Esc>"] = { "<cmd> noh<CR>", "clear highlights" },
+    ["<CR>"] = { "o<ESC>" },
     ["<M-S-Left>"] = {
       function()
         require("nvchad.tabufline").tabuflinePrev()
@@ -167,25 +168,6 @@ M.persistence = {
   },
 }
 
-M.zen = {
-  n = {
-    ["<leader>z"] = {
-      function()
-        require("zen-mode").toggle()
-      end,
-      "Zen mode",
-    },
-  },
-  v = {
-    ["<leader>z"] = {
-      function()
-        require("zen-mode").toggle()
-      end,
-      "Zen mode",
-    },
-  },
-}
-
 M.lspconfig = {
   plugin = true,
 
@@ -283,7 +265,7 @@ M.lspconfig = {
       function()
         vim.cmd([[Lspsaga show_cursor_diagnostics]])
       end,
-      "show line diagnostics",
+      "show cursor diagnostics",
     },
 
     ["[d"] = {
@@ -299,8 +281,6 @@ M.lspconfig = {
       end,
       "goto_next",
     },
-
-    -- ["<leader>q"] = "",
 
     ["<leader>o"] = {
       function()

@@ -28,7 +28,6 @@ set.foldcolumn = "1"
 set.hidden = true
 set.guifont = { "FiraCode Nerd Font", ":h14" }
 set.number = true
-set.relativenumber = true
 
 set.title = true
 

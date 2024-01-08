@@ -3,18 +3,9 @@ return {
     "nvim-treesitter/nvim-treesitter",
     opts = {
       ensure_installed = "all",
-      rainbow = {
+      indent = {
         enable = true,
-        extended_mode = true,
-        max_file_lines = 2500,
-        colors = {
-          "#E8E9ED",
-          "#009DDC",
-          "#F26430",
-          "#009B72",
-          "#F2B134",
-          "#DF57BC",
-        },
+        disable = { "dart" }, -- https://github.com/UserNobody14/tree-sitter-dart/issues/60
       },
     },
     setup = function()
@@ -29,8 +20,6 @@ return {
       }
     end,
   },
-
-  { "mrjones2014/nvim-ts-rainbow", event = "VeryLazy" },
 
   { "chrisgrieser/nvim-spider" },
 
@@ -130,30 +119,15 @@ return {
     event = "VeryLazy",
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     config = function()
-      require("wildfire").setup()
-    end,
-  },
-
-  { "vim-crystal/vim-crystal", ft = { "crystal" } },
-
-  { "IndianBoy42/tree-sitter-just", ft = { "just" } },
-
-  {
-    "scalameta/nvim-metals",
-    dependencies = "nvim-lua/plenary.nvim",
-    ft = { "scala", "sbt", "java" },
-    config = function()
-      local nvim_metals_group = vim.api.nvim_create_augroup("nvim-metals", { clear = true })
-      vim.api.nvim_create_autocmd("FileType", {
-        pattern = { "scala", "sbt", "java" },
-        callback = function()
-          require("metals").initialize_or_attach({})
-        end,
-        group = nvim_metals_group,
+      require("wildfire").setup({
+        keymaps = {
+          init_selection = "\\",
+          node_incremental = "\\",
+          node_decremental = "<BS>",
+        },
       })
     end,
   },
-
   {
     "andweeb/presence.nvim",
     event = "VeryLazy",
@@ -163,19 +137,11 @@ return {
       })
     end,
   },
-
-  { "lervag/vimtex", ft = { "tex", "latex", "plaintex" } },
-  { "ionide/Ionide-vim", ft = "fsharp" },
-
-  { "iamcco/markdown-preview.nvim", ft = "markdown" },
-
-  { "tpope/vim-surround", event = "VeryLazy" },
-
   {
-    "folke/drop.nvim",
+    "kylechui/nvim-surround",
     event = "VeryLazy",
     config = function()
-      require("drop").setup({ theme = "snow" })
+      require("nvim-surround").setup({})
     end,
   },
 
@@ -287,23 +253,8 @@ return {
   },
 
   {
-    "rcarriga/nvim-notify",
-    config = function()
-      require("notify").setup({
-        render = "compact",
-        top_down = false,
-        max_width = 40,
-        max_height = 5,
-        fps = 60,
-      })
-    end,
-  },
-
-  -- TODO:
-
-  {
     "folke/noice.nvim",
-    dependencies = { "MunifTanjim/nui.nvim", "rcarriga/nvim-notify" },
+    dependencies = { "MunifTanjim/nui.nvim" },
     event = "VeryLazy",
     config = function()
       require("noice").setup({
@@ -330,62 +281,43 @@ return {
   },
 
   {
-    "folke/twilight.nvim",
-    config = function()
-      require("twilight").setup({})
-    end,
+    "kaarmu/typst.vim",
+    ft = "typst",
   },
 
+  { "vim-crystal/vim-crystal", ft = { "crystal" } },
+
+  { "IndianBoy42/tree-sitter-just", ft = { "just" } },
+
   {
-    "folke/zen-mode.nvim",
-    dependencies = "folke/twilight.nvim",
+    "scalameta/nvim-metals",
+    dependencies = "nvim-lua/plenary.nvim",
+    ft = { "scala", "sbt", "java" },
     config = function()
-      require("zen-mode").setup({
-        window = {
-          options = {
-            signcolumn = "no",
-            number = false,
-            relativenumber = false,
-            cursorline = false,
-            cursorcolumn = false,
-            foldcolumn = "0",
-            statuscolumn = "",
-          },
-        },
-        plugins = {
-          enabled = true,
-          ruler = true,
-          gitsigns = { enabled = true },
-          kitty = {
-            enabled = true,
-            font = "+1.5",
-          },
-        },
+      local nvim_metals_group = vim.api.nvim_create_augroup("nvim-metals", { clear = true })
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = { "scala", "sbt", "java" },
+        callback = function()
+          require("metals").initialize_or_attach({})
+        end,
+        group = nvim_metals_group,
       })
     end,
   },
 
   {
-    "smoka7/multicursors.nvim",
-    event = "VeryLazy",
+    "akinsho/flutter-tools.nvim",
+    ft = { "dart" },
     dependencies = {
-      "nvim-treesitter/nvim-treesitter",
-      "smoka7/hydra.nvim",
+      "nvim-lua/plenary.nvim",
+      "stevearc/dressing.nvim", -- optional for vim.ui.select
     },
-    opts = {},
-    cmd = { "MCstart", "MCvisual", "MCclear", "MCpattern", "MCvisualPattern", "MCunderCursor" },
-    keys = {
-      {
-        mode = { "v", "n" },
-        "<Leader>m",
-        "<cmd>MCstart<cr>",
-        desc = "Create a selection for selected text or word under the cursor",
-      },
-    },
+    config = true,
   },
 
-  {
-    "kaarmu/typst.vim",
-    ft = "typst",
-  },
+  { "lervag/vimtex", ft = { "tex", "latex", "plaintex" } },
+
+  { "ionide/Ionide-vim", ft = "fsharp" },
+
+  { "iamcco/markdown-preview.nvim", ft = "markdown" },
 }

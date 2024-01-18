@@ -1,4 +1,4 @@
-@theme "dracula"
+@theme "catppuccin"
 configuration {
 modes: "window,drun,run,ssh,combi";
 font: "Fira Code Nerd Font 14";

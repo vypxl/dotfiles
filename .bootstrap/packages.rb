@@ -38,6 +38,8 @@ PACKAGES = %w[
   exa
   github-cli
   xclip
+  tree-sitter
+  tree-sitter-cli
 
   fish
   starship

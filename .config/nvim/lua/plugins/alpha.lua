@@ -1,4 +1,5 @@
-local M = { "goolord/alpha-nvim", enabled = true }
+-- alpha.nvim is my startup screen
+local M = { "goolord/alpha-nvim", enabled = true, lazy = false }
 
 local function button(sc, txt, keybind)
   local sc_ = sc:gsub("%s", ""):gsub("SPC", "<leader>")
@@ -31,9 +32,9 @@ end
 -- dynamic header padding
 local fn = vim.fn
 local marginTopPercent = 0.225
-local headerPadding = fn.max({ 2, fn.floor(fn.winheight(0) * marginTopPercent) })
+local headerPadding = fn.max { 2, fn.floor(fn.winheight(0) * marginTopPercent) }
 
-local opts = {
+M.opts = {
   layout = {
     { type = "padding", val = headerPadding },
     {
@@ -79,14 +80,9 @@ local opts = {
       type = "group",
       val = {
         button("Enter", "  Just type", ":enew<CR>"),
-        button("SPC s d", "  Restore local session", ":lua require('persistence').load()<CR>"),
-        button("SPC s l", "  Restore last session", ":lua require('persistence').load({ last = true })<CR>"),
-        button("SPC f f", "  Find File  ", ":Telescope find_files<CR>"),
-        button("SPC f o", "  Recent File  ", ":Telescope oldfiles<CR>"),
-        button("SPC f w", "  Find Word  ", ":Telescope live_grep<CR>"),
-        button("SPC b m", "  Bookmarks  ", ":Telescope marks<CR>"),
-        button("SPC t h", "  Themes  ", ":Telescope themes<CR>"),
-        button("SPC e s", "  Settings", ":e ~/.config/nvchad/chadrc.lua | :cd %:p:h <CR>"),
+        button("SPC f", "  Find File  ", ":Telescope find_files<CR>"),
+        button("SPC o", "  Recent File  ", ":Telescope oldfiles<CR>"),
+        button("SPC w", "  Find Word  ", ":Telescope live_grep<CR>"),
       },
       opts = {
         spacing = 1,
@@ -94,11 +90,5 @@ local opts = {
     },
   },
 }
-
-M.config = function()
-  require("alpha").setup(opts)
-end
-
-M.lazy = false
 
 return M

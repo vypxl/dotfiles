@@ -187,8 +187,8 @@ return {
 
     keys = {
       "<C-\\>",
-      { "<leader>g", "lua Toggleterms.lazygit:toggle() <CR>", mode = "n", desc = "Toggle Lazygit" },
-      { "<leader>y", "lua Toggleterms.lazygit_yadm:toggle() <CR>", mode = "n", desc = "Toggle Lazygit (yadm)" },
+      { "<leader>g", "<cmd> lua Toggleterms.lazygit:toggle() <CR>", mode = "n", desc = "Toggle Lazygit" },
+      { "<leader>y", "<cmd> lua Toggleterms.lazygit_yadm:toggle() <CR>", mode = "n", desc = "Toggle Lazygit (yadm)" },
       {
         "<F5>",
         function()

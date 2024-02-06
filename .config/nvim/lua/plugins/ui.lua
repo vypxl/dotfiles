@@ -89,7 +89,7 @@ return {
   -- Filetree
   {
     "nvim-tree/nvim-tree.lua",
-    keys = { { "<C-b>", "<cmd> NvimTreeToggle", mode = "n", desc = "Toggle Filetree" } },
+    keys = { { "<C-b>", "<cmd> NvimTreeToggle<CR>", mode = "n", desc = "Toggle Filetree" } },
     opts = {},
   },
 

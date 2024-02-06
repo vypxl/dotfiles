@@ -67,3 +67,6 @@ set.shell = "bash"
 -- local config
 set.exrc = true
 set.secure = true
+
+-- filetypes
+vim.filetype.add { extension = { frag = "glsl", vert = "glsl" } }

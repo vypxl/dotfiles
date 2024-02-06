@@ -63,6 +63,7 @@ local function setup_lspconfig()
     "elixirls",
     "emmet_ls",
     "gdscript",
+    "glsl_analyzer",
     "gopls",
     "haxe_language_server",
     "hls",

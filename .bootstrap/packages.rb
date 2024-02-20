@@ -36,6 +36,7 @@ PACKAGES = %w[
   fzf
   bat
   exa
+  git-delta
   github-cli
   xclip
   tree-sitter

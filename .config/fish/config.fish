@@ -160,7 +160,7 @@ alias la="ls -al"
 alias lr="la -R"
 alias .=ll
 
-alias vim=env nvim
+alias vim='env nvim'
 alias nvim='env nvim "+lua require(\'persistence\').load()"'
 if type -q helix; and not type -q hx
   alias hx=helix

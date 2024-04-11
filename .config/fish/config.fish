@@ -160,9 +160,11 @@ alias la="ls -al"
 alias lr="la -R"
 alias .=ll
 
-alias vim=/usr/bin/nvim
-alias nvim='/usr/bin/nvim "+lua require(\'persistence\').load()"'
-alias hx=helix
+alias vim=env nvim
+alias nvim='env nvim "+lua require(\'persistence\').load()"'
+if type -q helix; and not type -q hx
+  alias hx=helix
+end
 alias ccopy="kitty +kitten clipboard"
 alias cpaste="kitty +kitten clipboard --get-clipboard"
 alias beep="aplay -q ~/.config/misc/beep.wav"

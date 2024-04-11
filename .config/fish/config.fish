@@ -16,21 +16,20 @@ set -gx PATH /usr/lib/ccache/bin $PATH
 set -gx XDG_CONFIG_HOME $HOME/.config
 set -gx SXHKD_SHELL /bin/sh
 set -gx PYTHONSTARTUP $XDG_CONFIG_HOME/python/init.py
-set -gx DEBUGINFOD_URLS (cat "/etc/debuginfod"/*.urls 2> /dev/null | tr '\n' ' ')
+if [ -f /etc/debuginfod/ ]
+  set -gx DEBUGINFOD_URLS (cat "/etc/debuginfod"/*.urls 2> /dev/null | tr '\n' ' ')
+end
 set -gx EDITOR vim
-set -gx XMODIFIERS "@im=fcitx"
-set -gx XMODIFIER "@im=fcitx"
-set -gx GTK_IM_MODULE fcitx
-set -gx QT_IM_MODULE fcitx
-set -gx DefaultIMModule fcitx
 
 # ssh agent
-if not pgrep -u $USER ssh-agent >/dev/null
-    ssh-agent -c >$XDG_RUNTIME_DIR/ssh-agent.env
+if string match -ri (uname -n) 'basalt|slate'
+  if not pgrep -u $USER ssh-agent >/dev/null
+      ssh-agent -c >$XDG_RUNTIME_DIR/ssh-agent.env
+  end
+  source $XDG_RUNTIME_DIR/ssh-agent.env >/dev/null
+  set -gx SSH_ASKPASS /usr/bin/ksshaskpass
+  set -gx SSH_ASKPASS_REQUIRE prefer
 end
-source $XDG_RUNTIME_DIR/ssh-agent.env >/dev/null
-set -gx SSH_ASKPASS /usr/bin/ksshaskpass
-set -gx SSH_ASKPASS_REQUIRE prefer
 
 # Prompt
 if type -q starship
@@ -197,6 +196,9 @@ abbr -a cht cht.sh
 abbr -a m clac
 abbr -a j just
 
+abbr -a nixi 'nix profile install nixpkgs#'
+abbr -a nixr 'nix run nixpkgs#'
+
 abbr -a rem remember
 function c
     set r (_c $argv)
@@ -217,4 +219,4 @@ source /home/thomas/.opam/opam-init/init.fish >/dev/null 2>/dev/null; or true
 zoxide init fish | source
 
 # pyenv
-pyenv init - | source
+type -q pyenv; and pyenv init - | source; or true

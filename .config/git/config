@@ -36,6 +36,9 @@
 [gpg "ssh"]
 	allowedSignersFile = /home/thomas/.ssh/allowed_signers
 
+[submodule]
+  recurse = true
+
 [alias]
 	history = log --pretty='%C(yellow)%h %C(cyan)%cd %Cblue%aN%C(auto)%d %C(green)(%G?) %Creset%s' --graph --date=relative --date-order
 	uncommit = reset --soft HEAD^
@@ -68,3 +71,6 @@
 	plus-style = "syntax #313943"
 	# Should match the name of the bat theme
 	syntax-theme = "Catppuccin-macchiato"
+
+[includeIf "gitdir:~/work/"]
+  path = ~/.config/git/config.work

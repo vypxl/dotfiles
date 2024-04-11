@@ -160,7 +160,7 @@ local function setup_null_ls()
     fmt.protolint,
     fmt.ptop,
     fmt.rubocop,
-    fmt.rustfmt.with { extra_args = { "--edition=2021" } },
+    -- fmt.rustfmt.with { extra_args = { "--edition=2021" } },
     fmt.scalafmt,
     fmt.stylua.with { extra_args = { "--indent-type", "Spaces", "--indent-width", "2" } },
     fmt.surface, -- Phoenix

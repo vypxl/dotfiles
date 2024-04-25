@@ -17,18 +17,18 @@ set -gx XDG_CONFIG_HOME $HOME/.config
 set -gx SXHKD_SHELL /bin/sh
 set -gx PYTHONSTARTUP $XDG_CONFIG_HOME/python/init.py
 if [ -f /etc/debuginfod/ ]
-  set -gx DEBUGINFOD_URLS (cat "/etc/debuginfod"/*.urls 2> /dev/null | tr '\n' ' ')
+    set -gx DEBUGINFOD_URLS (cat "/etc/debuginfod"/*.urls 2> /dev/null | tr '\n' ' ')
 end
 set -gx EDITOR vim
 
 # ssh agent
 if string match -ri (uname -n) 'basalt|slate'
-  if not pgrep -u $USER ssh-agent >/dev/null
-      ssh-agent -c >$XDG_RUNTIME_DIR/ssh-agent.env
-  end
-  source $XDG_RUNTIME_DIR/ssh-agent.env >/dev/null
-  set -gx SSH_ASKPASS /usr/bin/ksshaskpass
-  set -gx SSH_ASKPASS_REQUIRE prefer
+    if not pgrep -u $USER ssh-agent >/dev/null
+        ssh-agent -c >$XDG_RUNTIME_DIR/ssh-agent.env
+    end
+    source $XDG_RUNTIME_DIR/ssh-agent.env >/dev/null
+    set -gx SSH_ASKPASS /usr/bin/ksshaskpass
+    set -gx SSH_ASKPASS_REQUIRE prefer
 end
 
 # Prompt
@@ -160,10 +160,10 @@ alias la="ls -al"
 alias lr="la -R"
 alias .=ll
 
-alias vim='env nvim'
-alias nvim='env nvim "+lua require(\'persistence\').load()"'
+alias vim='nvim'
+alias vimp='nvim "+lua require(\'persistence\').load()"'
 if type -q helix; and not type -q hx
-  alias hx=helix
+    alias hx=helix
 end
 alias ccopy="kitty +kitten clipboard"
 alias cpaste="kitty +kitten clipboard --get-clipboard"

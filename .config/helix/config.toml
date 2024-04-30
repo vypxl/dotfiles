@@ -1,1 +1,35 @@
 theme = "catppuccin_macchiato"
+
+[editor]
+cursorline = true
+auto-save = true
+# completion-timeout = 5
+bufferline = "multiple"
+color-modes = true
+text-width = 120
+# popup-border = "all"
+# jump-label-alphabet = "arstneiogmqwfpluybjzxcdhvk"
+
+[editor.lsp]
+display-inlay-hints = true
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[editor.whitespace.render]
+tab = "all"
+nbsp = "all"
+nnbsp = "all"
+
+[editor.whitespace.characters]
+nbsp = "⍽"
+nnbsp = "␣"
+tab = "→"
+
+[editor.indent-guides]
+render = true
+
+[editor.soft-wrap]
+enable = true

@@ -32,8 +32,15 @@ if string match -ri (uname -n) 'basalt|slate'
 end
 
 # Prompt
+function starship_transient_prompt_func
+    starship module username
+    echo -n " "
+    starship module character
+end
+
 if type -q starship
     starship init fish | source
+    enable_transience
 end
 
 # Completions

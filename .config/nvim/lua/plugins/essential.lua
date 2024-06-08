@@ -65,16 +65,6 @@ return {
     end,
   },
 
-  -- Discord Rich Presence
-  {
-    "ObserverOfTime/nvimcord",
-    event = "VeryLazy",
-    config = function()
-      require("nvimcord").setup { log_level = 3 }
-      vim.cmd [[NvimcordUpdate]] -- autostart rich presence
-    end,
-  },
-
   -- My mod of persistence.nvim
   -- Only used manually to reopen sessions I had in a directory
   {

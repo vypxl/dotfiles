@@ -42,32 +42,17 @@ return {
       end,
     },
 
-    -- Github Copilot
+    -- Codeium
     {
-      "zbirenbaum/copilot.lua",
+      "Exafunction/codeium.nvim",
+      dependencies = {
+          "nvim-lua/plenary.nvim",
+          "hrsh7th/nvim-cmp",
+      },
       config = function()
-        require("copilot").setup {
-          suggestion = { enabled = false },
-          panel = { enabled = false },
-          filetypes = {
-            yaml = true,
-            markdown = true,
-          },
-        }
-
-        -- disable if .nvimrc / .exrc or another place sets g:copilot = 0
-        if vim.g.copilot == 0 then
-          vim.api.nvim_command "Copilot disable"
-        end
-      end,
-    },
-
-    -- Copilot integration for nvim-cmp
-    {
-      "zbirenbaum/copilot-cmp",
-      dependencies = { "zbirenbaum/copilot.lua" },
-      config = true,
-    },
+          require("codeium").setup({})
+      end
+  },
 
     {
       "saadparwaiz1/cmp_luasnip",
@@ -86,7 +71,9 @@ return {
     local cmp = require "cmp"
     local lspkind = require "lspkind"
     lspkind.symbol_map["Copilot"] = ""
-    vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { link = "CmpItemKindConstant" })
+    lspkind.symbol_map["Codeium"] = ""
+    vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { link = "CmpItemKindSnippet" })
+    vim.api.nvim_set_hl(0, "CmpItemKindCodeium", { link = "CmpItemKindSnippet" })
 
     local function border(hl_name)
       return {
@@ -159,7 +146,7 @@ return {
       sources = cmp.config.sources {
         { name = "nvim_lsp", group_index = 1 },
         { name = "path", group_index = 1 },
-        { name = "copilot", group_index = 2 },
+        { name = "codeium", group_index = 2 },
         { name = "luasnip", group_index = 1 },
         { name = "nvim_lua", group_index = 1 },
         { name = "buffer", group_index = 2, keyword_length = 3 },

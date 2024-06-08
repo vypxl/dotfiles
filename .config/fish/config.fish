@@ -33,6 +33,7 @@ end
 
 # Prompt
 function starship_transient_prompt_func
+    echo
     starship module username
     echo -n " "
     starship module character

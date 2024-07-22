@@ -175,6 +175,14 @@ if type -q helix; and not type -q hx
 end
 alias ccopy="kitty +kitten clipboard"
 alias cpaste="kitty +kitten clipboard --get-clipboard"
+function ipaste
+    if test (count $argv) -lt 1
+        echo "Please provide file name. (without extension)"
+    else
+        kitty +kitten clipboard --get-clipboard "$argv[1].png"
+        echo "Pasted to $argv[1].png"
+    end
+end
 alias beep="aplay -q ~/.config/misc/beep.wav"
 alias pluto="julia -ie 'import Pluto; Pluto.run()'"
 alias icat="kitty +kitten icat"

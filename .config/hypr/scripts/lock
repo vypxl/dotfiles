@@ -1,2 +1,2 @@
 #!/bin/sh
-exec swaylock -C ~/.config/swaylock/config
+exec hyprlock

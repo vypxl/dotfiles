@@ -11,7 +11,7 @@ text-width = 120
 # jump-label-alphabet = "arstneiogmqwfpluybjzxcdhvk"
 
 [editor.lsp]
-display-inlay-hints = true
+display-messages = true
 
 [editor.cursor-shape]
 insert = "bar"
@@ -33,3 +33,15 @@ render = true
 
 [editor.soft-wrap]
 enable = true
+
+[keys.normal.g]
+t = "goto_type_definition"
+y = "no_op"
+
+[keys.normal.space]
+x = ":buffer-close"
+s = ":write"
+
+[keys.normal]
+"A-S-left" = ":buffer-previous"
+"A-S-right" = ":buffer-next"

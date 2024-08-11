@@ -44,4 +44,3 @@ map("n", "<leader>c", "<cmd>Lspsaga code_action<CR>", { desc = "Lsp code action"
 map("n", "<leader>l", "<cmd>Lspsaga show_line_diagnostics<CR>", { desc = "Lsp line diagnostics" })
 map("n", "]d", "<cmd>Lspsaga diagnostic_jump_next<CR>", { desc = "Lsp goto next diagnostic" })
 map("n", "[d", "<cmd>Lspsaga diagnostic_jump_prev<CR>", { desc = "Lsp goto previous diagnostic" })
-map("n", "<leader>m", "<cmd>lua vim.lsp.buf.format({async = true})<CR>", { desc = "Lsp forMat" })

@@ -1,8 +1,5 @@
 local function setup_lspconfig()
   local on_attach = function(client, _)
-    client.server_capabilities.documentFormattingProvider = false
-    client.server_capabilities.documentRangeFormattingProvider = false
-
     if not client.supports_method "textDocument/semanticTokens" then
       client.server_capabilities.semanticTokensProvider = nil
     end
@@ -117,94 +114,59 @@ local function setup_lspconfig()
   }
 end
 
-local function setup_null_ls()
-  local null_ls = require "null-ls"
-  local b = null_ls.builtins
-  local fmt = b.formatting
-  local diag = b.diagnostics
-  local ca = b.code_actions
-
-  local sources = {
-    fmt.alejandra,
-    fmt.asmfmt,
-    fmt.black,
-    fmt.buildifier,
-    fmt.cbfmt,
-    fmt.clang_format,
-    fmt.cljstyle,
-    fmt.cmake_format,
-    fmt.crystal_format.with { extra_args = { "-" } },
-    fmt.dfmt,
-    fmt.fish_indent,
-    fmt.fnlfmt,
-    fmt.gdformat,
-    fmt.gofmt,
-    fmt.goimports,
-    fmt.google_java_format,
-    fmt.isort, -- Python
-    fmt.ktlint,
-    fmt.markdownlint,
-    fmt.mix, -- Elixir
-    fmt.nginx_beautifier,
-    fmt.nimpretty,
-    fmt.nixfmt,
-    fmt.ocdc, -- Changelogs
-    fmt.prettierd,
-    fmt.prismaFmt,
-    fmt.protolint,
-    fmt.ptop,
-    fmt.rubocop,
-    fmt.scalafmt,
-    fmt.stylua.with { extra_args = { "--indent-type", "Spaces", "--indent-width", "2" } },
-    fmt.surface, -- Phoenix
-    fmt.swiftformat,
-    fmt.yamlfmt,
-
-    diag.buildifier,
-    diag.checkmake,
-    diag.checkstyle,
-    diag.clj_kondo,
-    diag.cmake_lint,
-    diag.credo,
-    diag.dotenv_linter,
-    diag.fish,
-    diag.gdlint,
-    diag.hadolint,
-    diag.ktlint,
-    diag.protolint,
-    diag.pylint,
-    diag.revive,
-    diag.selene,
-    diag.statix,
-    diag.swiftlint,
-    diag.tidy,
-    diag.yamllint,
-
-    ca.statix,
+local conform_opts = {
+  format_on_save = function(bufnr)
+    -- Disable with a global or buffer-local variable
+    if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+      return
+    end
+    return { timeout_ms = 500, lsp_format = "fallback" }
+  end,
+  default_format_opts = {
+    lsp_format = "fallback",
+  },
+  formatters_by_ft = {
+    lua = { "stylua", prepend_args = { "--indent-type", "Spaces", "--indent-width", "2" } }
   }
+}
 
-  null_ls.setup {
-    debug = false,
-    sources = sources,
-  }
-end
+vim.api.nvim_create_user_command("FormatDisable", function(args)
+  if args.bang then
+    -- FormatDisable! will disable formatting just for this buffer
+    vim.b.disable_autoformat = true
+    vim.print("Disabled autoformatting for this buffer")
+  else
+    vim.g.disable_autoformat = true
+      vim.print("Disabled autoformatting globally")
+  end
+end, {
+  desc = "Disable autoformat-on-save",
+  bang = true,
+})
+
+vim.api.nvim_create_user_command("FormatEnable", function()
+  vim.b.disable_autoformat = false
+  vim.g.disable_autoformat = false
+  vim.print("Enabled autoformatting")
+end, {
+  desc = "Re-enable autoformat-on-save",
+})
+
+vim.api.nvim_create_user_command("FormatToggle", function(args)
+  if vim.b.disable_autoformat or vim.g.disable_autoformat then
+    vim.cmd("FormatEnable")
+  else
+    if args.bang then
+      vim.cmd("FormatDisable!")
+    else
+      vim.cmd("FormatDisable")
+    end
+  end
+end, {
+  desc = "Toggle autoformat-on-save"
+})
 
 return {
-  -- Tool to install lsp's
-  {
-    "williamboman/mason.nvim",
-    cmd = { "Mason", "MasonInstall", "MasonInstallAll", "MasonUpdate" },
-    config = true,
-  },
-
-  -- Integrate mason with lspconfig
-  {
-    "williamboman/mason-lspconfig.nvim",
-    dependencies = { "williamboman/mason.nvim" },
-    event = "VeryLazy",
-    opts = { automatic_installation = true },
-  },
-
   -- Lsp configuration presets
   {
     "neovim/nvim-lspconfig",
@@ -213,21 +175,28 @@ return {
     config = setup_lspconfig,
   },
 
-  -- Integrate null-ls with lspconfig
+  -- Formatting
   {
-    "jay-babu/mason-null-ls.nvim",
-    event = "VeryLazy",
-    dependencies = { "williamboman/mason.nvim", "nvimtools/none-ls.nvim" },
-    opts = {
-      ensure_installed = nil,
-      automatic_installation = true,
+    "stevearc/conform.nvim",
+    event = { "BufWritePre" },
+    cmd = { "ComformInfo" },
+    keys = {
+      {
+        "<leader>m",
+        "<cmd>lua require('conform').format({ async = true })<CR>",
+        mode = "n",
+        desc = "forMat buffer"
+      },
+      {
+        "<leader>M",
+        "<cmd>FormatToggle!<CR>",
+        mode = "n",
+        desc = "Toggle automatic formatting on save"
+      }
     },
-  },
-
-  -- Drop in replacement for null-ls
-  -- A tool to integrate linters, formatters and diagnostic sources with nvim-lsp
-  {
-    "nvimtools/none-ls.nvim",
-    config = setup_null_ls,
-  },
+    opts = conform_opts,
+    init = function()
+      vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+    end
+  }
 }

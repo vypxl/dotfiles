@@ -9,17 +9,6 @@ vim.api.nvim_exec(
   false
 )
 
--- Auto format on save
-vim.api.nvim_exec(
-  [[
-  augroup auto-format
-      autocmd!
-      autocmd BufWritePre * lua vim.lsp.buf.format({sync = true})
-  augroup END
-]],
-  false
-)
-
 -- dont list quickfix buffers
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "qf",

@@ -74,3 +74,7 @@
 
 [includeIf "gitdir:~/work/"]
   path = ~/.config/git/config.work
+
+
+[includeIf "gitdir:~/dev/uni/"]
+  path = ~/.config/git/config.uni

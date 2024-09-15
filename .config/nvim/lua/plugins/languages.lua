@@ -42,9 +42,6 @@ return {
     config = true,
   },
 
-  -- LaTeX
-  { "lervag/vimtex", ft = { "tex", "latex", "plaintex" } },
-
   -- F#
   { "ionide/Ionide-vim", ft = "fsharp" },
 

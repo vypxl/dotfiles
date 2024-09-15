@@ -73,7 +73,7 @@ local function setup_lspconfig()
     "svelte",
     "tailwindcss",
     "taplo",
-    "tsserver",
+    "ts_ls",
     "typst_lsp",
     "volar",
     "yamlls",
@@ -88,6 +88,26 @@ local function setup_lspconfig()
         check = { command = "clippy" },
       },
     },
+  }
+
+  lspconfig.texlab.setup {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    settings = {
+      texlab = {
+        build = {
+          onSave = true,
+          executable = "tectonic",
+          args = {"%f", "-Z", "shell-escape", "--synctex", "--keep-logs", "--keep-intermediates"},
+        },
+        chktex = {
+          onOpenAndSave = true,
+          onEdit = true,
+        },
+        formatterLineLength = 100,
+        latexindent = { ["local"] = ".latexindent.yaml", modifyLineBreaks = true },
+      }
+    }
   }
 
   for _, lsp in ipairs(servers) do

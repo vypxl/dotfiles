@@ -19,7 +19,7 @@ set -gx PYTHONSTARTUP $XDG_CONFIG_HOME/python/init.py
 if [ -f /etc/debuginfod/ ]
     set -gx DEBUGINFOD_URLS (cat "/etc/debuginfod"/*.urls 2> /dev/null | tr '\n' ' ')
 end
-set -gx EDITOR vim
+set -gx EDITOR nvim
 
 # ssh agent
 if string match -ri (uname -n) 'basalt|slate'

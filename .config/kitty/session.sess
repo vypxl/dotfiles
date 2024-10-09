@@ -1,1 +1,1 @@
-launch fish -C "fastfetch | lolcat"
+launch sh -c 'if tmux has -t home; then tmux; else tmux new -s home; fi'

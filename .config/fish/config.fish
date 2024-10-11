@@ -32,16 +32,65 @@ if string match -ri (uname -n) 'basalt|slate'
 end
 
 # Prompt
-function starship_transient_prompt_func
-    echo
-    starship module username
-    echo -n " "
-    starship module character
+# function starship_transient_prompt_func
+#     echo
+#     starship module username
+#     echo -n " "
+#     starship module character
+# end
+#
+# if type -q starship
+#     starship init fish | source
+#     enable_transience
+# end
+
+function format_command_duration
+  set ms $CMD_DURATION
+  set s (math "floor($ms / 1000)")
+  set m (math "floor($s / 60)")
+
+  set res ""
+
+  if test $m -gt 0
+    set res "$m"m
+  else if test $s -gt 0
+    set res "$s"s
+  else if test $ms -gt 40
+    set res "$ms"ms
+  end
+
+  if test -n $res
+    echo -n "took $res"
+  end
 end
 
-if type -q starship
-    starship init fish | source
-    enable_transience
+function fish_prompt
+  set last_status $status
+  echo
+
+  set_color -o yellow
+  echo -n thomas
+
+  set_color -o green
+  if test $last_status -ne 0
+    set_color -o red
+  end
+  echo -n " λ "
+
+  set_color normal
+end
+
+
+function fish_right_prompt
+  set dur (format_command_duration)
+  if test -n $dur
+    set_color -o cyan
+    echo "$dur "
+  end
+
+  set_color -o yellow
+  date +"[ %H:%M:%S ]"
+  set_color normal
 end
 
 # Completions
@@ -186,7 +235,6 @@ end
 alias beep="aplay -q ~/.config/misc/beep.wav"
 alias pluto="julia -ie 'import Pluto; Pluto.run()'"
 alias icat="kitty +kitten icat"
-alias ssh="kitty +kitten ssh"
 alias lazyyadm="lazygit -w ~ -g ~/.local/share/yadm/repo.git"
 
 alias killbg="jobs -p | tail -n 1 | xargs kill -9; fg"

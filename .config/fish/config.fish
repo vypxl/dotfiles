@@ -32,18 +32,6 @@ if string match -ri (uname -n) 'basalt|slate'
 end
 
 # Prompt
-# function starship_transient_prompt_func
-#     echo
-#     starship module username
-#     echo -n " "
-#     starship module character
-# end
-#
-# if type -q starship
-#     starship init fish | source
-#     enable_transience
-# end
-
 function format_command_duration
   set ms $CMD_DURATION
   set s (math "floor($ms / 1000)")
@@ -64,6 +52,9 @@ function format_command_duration
   end
 end
 
+function fish_mode_prompt
+end
+
 function fish_prompt
   set last_status $status
   echo
@@ -75,7 +66,15 @@ function fish_prompt
   if test $last_status -ne 0
     set_color -o red
   end
-  echo -n " λ "
+
+  switch $fish_bind_mode
+    case default
+      echo -n ' ❮ '
+    case visual
+      echo -n ' V '
+    case '*'
+      echo -n ' λ '
+  end
 
   set_color normal
 end

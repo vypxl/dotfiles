@@ -1,7 +1,0 @@
-#! /bin/bash
-
-if ! swww query; then
-    swww-daemon &
-fi
-
-swww img ~/.config/misc/wallpaper

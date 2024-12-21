@@ -1,4 +1,0 @@
-#! /usr/bin/bash
-if ! pkill -x rofi; then
-    rofi "$@"
-fi

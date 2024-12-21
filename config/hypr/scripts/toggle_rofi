@@ -1,0 +1,4 @@
+#! /usr/bin/env bash
+if ! pkill -x rofi; then
+    rofi "$@"
+fi

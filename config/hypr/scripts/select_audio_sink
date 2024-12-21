@@ -1,0 +1,9 @@
+#! /usr/bin/env bash
+
+which=$(pactl -f json list sinks | jq -r '.[] | select(.ports[0].availability != "not available") | .description ' | rofi -dmenu -p 'Audio Sink' | tr -d '\n')
+if [ -z "$which" ]; then
+    exit 0
+fi
+name=$(pactl -f json list sinks | jq -r --arg which "$which" '.[] | select(.description == $which) | .name')
+pactl set-default-sink "$name"
+notify-send -t 1500 -a Audio "Switched to audio sink $which"

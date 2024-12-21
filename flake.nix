@@ -49,7 +49,7 @@
           home-manager.nixosModules.default
           hm-opts
           (hm-user "thomas")
-          ./configuration.nix
+          ./hosts/stone/configuration.nix
           # ./nixos/greetd.nix
           ./nixos/gdm.nix
         ];

@@ -39,20 +39,21 @@
       hm-user = username: {
         home-manager.users."${username}" = import ./home/${username}.nix;
       };
+      machine =
+        hostname: username:
+        nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = attrs;
+          modules = [
+            unstable-overlay
+            home-manager.nixosModules.default
+            hm-opts
+            (hm-user username)
+            ./hosts/${hostname}/configuration.nix
+          ];
+        };
     in
     {
-      nixosConfigurations.stone = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = attrs;
-        modules = [
-          unstable-overlay
-          home-manager.nixosModules.default
-          hm-opts
-          (hm-user "thomas")
-          ./hosts/stone/configuration.nix
-          # ./nixos/greetd.nix
-          ./nixos/gdm.nix
-        ];
-      };
+      nixosConfigurations.stone = machine "stone" "thomas";
     };
 }

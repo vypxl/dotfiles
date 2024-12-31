@@ -9,6 +9,7 @@ with import ./src/util.nix config;
   xdg.enable = true;
   imports = [
     ./modules/bat.nix
+    ./modules/direnv.nix
     ./modules/dunst.nix
     ./modules/fish.nix
     ./modules/git.nix

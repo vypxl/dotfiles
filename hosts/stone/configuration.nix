@@ -5,6 +5,7 @@
     ../../nixos/modules/audio.nix
     ../../nixos/modules/base.nix
     ../../nixos/modules/boot.nix
+    ../../nixos/modules/docker.nix
     ../../nixos/modules/fish.nix
     ../../nixos/modules/font.nix
     ../../nixos/modules/hyprland.nix

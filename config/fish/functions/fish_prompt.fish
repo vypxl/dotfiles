@@ -2,7 +2,7 @@ set last_status $status
 echo
 
 set_color -o yellow
-echo -n thomas
+echo -n (prompt_pwd)
 
 set_color -o green
 if test $last_status -ne 0

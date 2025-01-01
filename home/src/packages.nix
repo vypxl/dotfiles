@@ -50,13 +50,13 @@ pkgs: with pkgs; {
   graphical = [
     brave
     firefox
+    ferdium
     google-chrome
     gparted
     pavucontrol
     spotifywm
     vlc
     vscodium-fhs
-    webcord
     wl-clipboard-rs
     zathura
   ];

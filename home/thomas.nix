@@ -45,6 +45,7 @@ with import ./src/util.nix config;
     ];
 
   services.udiskie.enable = true;
+  services.mpris-proxy.enable = true; # bt media control
 
   home.sessionVariables.EDITOR = "nvim";
 

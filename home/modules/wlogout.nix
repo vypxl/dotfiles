@@ -7,16 +7,10 @@ in
     enable = true;
     layout = [
       {
-        label = "lock";
-        action = "$HOME/.config/hypr/scripts/lock";
-        text = "Lock";
-        keybind = "l";
-      }
-      {
         label = "logout";
         action = "loginctl terminate-user $USER";
         text = "Logout";
-        keybind = "e";
+        keybind = "o";
       }
       {
         label = "shutdown";
@@ -26,7 +20,7 @@ in
       }
       {
         label = "suspend";
-        action = "$HOME/.config/hypr/scripts/suspend";
+        action = "systemctl suspend && hyprlock";
         text = "Suspend";
         keybind = "u";
       }
@@ -36,9 +30,14 @@ in
         text = "Reboot";
         keybind = "r";
       }
+      {
+        label = "windows";
+        action = "systemctl reboot --boot-loader-entry=auto-windows";
+        text = "Reboot to Windows";
+        keybind = "w";
+      }
     ];
 
-    # note: /usr/share/wlogout is replaced to the nix store path by the wlogout package
     style = ''
       * {
         background-image: none;
@@ -96,6 +95,12 @@ in
       }
 
       #reboot {
+        background-image: image(
+          url("${out}/share/wlogout/icons/reboot.png")
+        );
+      }
+
+      #windows {
         background-image: image(
           url("${out}/share/wlogout/icons/reboot.png")
         );

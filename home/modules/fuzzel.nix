@@ -15,7 +15,7 @@
         use-bold = true;
         password-character = "•";
         list-executables-in-path = true;
-        launch-prefix = "uwsm app --";
+        launch-prefix = "uwsm-app --";
       };
 
       border = {
@@ -48,9 +48,7 @@
   # https://github.com/ClemaX/menu-qalc-wayland
   home.packages = [
     pkgs.libqalculate
-    (pkgs.writeShellScriptBin
-    "="
-    ''
+    (pkgs.writeShellScriptBin "=" ''
       # https://github.com/onespaceman/menu-qalc
       # Calculator for use with wofi/fuzzel/dmenu(2)
       # Copying to the clipboard requires wl-clipboard

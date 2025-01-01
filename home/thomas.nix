@@ -31,6 +31,7 @@ with import ./src/util.nix config;
     ./modules/xkb.nix
     ./modules/yamllint.nix
     ./modules/zed.nix
+    ./modules/zellij.nix
   ];
 
   home.packages =
@@ -43,6 +44,7 @@ with import ./src/util.nix config;
     ];
 
   services.udiskie.enable = true;
+
   home.sessionVariables.EDITOR = "nvim";
 
   xdg.configFile."file_templates" = dotfile_dir "file_templates";

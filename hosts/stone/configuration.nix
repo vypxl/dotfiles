@@ -3,6 +3,7 @@
   imports = [
     ./hardware-configuration.nix
     ../../nixos/modules/audio.nix
+    ../../nixos/modules/auto-upgrade.nix
     ../../nixos/modules/base.nix
     ../../nixos/modules/boot.nix
     ../../nixos/modules/docker.nix

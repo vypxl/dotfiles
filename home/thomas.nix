@@ -13,6 +13,7 @@ with import ./src/util.nix config;
     ./modules/dunst.nix
     ./modules/fish.nix
     ./modules/git.nix
+    ./modules/gnome-keyring.nix
     ./modules/helix.nix
     ./modules/hyprland.nix
     ./modules/kitty.nix
@@ -39,18 +40,9 @@ with import ./src/util.nix config;
       graphical
       lsp
       languages
-      [
-        pkgs.seahorse
-        pkgs.gcr
-      ]
     ];
 
   services.udiskie.enable = true;
-  services.gnome-keyring.enable = true;
-  programs.fish.shellInit = ''
-    set -gx SSH_AUTH_SOCK /run/user/(id -u)/keyring/ssh
-  '';
-  # programs.seahorse.enable = true;
   home.sessionVariables.EDITOR = "nvim";
 
   xdg.configFile."file_templates" = dotfile_dir "file_templates";

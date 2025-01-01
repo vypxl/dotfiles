@@ -12,6 +12,7 @@ with import ./src/util.nix config;
     ./modules/direnv.nix
     ./modules/dunst.nix
     ./modules/fish.nix
+    ./modules/fuzzel.nix
     ./modules/git.nix
     ./modules/gnome-keyring.nix
     ./modules/helix.nix

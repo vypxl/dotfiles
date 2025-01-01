@@ -8,6 +8,7 @@ pkgs: with pkgs; {
     imagemagick
     tealdeer
     clac
+    libqalculate
     zip
     unzip
     file

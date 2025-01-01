@@ -13,6 +13,7 @@
     ../../nixos/modules/locale.nix
     ../../nixos/modules/networking.nix
     ../../nixos/modules/nix.nix
+    ../../nixos/modules/plymouth.nix
     ../../nixos/modules/services.nix
     ../../nixos/modules/sudo.nix
     ../../nixos/modules/user.nix

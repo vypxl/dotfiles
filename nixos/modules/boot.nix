@@ -5,6 +5,7 @@
   
   # needed for auto-unlock of gnome keyring
   # in gdm with luks pw
+  # and for plymouth
   boot.initrd.systemd.enable = true;
   
   # in case the ESP has size problems, this can limit

@@ -24,6 +24,9 @@
   networking.hostName = "stone";
   time.timeZone = "Europe/Berlin";
 
+  # custom, declared in networking.nix
+  dns.enable = true;
+
   fileSystems = {
     "/".options = [ "compress=zstd" ];
   };

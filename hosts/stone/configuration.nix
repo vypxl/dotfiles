@@ -16,6 +16,7 @@
     ../../nixos/modules/plymouth.nix
     ../../nixos/modules/services.nix
     ../../nixos/modules/sudo.nix
+    ../../nixos/modules/swapfile.nix
     ../../nixos/modules/user.nix
   ];
 

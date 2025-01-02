@@ -22,6 +22,9 @@ with import ../src/util.nix config;
   # Cursor theme
   home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
 
+  # face
+  home.file.".face".source = ../src/face.png;
+
   # Wayland for electron/chromium
   home.sessionVariables.NIXOS_OZONE_WL = 1;
 

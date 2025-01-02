@@ -10,6 +10,7 @@ with import ../src/util.nix config;
     hyprpicker
     hyprshot
   ];
+
   wayland.windowManager.hyprland = {
     enable = true;
     extraConfig = read_dotfile "hypr/hyprland.conf";
@@ -18,6 +19,10 @@ with import ../src/util.nix config;
     xwayland.enable = true;
   };
 
+  # Cursor theme
+  home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
+
+  # Wayland for electron/chromium
   home.sessionVariables.NIXOS_OZONE_WL = 1;
 
   services.hyprpaper = {

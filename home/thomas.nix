@@ -21,6 +21,7 @@ with import ./src/util.nix config;
     ./modules/lazygit.nix
     ./modules/nvim.nix
     ./modules/python.nix
+    ./modules/scripts.nix
     ./modules/shell-utils.nix
     ./modules/ssh.nix
     ./modules/syncthing.nix

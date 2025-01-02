@@ -7,6 +7,8 @@ with import ../src/util.nix config;
     networkmanagerapplet
     seafile-client
     hyprpolkitagent
+    hyprpicker
+    hyprshot
   ];
   wayland.windowManager.hyprland = {
     enable = true;
@@ -15,7 +17,6 @@ with import ../src/util.nix config;
     # systemd.variables = [ "--all" ];
     xwayland.enable = true;
   };
-  xdg.configFile."hypr/scripts" = dotfile_dir "hypr/scripts";
 
   home.sessionVariables.NIXOS_OZONE_WL = 1;
 

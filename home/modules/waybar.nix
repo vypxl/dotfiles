@@ -24,7 +24,7 @@
             ""
             ""
           ];
-          on-update = "~/.config/hypr/scripts/check_battery";
+          on-update = "hypr_check_battery";
           states = {
             critical = 10;
             warning = 20;
@@ -47,7 +47,7 @@
         };
         "custom/power" = {
           format = "";
-          on-click = "$HOME/.config/hypr/scripts/powermenu";
+          on-click = "hypr_powermenu";
         };
         height = 30;
         "hyprland/window" = {

@@ -1,4 +1,0 @@
-#! /usr/bin/env bash
-if ! pgrep -x wlogout; then
-    wlogout -b 5
-fi

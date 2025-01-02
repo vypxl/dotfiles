@@ -1,0 +1,71 @@
+layout {
+  pane
+  //
+  // 
+  // 
+  // 
+  // 
+  // |
+  pane size=1 borderless=true {
+    plugin location="https://github.com/dj95/zjstatus/releases/download/v0.19.1/zjstatus.wasm" {
+      // catppuccin macchiato palette
+      color_rosewater "#f4dbd6"
+      color_flamingo "#f0c6c6"
+      color_pink "#f5bde6"
+      color_mauve "#c6a0f6"
+      color_red "#ed8796"
+      color_maroon "#ee99a0"
+      color_peach "#f5a97f"
+      color_yellow "#eed49f"
+      color_green "#a6da95"
+      color_teal "#8bd5ca"
+      color_sky "#91d7e3"
+      color_sapphire "#7dc4e4"
+      color_blue "#8aadf4"
+      color_lavender "#b7bdf8"
+      color_text "#cad3f5"
+      color_subtext1 "#b8c0e0"
+      color_subtext0 "#a5adcb"
+      color_overlay2 "#939ab7"
+      color_overlay1 "#8087a2"
+      color_overlay0 "#6e738d"
+      color_surface2 "#5b6078"
+      color_surface1 "#494d64"
+      color_surface0 "#363a4f"
+      color_base "#24273a"
+      color_mantle "#1e2030"
+      color_crust "#181926"
+      
+      // leaving this disabled until zellij supports cwd querying
+      // format_left   "{mode}{command_git_branch}{command_git_status}"
+      format_left   "{mode}"
+      format_center "{tabs}"
+      format_right  "{datetime}"
+      format_space  ""
+
+      border_enabled  "false"
+
+      hide_frame_for_single_pane "true"
+
+      mode_normal  "#[fg=$base,bold,bg=$sapphire] {name} #[fg=$sapphire] "
+
+      tab_normal   "#[fg=$text] {name} "
+      tab_active   "#[fg=$rosewater]#[fg=$base,bold,bg=$rosewater]{name}#[fg=$rosewater,bg=none]"
+
+      command_git_branch_command     "git rev-parse --abbrev-ref HEAD"
+      command_git_branch_format      "#[bg=$pink,fg=$base,bold]{stdout} #[fg=$pink] "
+      command_git_branch_interval    "1"
+      command_git_branch_rendermode  "static"
+
+      // script from scripts.nix
+      command_git_status_command     "git compact-status"
+      command_git_status_format      "#[fg=$red]{stdout}"
+      command_git_status_interval    "1"
+      command_git_status_rendermode  "static"
+
+      datetime        "#[fg=$text,bold] {format} "
+      datetime_format "%H:%M"
+      datetime_timezone "Europe/Berlin"
+    }
+  }
+}

@@ -15,7 +15,7 @@ in
       gst = "git status";
       gcm = "git commit -am";
       lg = "lazygit";
-      zj = "zellij";
+      zj = "zellij -l thomas";
 
       d = "docker";
       dc = "docker compose";

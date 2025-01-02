@@ -1,0 +1,29 @@
+copy_on_select false
+default_mode "normal"
+on_force_close "quit"
+pane_frames false
+mouse_mode true
+theme "catppuccin-macchiato"
+
+ui {
+	pane_frames {
+		hide_session_name true
+	}
+}
+
+keybinds {
+  shared_except "resize" "locked" {
+    bind "Ctrl r" { SwitchToMode "Resize"; }
+  }
+
+  resize {
+    bind "Ctrl r" { SwitchToMode "Normal"; }
+  }
+
+  normal {
+    bind "Ctrl n" { NewTab; SwitchToMode "Normal"; }
+    bind "Ctrl Alt Left" { GoToPreviousTab; }
+    bind "Ctrl Alt Right" { GoToNextTab; }
+    bind "Ctrl Alt Right" { GoToNextTab; }
+  }
+}

@@ -26,7 +26,6 @@ with import ./src/util.nix config;
     ./modules/ssh.nix
     ./modules/syncthing.nix
     ./modules/tmux.nix
-    ./modules/touchegg.nix
     ./modules/vim.nix
     ./modules/waybar.nix
     ./modules/wlogout.nix

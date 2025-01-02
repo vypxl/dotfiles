@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 {
   imports = [
     ./hardware-configuration.nix
@@ -27,6 +27,10 @@
 
   # custom, declared in networking.nix
   dns.enable = true;
+
+  # For some reason, gparted needs to be a system package
+  # Otherwise we can't run it via polkit
+  environment.systemPackages = [ pkgs.gparted ];
 
   fileSystems = {
     "/".options = [ "compress=zstd" ];

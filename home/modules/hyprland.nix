@@ -6,7 +6,7 @@ with import ../src/util.nix config;
     blueman
     networkmanagerapplet
     seafile-client
-    hyprpolkitagent
+    soteria
     hyprpicker
     hyprshot
   ];

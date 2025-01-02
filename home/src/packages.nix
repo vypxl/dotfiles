@@ -52,7 +52,6 @@ pkgs: with pkgs; {
     firefox
     ferdium
     google-chrome
-    gparted
     nautilus # file manager
     nautilus-open-any-terminal # to open kitty instead of gnome-terminal
     sushi # previewer for nautilus

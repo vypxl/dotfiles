@@ -24,7 +24,7 @@
         font = "Fira Code Nerd Font 13";
         force_xinerama = false;
         force_xwayland = false;
-        format = "<span color='#50fa7b'><b><i>[ %a ]</i></b></span>\n\n<b> - %s - </b>\n%b";
+        format = "<span color='#50fa7b'><b><i>[ %a ]</i></b></span>\\n\\n<b> - %s - </b>\\n%b";
         frame_color = "#8be9fd";
         frame_width = 3;
         gap_size = 0;

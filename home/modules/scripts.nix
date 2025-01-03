@@ -1,5 +1,11 @@
-{ pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
+  cfg = config.my;
   hypr_check_battery = pkgs.writeShellScriptBin "hypr_check_battery" ''
     BATINFO="$(acpi -b | grep -i discharging | awk '/Battery 0/{print $5;}')"
     if [ -z "$BATINFO" ]; then
@@ -67,13 +73,19 @@ let
   '';
 in
 {
-  home.packages = [
-    hypr_check_battery
-    hypr_powermenu
-    hypr_screenshot
-    hypr_select_audio_sink
-    hypr_suspend
-    
-    git-compact-status
-  ];
+  options.my = with lib; {
+    scripts.enable = mkEnableOption "scripts";
+  };
+
+  config = lib.mkIf cfg.scripts.enable {
+    home.packages = [
+      hypr_check_battery
+      hypr_powermenu
+      hypr_screenshot
+      hypr_select_audio_sink
+      hypr_suspend
+
+      git-compact-status
+    ];
+  };
 }

@@ -1,95 +1,104 @@
-{ ... }:
+{ config, lib, ... }:
+let
+  cfg = config.my;
+in
 {
-  programs.vim.enable = true;
-  programs.vim.extraConfig = ''
-    " Vim
-    set nocompatible "iMproved!
-    set shell=bash
-    syntax enable
-    set termguicolors
+  options.my = with lib; {
+    vim.enable = mkEnableOption "vim";
+  };
 
-    set timeoutlen=200
-    inoremap jk <Esc>
-    inoremap kj <Esc>
+  config = lib.mkIf cfg.vim.enable {
+    programs.vim.enable = true;
+    programs.vim.extraConfig = ''
+      " Vim
+      set nocompatible "iMproved!
+      set shell=bash
+      syntax enable
+      set termguicolors
 
-    " No swap or backup
-    set noswapfile
-    set nobackup
+      set timeoutlen=200
+      inoremap jk <Esc>
+      inoremap kj <Esc>
 
-    " Editing
-    set tabstop=2
-    set softtabstop=2
-    set shiftwidth=2
-    set smarttab
-    set expandtab
+      " No swap or backup
+      set noswapfile
+      set nobackup
 
-    set autoindent
-    set smartindent
+      " Editing
+      set tabstop=2
+      set softtabstop=2
+      set shiftwidth=2
+      set smarttab
+      set expandtab
 
-    set encoding=utf-8
+      set autoindent
+      set smartindent
 
-    " Editor
-    set hidden
+      set encoding=utf-8
 
-    set number
-    set relativenumber
-    set ruler
+      " Editor
+      set hidden
 
-    set showcmd
-    set showmode
-    set showmatch
-    set wildmenu
-    set wildignore=*.swp,*.bak,*.pyc,*.class
+      set number
+      set relativenumber
+      set ruler
 
-    set title
-    set novisualbell
-    set noerrorbells
+      set showcmd
+      set showmode
+      set showmatch
+      set wildmenu
+      set wildignore=*.swp,*.bak,*.pyc,*.class
 
-    set list
-    set listchars=tab:▸\ ,trail:.,extends:#
+      set title
+      set novisualbell
+      set noerrorbells
 
-    set splitright
-    set splitbelow
+      set list
+      set listchars=tab:▸\ ,trail:.,extends:#
 
-    " Searching
-    set ignorecase
-    set smartcase
-    set incsearch
+      set splitright
+      set splitbelow
 
-    " Folding
-    set foldenable
-    set foldnestmax=2
-    set foldmethod=expr
+      " Searching
+      set ignorecase
+      set smartcase
+      set incsearch
 
-    " Keybindings
+      " Folding
+      set foldenable
+      set foldnestmax=2
+      set foldmethod=expr
 
-    let mapleader=" "
+      " Keybindings
 
-    " Disable hlsearch with second escape
-    " and when entering insert mode
-    nnoremap-silent <Esc> :nohl<CR>
-    augroup nohlOnInsert
-      au!
-      au InsertEnter * setlocal nohlsearch
-      au CmdlineEnter / setlocal hlsearch
-      au CmdlineEnter ? setlocal hlsearch
-    augroup END
+      let mapleader=" "
 
-    " Arrow keys as Buffer and Tab switchers
-    nnoremap <UP> :tabnext<CR>
-    nnoremap <DOWN> :tabprev<CR>
-    nnoremap <LEFT> :bp<CR>
-    nnoremap <RIGHT> :bn<CR>
+      " Disable hlsearch with second escape
+      " and when entering insert mode
+      nnoremap-silent <Esc> :nohl<CR>
+      augroup nohlOnInsert
+        au!
+        au InsertEnter * setlocal nohlsearch
+        au CmdlineEnter / setlocal hlsearch
+        au CmdlineEnter ? setlocal hlsearch
+      augroup END
 
-    " Moving lines
-    nnoremap <A-j> :m .+1<CR>==
-    nnoremap <A-k> :m .-2<CR>==
-    inoremap <A-j> <Esc>:m .+1<CR>==gi
-    inoremap <A-k> <Esc>:m .-2<CR>==gi
-    vnoremap <A-j> :m '>+1<CR>gv=gv
-    vnoremap <A-k> :m '<-2<CR>gv=gv
+      " Arrow keys as Buffer and Tab switchers
+      nnoremap <UP> :tabnext<CR>
+      nnoremap <DOWN> :tabprev<CR>
+      nnoremap <LEFT> :bp<CR>
+      nnoremap <RIGHT> :bn<CR>
 
-    " Add blank line with enter
-    nnoremap <Enter> o<ESC>
-  '';
+      " Moving lines
+      nnoremap <A-j> :m .+1<CR>==
+      nnoremap <A-k> :m .-2<CR>==
+      inoremap <A-j> <Esc>:m .+1<CR>==gi
+      inoremap <A-k> <Esc>:m .-2<CR>==gi
+      vnoremap <A-j> :m '>+1<CR>gv=gv
+      vnoremap <A-k> :m '<-2<CR>gv=gv
+
+      " Add blank line with enter
+      nnoremap <Enter> o<ESC>
+    '';
+  };
 }

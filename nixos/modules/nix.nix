@@ -1,14 +1,23 @@
-{ ... }:
+{ config, lib, ... }:
+let
+  cfg = config.my;
+in
 {
-  nixpkgs.config.allowUnfree = true;
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+  options.my = with lib; {
+    nix.enable = mkEnableOption "nix";
+  };
 
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 14d";
+  config = lib.mkIf cfg.nix.enable {
+    nixpkgs.config.allowUnfree = true;
+    nix.settings.experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+
+    nix.gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 14d";
+    };
   };
 }

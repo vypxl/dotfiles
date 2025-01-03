@@ -1,10 +1,11 @@
 { lib, config, ... }:
 with lib;
 let
-  cfg = config;
+  cfg = config.my.networking;
 in
 {
-  options = {
+  options.my.networking = {
+    enable = mkEnableOption "networking";
     dns.enable = mkEnableOption "Enable custom DNS";
     dns.servers = mkOption {
       type = types.listOf types.str;
@@ -12,7 +13,7 @@ in
     };
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
     networking.networkmanager.enable = true;
 
     # custom dns

@@ -1,11 +1,20 @@
-{ ... }:
+{ config, lib, ... }:
+let
+  cfg = config.my;
+in
 {
-  users.users.thomas = {
-    isNormalUser = true;
-    description = "Thomas";
-    extraGroups = [
-      "networkmanager"
-      "wheel"
-    ];
+  options.my = with lib; {
+    user.enable = mkEnableOption "user";
+  };
+
+  config = lib.mkIf cfg.user.enable {
+    users.users.thomas = {
+      isNormalUser = true;
+      description = "Thomas";
+      extraGroups = [
+        "networkmanager"
+        "wheel"
+      ];
+    };
   };
 }

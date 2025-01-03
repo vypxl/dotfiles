@@ -1,5 +1,4 @@
-{ config, pkgs, ... }:
-with import ../src/util.nix config;
+{ pkgs, ... }:
 {
   home.packages = with pkgs; [
     brightnessctl
@@ -13,7 +12,7 @@ with import ../src/util.nix config;
 
   wayland.windowManager.hyprland = {
     enable = true;
-    extraConfig = read_dotfile "hypr/hyprland.conf";
+    extraConfig = builtins.readFile ../../config/hypr/hyprland.conf;
     systemd.enable = false; # Conflict with uwsm nixos
     # systemd.variables = [ "--all" ];
     xwayland.enable = true;
@@ -38,8 +37,8 @@ with import ../src/util.nix config;
   };
 
   programs.hyprlock.enable = true;
-  xdg.configFile."hypr/hyprlock.conf".source = dotfile "hypr/hyprlock.conf";
-  xdg.configFile."hypr/macchiato.conf".source = dotfile "hypr/macchiato.conf";
+  my.dotfile."hypr/hyprlock.conf".enable = true;
+  my.dotfile."hypr/macchiato.conf".enable = true;
 
   services.hypridle = {
     enable = true;

@@ -1,7 +1,16 @@
-{ ... }:
+{ config, lib, ... }:
+let
+  cfg = config.my;
+in
 {
-  services.syncthing = {
-    enable = true;
-    tray.enable = true;
+  options.my = with lib; {
+    syncthing.enable = mkEnableOption "syncthing";
+  };
+
+  config = lib.mkIf cfg.syncthing.enable {
+    services.syncthing = {
+      enable = true;
+      tray.enable = true;
+    };
   };
 }

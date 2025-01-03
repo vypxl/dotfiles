@@ -1,110 +1,122 @@
-{ pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
+  cfg = config.my;
   out = pkgs.wlogout.outPath;
 in
 {
-  programs.wlogout = {
-    enable = true;
-    layout = [
-      {
-        label = "logout";
-        action = "loginctl terminate-user $USER";
-        text = "Logout";
-        keybind = "o";
-      }
-      {
-        label = "shutdown";
-        action = "systemctl poweroff";
-        text = "Shutdown";
-        keybind = "s";
-      }
-      {
-        label = "suspend";
-        action = "systemctl suspend && hyprlock";
-        text = "Suspend";
-        keybind = "u";
-      }
-      {
-        label = "reboot";
-        action = "systemctl reboot";
-        text = "Reboot";
-        keybind = "r";
-      }
-      {
-        label = "windows";
-        action = "systemctl reboot --boot-loader-entry=auto-windows";
-        text = "Reboot to Windows";
-        keybind = "w";
-      }
-    ];
+  options.my = with lib; {
+    wlogout.enable = mkEnableOption "wlogout";
+  };
 
-    style = ''
-      * {
-        background-image: none;
-        box-shadow: none;
-      }
+  config = lib.mkIf cfg.wlogout.enable {
+    programs.wlogout = {
+      enable = true;
+      layout = [
+        {
+          label = "logout";
+          action = "loginctl terminate-user $USER";
+          text = "Logout";
+          keybind = "o";
+        }
+        {
+          label = "shutdown";
+          action = "systemctl poweroff";
+          text = "Shutdown";
+          keybind = "s";
+        }
+        {
+          label = "suspend";
+          action = "systemctl suspend && hyprlock";
+          text = "Suspend";
+          keybind = "u";
+        }
+        {
+          label = "reboot";
+          action = "systemctl reboot";
+          text = "Reboot";
+          keybind = "r";
+        }
+        {
+          label = "windows";
+          action = "systemctl reboot --boot-loader-entry=auto-windows";
+          text = "Reboot to Windows";
+          keybind = "w";
+        }
+      ];
 
-      window {
-        background-color: rgba(0, 0, 0, 0.3);
-      }
+      style = ''
+        * {
+          background-image: none;
+          box-shadow: none;
+        }
 
-      button {
-        color: #f8f8f2;
-        background-color: rgba(40, 42, 54, 0.8);
-        border-radius: 32px;
-        border-style: none;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: 25%;
-        margin: 240 20;
-      }
+        window {
+          background-color: rgba(0, 0, 0, 0.3);
+        }
 
-      button:hover {
-        background-color: rgba(68, 71, 90, 0.7);
-        outline-style: none;
-      }
+        button {
+          color: #f8f8f2;
+          background-color: rgba(40, 42, 54, 0.8);
+          border-radius: 32px;
+          border-style: none;
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: 25%;
+          margin: 240 20;
+        }
 
-      #lock {
-        background-image: image(
-          url("${out}/share/wlogout/icons/lock.png")
-        );
-      }
+        button:hover {
+          background-color: rgba(68, 71, 90, 0.7);
+          outline-style: none;
+        }
 
-      #logout {
-        background-image: image(
-          url("${out}/share/wlogout/icons/logout.png")
-        );
-      }
+        #lock {
+          background-image: image(
+            url("${out}/share/wlogout/icons/lock.png")
+          );
+        }
 
-      #suspend {
-        background-image: image(
-          url("${out}/share/wlogout/icons/suspend.png")
-        );
-      }
+        #logout {
+          background-image: image(
+            url("${out}/share/wlogout/icons/logout.png")
+          );
+        }
 
-      #hibernate {
-        background-image: image(
-          url("${out}/share/wlogout/icons/hibernate.png")
-        );
-      }
+        #suspend {
+          background-image: image(
+            url("${out}/share/wlogout/icons/suspend.png")
+          );
+        }
 
-      #shutdown {
-        background-image: image(
-          url("${out}/share/wlogout/icons/shutdown.png")
-        );
-      }
+        #hibernate {
+          background-image: image(
+            url("${out}/share/wlogout/icons/hibernate.png")
+          );
+        }
 
-      #reboot {
-        background-image: image(
-          url("${out}/share/wlogout/icons/reboot.png")
-        );
-      }
+        #shutdown {
+          background-image: image(
+            url("${out}/share/wlogout/icons/shutdown.png")
+          );
+        }
 
-      #windows {
-        background-image: image(
-          url("${out}/share/wlogout/icons/reboot.png")
-        );
-      }
-    '';
+        #reboot {
+          background-image: image(
+            url("${out}/share/wlogout/icons/reboot.png")
+          );
+        }
+
+        #windows {
+          background-image: image(
+            url("${out}/share/wlogout/icons/reboot.png")
+          );
+        }
+      '';
+    };
   };
 }

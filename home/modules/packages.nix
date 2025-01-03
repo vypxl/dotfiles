@@ -1,11 +1,17 @@
-pkgs: with pkgs; {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with pkgs;
+let
   base = [
     just
     inetutils
     nmap
     htop
     btop
-    imagemagick
     tealdeer
     clac
     libqalculate
@@ -13,7 +19,6 @@ pkgs: with pkgs; {
     unzip
     file
     wget
-    pandoc
     fd
     jq
     fq
@@ -28,7 +33,6 @@ pkgs: with pkgs; {
     entr
     live-server
     lazygit
-    ffmpeg
 
     lolcat
     cowsay
@@ -46,6 +50,11 @@ pkgs: with pkgs; {
     gcc
     gnumake
     ninja
+  ];
+  util = [
+    imagemagick
+    pandoc
+    ffmpeg
   ];
   graphical = [
     brave
@@ -102,4 +111,24 @@ pkgs: with pkgs; {
     cargo
     ghc
   ];
+  cfg = config.my.packages;
+in
+{
+  options.my.packages = with lib; {
+    base = mkEnableOption "base";
+    graphical = mkEnableOption "graphical";
+    lsp = mkEnableOption "lsp";
+    languages = mkEnableOption "languages";
+    util = mkEnableOption "util";
+  };
+
+  config = {
+    home.packages = lib.lists.concatLists [
+      (if cfg.base then base else [ ])
+      (if cfg.graphical then graphical else [ ])
+      (if cfg.lsp then lsp else [ ])
+      (if cfg.languages then languages else [ ])
+      (if cfg.util then util else [ ])
+    ];
+  };
 }

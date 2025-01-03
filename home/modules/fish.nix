@@ -1,8 +1,7 @@
-{ config, ... }:
-with import ../src/util.nix config;
+{ ... }:
 let
   fun = name: {
-    body = read_dotfile "fish/functions/${name}.fish";
+    body = builtins.readFile ../../config/fish/functions/${name}.fish;
   };
 in
 {

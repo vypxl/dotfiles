@@ -1,6 +1,5 @@
-{ config, pkgs, ... }:
-with import ../src/util.nix config;
+{ pkgs, ... }:
 {
   home.packages = [ pkgs.neovim ];
-  xdg.configFile."nvim" = dotfile_dir_mut "nvim";
+  my.dotfile."nvim".mut = true;
 }

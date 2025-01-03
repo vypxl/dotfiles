@@ -1,6 +1,5 @@
-{ config, pkgs, ... }:
-with import ../src/util.nix config;
+{ pkgs, ... }:
 {
   home.packages = [ pkgs.zellij ];
-  xdg.configFile.zellij = dotfile_dir "zellij";
+  my.dotfile."zellij".enable = true;
 }

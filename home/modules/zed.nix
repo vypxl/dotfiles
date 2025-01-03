@@ -1,6 +1,5 @@
-{ config, pkgs, ... }:
-with import ../src/util.nix config;
+{ pkgs, ... }:
 {
   home.packages = [ pkgs.zed-editor ];
-  xdg.configFile."zed" = dotfile_dir_mut "zed";
+  my.dotfile."zed".mut = true;
 }

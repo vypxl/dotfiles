@@ -5,6 +5,8 @@
     ../../nixos
   ];
 
+  my.bundle.desktop.enable = true;
+
   my.boot.splash = true;
   my.gdm.autologin = true;
   my.networking.dns.enable = true;

@@ -45,6 +45,7 @@
     {
       nixosConfigurations = {
         stone = machine "stone" "thomas";
+        slate = machine "slate" "thomas";
       };
     };
 }

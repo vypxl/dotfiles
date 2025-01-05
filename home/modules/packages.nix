@@ -95,8 +95,8 @@ let
     tailwindcss-language-server
     taplo # toml
     texlab
+    tinymist
     typescript-language-server
-    typst-lsp
     typstyle
     vscode-langservers-extracted
     yaml-language-server

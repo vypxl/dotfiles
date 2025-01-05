@@ -71,8 +71,8 @@ local function setup_lspconfig()
     "svelte",
     "tailwindcss",
     "taplo",
+    "tinymist",
     "ts_ls",
-    "typst_lsp",
     "yamlls",
   }
 

@@ -64,6 +64,7 @@ let
     nautilus # file manager
     nautilus-open-any-terminal # to open kitty instead of gnome-terminal
     sushi # previewer for nautilus
+    obsidian
     pavucontrol
     spotifywm
     vlc

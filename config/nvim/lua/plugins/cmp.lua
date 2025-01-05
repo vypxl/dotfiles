@@ -42,18 +42,6 @@ return {
       end,
     },
 
-    -- Codeium
-    {
-      "Exafunction/codeium.nvim",
-      dependencies = {
-          "nvim-lua/plenary.nvim",
-          "hrsh7th/nvim-cmp",
-      },
-      config = function()
-          require("codeium").setup({})
-      end
-  },
-
     {
       "saadparwaiz1/cmp_luasnip",
       "hrsh7th/cmp-nvim-lua",
@@ -146,7 +134,6 @@ return {
       sources = cmp.config.sources {
         { name = "nvim_lsp", group_index = 1 },
         { name = "path", group_index = 1 },
-        { name = "codeium", group_index = 2 },
         { name = "luasnip", group_index = 1 },
         { name = "nvim_lua", group_index = 1 },
         { name = "buffer", group_index = 2, keyword_length = 3 },

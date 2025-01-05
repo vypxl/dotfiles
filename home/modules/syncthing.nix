@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.my;
 in
@@ -8,9 +13,9 @@ in
   };
 
   config = lib.mkIf cfg.syncthing.enable {
+    home.packages = [ pkgs.syncthingtray-minimal ];
     services.syncthing = {
       enable = true;
-      tray.enable = true;
     };
   };
 }

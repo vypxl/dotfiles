@@ -37,9 +37,6 @@ in
     # face
     home.file.".face".source = ../src/face.png;
 
-    # Wayland for electron/chromium
-    home.sessionVariables.NIXOS_OZONE_WL = 1;
-
     # auto mount disks
     services.udiskie.enable = true;
     # bt media control

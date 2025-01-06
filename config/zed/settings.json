@@ -30,7 +30,7 @@
   "theme": {
     "mode": "system",
     "light": "Catppuccin Macchiato",
-    "dark": "One Dark"
+    "dark": "Catppuccin Macchiato"
   },
   "terminal": {
     "line_height": "standard"

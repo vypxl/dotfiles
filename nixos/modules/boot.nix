@@ -46,12 +46,14 @@ in
         boot = lib.mkIf cfg.boot.splash {
           plymouth = {
             enable = true;
-            theme = "circle_hud";
+            # theme = "circle_hud";
+            theme = "catppuccin-macchiato";
             themePackages = with pkgs; [
               # By default we would install all themes
-              (adi1090x-plymouth-themes.override {
-                selected_themes = [ "circle_hud" ];
-              })
+              # (adi1090x-plymouth-themes.override {
+              #   selected_themes = [ "circle_hud" ];
+              # })
+              catppuccin-plymouth
             ];
           };
           # Enable "Silent Boot"

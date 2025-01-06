@@ -32,7 +32,7 @@ in
     };
 
     # Cursor theme
-    home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
+    home.file.".icons/default".source = "${pkgs.catppuccin-cursors.macchiatoSky}/share/icons/catppuccin-macchiato-sky-cursors"; # "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
 
     # face
     home.file.".face".source = ../src/face.png;
@@ -41,6 +41,24 @@ in
     services.udiskie.enable = true;
     # bt media control
     services.mpris-proxy.enable = true;
+
+    # dark theme
+    dconf = {
+      enable = true;
+      settings = {
+        "org/gnome/desktop/interface" = {
+          color-scheme = "prefer-dark";
+        };
+      };
+    };
+
+    gtk = {
+      enable = true;
+      theme = {
+        name = "Adwaita-dark";
+        package = pkgs.gnome-themes-extra;
+      };
+    };
 
     services.hyprpaper = {
       enable = true;

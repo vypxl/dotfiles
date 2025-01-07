@@ -55,6 +55,7 @@ let
     imagemagick
     pandoc
     ffmpeg
+    poppler_utils
   ];
   graphical = [
     brave

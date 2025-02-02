@@ -68,6 +68,7 @@ let
     sushi # previewer for nautilus
     obsidian
     pavucontrol
+    ripdrag
     spotifywm
     vlc
     vscodium-fhs

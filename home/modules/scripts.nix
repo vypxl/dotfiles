@@ -63,11 +63,11 @@ let
       echo -n "?"
     fi
 
-    if [ -n "$(git rev-list @{u}..HEAD)" ]; then
+    if [ -n "$(git rev-list @{u}..HEAD 2>/dev/null)" ]; then
       echo -n "↑"
     fi
 
-    if [ -n "$(git rev-list HEAD..@{u})" ]; then
+    if [ -n "$(git rev-list HEAD..@{u} 2>/dev/null)" ]; then
       echo -n "↓"
     fi
   '';

@@ -4,6 +4,7 @@ let
 in
 {
   imports = [
+    ./modules/android.nix
     ./modules/bat.nix
     ./modules/direnv.nix
     ./modules/dotfiles.nix

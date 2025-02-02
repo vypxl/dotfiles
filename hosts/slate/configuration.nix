@@ -11,6 +11,8 @@
   my.gdm.autologin = true;
   my.networking.dns.enable = true;
 
+  my.android.enable = true;
+
   networking.hostName = "slate";
   time.timeZone = "Europe/Zurich";
 

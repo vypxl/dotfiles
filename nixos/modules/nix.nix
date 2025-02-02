@@ -9,6 +9,7 @@ in
 
   config = lib.mkIf cfg.nix.enable {
     nixpkgs.config.allowUnfree = true;
+    nixpkgs.config.android_sdk.accept_license = true;
     nix.settings.experimental-features = [
       "nix-command"
       "flakes"

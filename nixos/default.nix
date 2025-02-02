@@ -4,6 +4,7 @@ let
 in
 {
   imports = [
+    ./modules/android.nix
     ./modules/audio.nix
     ./modules/auto-upgrade.nix
     ./modules/base.nix

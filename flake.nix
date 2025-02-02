@@ -22,6 +22,7 @@
         unstable = import nixpkgs-unstable {
           inherit system;
           config.allowUnfree = true;
+          config.android_sdk.accept_license = true;
         };
       };
       machine =

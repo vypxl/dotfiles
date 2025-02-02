@@ -56,6 +56,7 @@ let
     pandoc
     ffmpeg
     poppler_utils
+    qmk
   ];
   graphical = [
     brave

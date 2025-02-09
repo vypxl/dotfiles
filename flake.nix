@@ -47,6 +47,7 @@
       nixosConfigurations = {
         stone = machine "stone" "thomas";
         slate = machine "slate" "thomas";
+        zephyr = machine "zephyr" "thomas";
       };
     };
 }

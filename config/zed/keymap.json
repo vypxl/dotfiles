@@ -29,9 +29,20 @@
     "bindings": {
       "space": null,
       "space x": "pane::CloseActiveItem",
+      "ctrl-w": "pane::CloseActiveItem",
       "space f": "file_finder::Toggle",
       "space w": "workspace::NewSearch",
+      "space h": "pane::ActivatePreviousItem",
+      "space l": "pane::ActivateNextItem",
+      "alt-shift-left": "pane::ActivatePreviousItem",
+      "alt-shift-right": "pane::ActivateNextItem",
       "ctrl-b": "workspace::ToggleLeftDock"
+    }
+  },
+  {
+    "context": "AssistantPanel",
+    "bindings": {
+      "ctrl-d": "pane::CloseActiveItem"
     }
   }
 ]

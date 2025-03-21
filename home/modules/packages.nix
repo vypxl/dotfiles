@@ -72,7 +72,6 @@ let
     obsidian
     pavucontrol
     ripdrag
-    unstable.rustdesk
     spotifywm
     vlc
     vscodium-fhs

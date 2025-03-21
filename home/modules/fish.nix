@@ -34,6 +34,7 @@ in
         md = "mkdir";
         nixi = "nix profile install nixpkgs#";
         nixr = "nix run nixpkgs#";
+        venv = "source .venv/bin/activate.fish";
       };
       shellAliases = {
         ls = "eza --git";

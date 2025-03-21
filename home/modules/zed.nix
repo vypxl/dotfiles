@@ -13,7 +13,8 @@ in
   };
 
   config = lib.mkIf cfg.zed.enable {
-    home.packages = [ pkgs.zed-editor ];
+    home.packages = [ pkgs.unstable.zed-editor ];
     my.dotfile."zed".mut = true;
+    programs.fish.shellAliases.zed = "zeditor";
   };
 }

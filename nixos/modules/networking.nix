@@ -1,4 +1,4 @@
-{ lib, config, ... }:
+{ lib, config, pkgs, ... }:
 with lib;
 let
   cfg = config.my.networking;
@@ -15,6 +15,14 @@ in
 
   config = lib.mkIf cfg.enable {
     networking.networkmanager.enable = true;
+    # services.resolved.enable = true; # for .local domains
+    services.avahi = {
+      enable = true;
+      nssmdns4 = true;
+    };
+
+    # wireguard with networkmanager
+    networking.firewall.checkReversePath = false;
 
     # custom dns
     networking.nameservers = mkIf cfg.dns.enable [
@@ -28,6 +36,13 @@ in
       settings = {
         ipv6_servers = true;
         require_dnssec = true;
+
+        forwarding_rules = pkgs.writeText "forwarding-rules.txt" ''
+          lan $DHCP
+          local $DHCP
+          home $DHCP
+          localdomain $DHCP
+        '';
 
         sources.public-resolvers = {
           urls = [

@@ -32,5 +32,12 @@ in
       zsa-udev-rules
       via
     ];
+
+    programs.nix-ld = {
+      enable = true;
+      libraries = with pkgs; [
+        libgcc # libstdc++
+      ];
+    };
   };
 }

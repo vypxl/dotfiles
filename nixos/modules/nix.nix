@@ -15,6 +15,8 @@ in
       "flakes"
     ];
 
+    nix.settings.trusted-users = [ "@wheel" ];
+
     nix.gc = {
       automatic = true;
       dates = "weekly";

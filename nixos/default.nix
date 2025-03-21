@@ -56,7 +56,7 @@ in
       my.bluetooth.enable = true;
       my.hyprland.enable = true;
       my.gdm.enable = true;
-      my.networking.dns.enable = true;
+      my.networking.dns.enable = lib.mkDefault true;
     })
   ];
 }

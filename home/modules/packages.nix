@@ -52,6 +52,9 @@ let
     gcc
     gnumake
     ninja
+
+    terraform
+    google-cloud-sdk
   ];
   util = [
     imagemagick
@@ -63,6 +66,7 @@ let
   ];
   graphical = [
     brave
+    bruno
     firefox
     unstable.ferdium
     google-chrome

@@ -15,6 +15,7 @@ in
       controlMaster = "auto";
       controlPath = "~/.ssh/control-%r@%h:%p";
       controlPersist = "10m";
+      includes = [ "~/.ssh/config.d/*" ];
     };
   };
 }

@@ -6,6 +6,9 @@
       url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    omnix.url = "github:juspay/omnix";
+    omnix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -14,16 +17,18 @@
       home-manager,
       nixpkgs,
       nixpkgs-unstable,
+      omnix,
       ...
     }@attrs:
     let
       system = "x86_64-linux";
-      overlay-unstable = final: prev: {
+      overlay = final: prev: {
         unstable = import nixpkgs-unstable {
           inherit system;
           config.allowUnfree = true;
           config.android_sdk.accept_license = true;
         };
+        omnix = omnix.packages.${system};
       };
       machine =
         hostname: username:
@@ -31,7 +36,7 @@
           inherit system;
           specialArgs = attrs;
           modules = [
-            { nixpkgs.overlays = [ overlay-unstable ]; }
+            { nixpkgs.overlays = [ overlay ]; }
             home-manager.nixosModules.default
             { 
               home-manager.backupFileExtension = "hmbak";

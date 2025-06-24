@@ -52,6 +52,7 @@ let
     gcc
     gnumake
     ninja
+    omnix.default
 
     terraform
     google-cloud-sdk
@@ -63,6 +64,7 @@ let
     poppler_utils
     qmk
     unstable.aichat
+    unstable.vault
   ];
   graphical = [
     brave
@@ -70,11 +72,13 @@ let
     firefox
     unstable.ferdium
     google-chrome
+    gfn-electron
     nautilus # file manager
     nautilus-open-any-terminal # to open kitty instead of gnome-terminal
     sushi # previewer for nautilus
     obsidian
     pavucontrol
+    remmina
     ripdrag
     spotifywm
     vlc
@@ -123,6 +127,7 @@ let
     yarn
     pnpm
     ruby
+    # unstable.rustup
     ghc
   ];
   cfg = config.my.packages;
@@ -144,5 +149,12 @@ in
       (if cfg.languages then languages else [ ])
       (if cfg.util then util else [ ])
     ];
+
+    xdg.mimeApps = {
+      enable = true;
+      defaultApplications = {
+        "x-scheme-handler/geforcenow" = "com.github.hmlendea.geforcenow-electron.desktop";
+      };
+    };
   };
 }

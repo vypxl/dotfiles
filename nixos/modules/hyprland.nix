@@ -26,7 +26,7 @@ in
       noto-fonts-emoji
       fira-code
       fira-code-symbols
-      (nerdfonts.override { fonts = [ "FiraCode" ]; })
+      nerd-fonts.fira-code
     ];
 
     services.playerctld.enable = true;

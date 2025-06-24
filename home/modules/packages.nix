@@ -103,7 +103,6 @@ let
     pyright
     marksman
     rubyPackages.solargraph
-    rust-analyzer
     svelte-language-server
     tailwindcss-language-server
     taplo # toml
@@ -124,8 +123,6 @@ let
     yarn
     pnpm
     ruby
-    rustc
-    cargo
     ghc
   ];
   cfg = config.my.packages;

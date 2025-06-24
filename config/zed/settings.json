@@ -1,4 +1,20 @@
 {
+  "features": {
+    "edit_prediction_provider": "supermaven"
+  },
+  "agent": {
+    "always_allow_tool_actions": true,
+    "default_profile": "write",
+    "default_model": {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-thinking-latest"
+    },
+    "inline_assistant_model": {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-latest"
+    },
+    "version": "2"
+  },
   "telemetry": {
     "diagnostics": false,
     "metrics": false
@@ -45,6 +61,13 @@
           "flake": {
             "autoArchive": true
           }
+        }
+      }
+    },
+    "rust-analyzer": {
+      "initialization_options": {
+        "check": {
+          "command": "clippy"
         }
       }
     }

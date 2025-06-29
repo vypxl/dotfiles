@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  hostname,
   ...
 }:
 let
@@ -31,8 +32,19 @@ in
       xwayland.enable = true;
     };
 
+    xdg.configFile."hypr/hyprland-custom.conf".text =
+      if hostname == "zephyr" then
+        ''
+          monitor=eDP-1,preferred,auto,1.6666667
+          monitor=DP-10,highres,auto,auto
+          monitor=DP-11,highres,auto,auto
+        ''
+      else
+        "";
+
     # Cursor theme
-    home.file.".icons/default".source = "${pkgs.catppuccin-cursors.macchiatoSky}/share/icons/catppuccin-macchiato-sky-cursors"; # "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
+    home.file.".icons/default".source =
+      "${pkgs.catppuccin-cursors.macchiatoSky}/share/icons/catppuccin-macchiato-sky-cursors"; # "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
 
     # face
     home.file.".face".source = ../src/face.png;

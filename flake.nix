@@ -38,7 +38,8 @@
           modules = [
             { nixpkgs.overlays = [ overlay ]; }
             home-manager.nixosModules.default
-            { 
+            {
+              home-manager.extraSpecialArgs = { inherit hostname; };
               home-manager.backupFileExtension = "hmbak";
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;

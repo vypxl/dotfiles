@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  hostname,
   ...
 }:
 with pkgs;
@@ -125,6 +126,13 @@ let
     ruby
     ghc
   ];
+  per-host = {
+    zephyr = [
+      omnix.default
+      unstable.vault
+      remmina
+    ];
+  };
   cfg = config.my.packages;
 in
 {
@@ -143,6 +151,7 @@ in
       (if cfg.lsp then lsp else [ ])
       (if cfg.languages then languages else [ ])
       (if cfg.util then util else [ ])
+      (lib.attrsets.attrByPath [ hostname ] [ ] per-host)
     ];
   };
 }

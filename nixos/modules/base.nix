@@ -31,6 +31,7 @@ in
       qmk-udev-rules
       zsa-udev-rules
       via
+      steam-run-free
     ];
 
     programs.nix-ld = {
@@ -38,6 +39,16 @@ in
       libraries = with pkgs; [
         libgcc # libstdc++
       ];
+    };
+
+    programs.appimage = {
+      enable = true;
+      binfmt = true;
+      package = pkgs.appimage-run.override { extraPkgs = pkgs: [
+        pkgs.icu
+        pkgs.libxcrypt-legacy
+        pkgs.zstd
+      ]; };
     };
   };
 }

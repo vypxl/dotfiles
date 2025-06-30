@@ -10,6 +10,7 @@ in
     ./modules/base.nix
     ./modules/bluetooth.nix
     ./modules/boot.nix
+    ./modules/command-not-found.nix
     ./modules/docker.nix
     ./modules/fish.nix
     ./modules/hyprland.nix

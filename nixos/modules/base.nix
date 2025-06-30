@@ -26,7 +26,6 @@ in
       git
       vim
       wget
-      comma
 
       qmk-udev-rules
       zsa-udev-rules

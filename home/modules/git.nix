@@ -50,6 +50,7 @@ in
 
         pull = {
           rebase = true;
+          autostash = true;
         };
 
         diff = {

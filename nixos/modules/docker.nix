@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.my;
 in
@@ -8,7 +8,15 @@ in
   };
 
   config = lib.mkIf cfg.docker.enable {
-    virtualisation.docker.enable = true;
-    users.users.thomas.extraGroups = [ "docker" ];
+    virtualisation = {
+      containers.enable = true;
+      podman = {
+        enable = true;
+        dockerCompat = true;
+        defaultNetwork.settings.dns_enabled = true;
+      };
+    };
+
+    environment.systemPackages = with pkgs; [ podman-compose podman-tui ];
   };
 }

@@ -47,6 +47,7 @@ in
         vimp = ''nvim "+lua require('persistence').load()"'';
         icat = "kitty +kitten icat";
         killbg = "jobs -p | tail -n 1 | xargs kill -9; fg";
+        jwt-decode = "jq -R 'split(\".\") | .[0:2] | map(@base64d) | map(fromjson)'";
       };
       functions = {
         "format_command_duration" = fun "format_command_duration";

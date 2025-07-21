@@ -40,9 +40,30 @@
     }
   },
   {
+    "context": "vim_mode == visual",
+    "bindings": {
+      "shift-x": "vim::Exchange",
+      "ctrl-s": ["vim::PushAddSurrounds", {}]
+    }
+  },
+  {
     "context": "AssistantPanel",
     "bindings": {
       "ctrl-d": "pane::CloseActiveItem"
+    }
+  },
+  {
+    "context": "vim_operator == a || vim_operator == i || vim_operator == ds || vim_operator == cs",
+    "bindings": {
+      "q": "vim::MiniQuotes",
+      "b": "vim::MiniBrackets"
+    }
+  },
+  {
+    "context": "vim_mode == normal || vim_mode == visual",
+    "bindings": {
+      "s": "vim::PushSneak",
+      "shift-s": "vim::PushSneakBackward"
     }
   }
 ]

@@ -97,27 +97,27 @@ in
         listener = [
           {
             timeout = 150; # 2.5min.
-            on-timeout = "brightnessctl -s set 5"; # set monitor backlight to minimum, avoid 0 on OLED monitor.
-            on-resume = "brightnessctl -r"; # monitor backlight restore.
+            on-timeout = "brightnessctl -sd amdgpu_bl1 set 5"; # set monitor backlight to minimum, avoid 0 on OLED monitor.
+            on-resume = "brightnessctl -rd amdgpu_bl1"; # monitor backlight restore.
           }
 
           # turn off keyboard backlight, comment out this section if you dont have a keyboard backlight.
+          # {
+          #   timeout = 150; # 2.5min.
+          #   on-timeout = "brightnessctl -sd rgb:kbd_backlight set 0"; # turn off keyboard backlight.
+          #   on-resume = "brightnessctl -rd rgb:kbd_backlight"; # turn on keyboard backlight.
+          # }
+
           {
-            timeout = 150; # 2.5min.
-            on-timeout = "brightnessctl -sd rgb:kbd_backlight set 0"; # turn off keyboard backlight.
-            on-resume = "brightnessctl -rd rgb:kbd_backlight"; # turn on keyboard backlight.
+            timeout = 270; # 4.5min (+ 30s grace period of hyprlock)
+            on-timeout = "hyprlock"; # lock screen when timeout has passed
           }
 
-          # {
-          #   timeout = 300; # 5min
-          #   on-timeout = "loginctl lock-session"; # lock screen when timeout has passed
-          # }
-
-          # {
-          #   timeout = 330; # 5.5min
-          #   on-timeout = "hyprctl dispatch dpms off"; # screen off when timeout has passed
-          #   on-resume = "hyprctl dispatch dpms on"; # screen on when activity is detected after timeout has fired.
-          # }
+          {
+            timeout = 600; # 10min
+            on-timeout = "hyprctl dispatch dpms off"; # screen off when timeout has passed
+            on-resume = "hyprctl dispatch dpms on"; # screen on when activity is detected after timeout has fired.
+          }
 
           # {
           #   timeout = 1800; # 30min

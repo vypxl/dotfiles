@@ -36,6 +36,8 @@ let
     lazygit
     lshw
     dig
+    socat
+    tree
 
     lolcat
     cowsay

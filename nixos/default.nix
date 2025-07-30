@@ -19,7 +19,7 @@ in
     ./modules/networking.nix
     ./modules/nix.nix
     ./modules/sudo.nix
-    ./modules/swapfile.nix
+    ./modules/swap.nix
     ./modules/user.nix
   ];
 
@@ -48,7 +48,7 @@ in
       my.networking.enable = true;
       my.nix.enable = true;
       my.sudo.enable = true;
-      my.swapfile.enable = true;
+      my.swap.enable = true;
       my.user.enable = true;
     })
 

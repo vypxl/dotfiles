@@ -95,6 +95,7 @@ in
             "mpris"
             "backlight"
             "pulseaudio"
+            "idle_inhibitor"
             "tray"
             "custom/kdeconnect"
             "battery"

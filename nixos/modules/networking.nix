@@ -24,6 +24,19 @@ in
     # wireguard with networkmanager
     networking.firewall.checkReversePath = false;
 
+    networking.firewall = {
+      enable = true;
+      # Do not timeout, just reject
+      rejectPackets = true;
+      # Allow local network access
+      extraCommands = ''
+        iptables -A nixos-fw -p tcp --source 192.168.0.0/16 --dport 8000:8000 -j nixos-fw-accept
+      '';
+      extraStopCommands = ''
+        iptables -D nixos-fw -p tcp --source 192.168.0.0/16 --dport 8000:8000 nixos-fw-accept || true
+      '';
+    };
+
     # custom dns
     networking.nameservers = mkIf cfg.dns.enable [
       "127.0.0.1"

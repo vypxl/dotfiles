@@ -21,6 +21,7 @@ in
     hardware.keyboard.qmk.enable = true;
     hardware.keyboard.zsa.enable = true;
     services.udev.packages = [ pkgs.via ];
+    services.gvfs.enable = true; # Support MTP file systems (e.g. Android file transfer mode)
 
     environment.systemPackages = with pkgs; [
       git

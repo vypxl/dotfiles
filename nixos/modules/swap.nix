@@ -10,11 +10,11 @@ in
   config = lib.mkIf cfg.swap.enable {
     zramSwap = {
       enable = true;
-      memoryPercent = 25;
+      memoryPercent = 33;
     };
 
     boot.kernel.sysctl = {
-      "vm.swappiness" = 5;
+      "vm.swappiness" = 50;
     };
   };
 }

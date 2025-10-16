@@ -36,7 +36,8 @@
       "space l": "pane::ActivateNextItem",
       "alt-shift-left": "pane::ActivatePreviousItem",
       "alt-shift-right": "pane::ActivateNextItem",
-      "ctrl-b": "workspace::ToggleLeftDock"
+      "ctrl-b": "workspace::ToggleLeftDock",
+      "space g":  ["task::Spawn", { "task_name": "lazygit", "reveal_target": "center" }]
     }
   },
   {

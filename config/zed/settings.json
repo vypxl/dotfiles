@@ -1,6 +1,6 @@
 {
   "features": {
-    "edit_prediction_provider": "supermaven"
+    "edit_prediction_provider": "zed"
   },
   "agent": {
     "always_allow_tool_actions": true,
@@ -12,8 +12,7 @@
     "inline_assistant_model": {
       "provider": "anthropic",
       "model": "claude-sonnet-4-latest"
-    },
-    "version": "2"
+    }
   },
   "telemetry": {
     "diagnostics": false,

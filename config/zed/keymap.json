@@ -25,6 +25,13 @@
     }
   },
   {
+    "context": "Terminal && !Dock",
+    "bindings": {
+      // This makes the lazygit pane de-maximize on close
+      // "q": "workspace::ToggleZoom"
+    }
+  },
+  {
     "context": "Editor && (vim_mode == normal || vim_mode == visual) && !VimWaiting && !menu",
     "bindings": {
       "space": null,
@@ -37,7 +44,7 @@
       "alt-shift-left": "pane::ActivatePreviousItem",
       "alt-shift-right": "pane::ActivateNextItem",
       "ctrl-b": "workspace::ToggleLeftDock",
-      "space g":  ["task::Spawn", { "task_name": "lazygit", "reveal_target": "center" }]
+      "space g":  ["action::Sequence", [["task::Spawn", { "task_name": "lazygit", "reveal_target": "center" }], "workspace::ToggleZoom"]]
     }
   },
   {

@@ -7,11 +7,11 @@
     "default_profile": "write",
     "default_model": {
       "provider": "anthropic",
-      "model": "claude-sonnet-4-thinking-latest"
+      "model": "claude-sonnet-4-5-thinking-latest"
     },
     "inline_assistant_model": {
       "provider": "anthropic",
-      "model": "claude-sonnet-4-latest"
+      "model": "claude-sonnet-4-5-latest"
     }
   },
   "telemetry": {

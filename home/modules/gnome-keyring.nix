@@ -21,5 +21,9 @@ in
     programs.fish.shellInit = ''
       set -gx SSH_AUTH_SOCK /run/user/(id -u)/keyring/ssh
     '';
+    systemd.user.services.gnome-keyring = {
+      Service.Restart = lib.mkForce "always";
+      Service.ExecStopPost = "${pkgs.lib.getExe pkgs.libnotify} -u normal -a Keyring \"Keyring needs to be re-unlocked\"";
+    };
   };
 }

@@ -11,9 +11,9 @@ in
     ./modules/bluetooth.nix
     ./modules/boot.nix
     ./modules/command-not-found.nix
+    ./modules/desktop.nix
     ./modules/docker.nix
     ./modules/fish.nix
-    ./modules/hyprland.nix
     ./modules/gdm.nix
     ./modules/locale.nix
     ./modules/networking.nix

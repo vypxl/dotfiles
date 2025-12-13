@@ -6,6 +6,7 @@ in
   imports = [
     ./modules/android.nix
     ./modules/bat.nix
+    ./modules/desktop.nix
     ./modules/direnv.nix
     ./modules/dotfiles.nix
     ./modules/dunst.nix
@@ -15,7 +16,6 @@ in
     ./modules/git.nix
     ./modules/gnome-keyring.nix
     ./modules/helix.nix
-    ./modules/hyprland.nix
     ./modules/kitty.nix
     ./modules/lazygit.nix
     ./modules/nvim.nix

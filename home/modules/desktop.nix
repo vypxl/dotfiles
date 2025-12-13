@@ -7,19 +7,9 @@
 }:
 let
   cfg = config.my;
-in
-{
-  options.my = with lib; {
-    hyprland.enable = mkEnableOption "hyprland";
-  };
-
-  config = lib.mkIf cfg.hyprland.enable {
+  desktop-enabled = cfg.hyprland.enable || cfg.niri.enable;
+  hyprland-config = lib.mkIf cfg.hyprland.enable {
     home.packages = with pkgs; [
-      brightnessctl
-      blueman
-      networkmanagerapplet
-      seafile-client
-      soteria
       hyprpicker
       hyprshot
     ];
@@ -41,36 +31,6 @@ in
         ''
       else
         "";
-
-    # Cursor theme
-    home.file.".icons/default".source =
-      "${pkgs.catppuccin-cursors.macchiatoSky}/share/icons/catppuccin-macchiato-sky-cursors"; # "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
-
-    # face
-    home.file.".face".source = ../src/face.png;
-
-    # auto mount disks
-    services.udiskie.enable = true;
-    # bt media control
-    services.mpris-proxy.enable = true;
-
-    # dark theme
-    dconf = {
-      enable = true;
-      settings = {
-        "org/gnome/desktop/interface" = {
-          color-scheme = "prefer-dark";
-        };
-      };
-    };
-
-    gtk = {
-      enable = true;
-      theme = {
-        name = "Adwaita-dark";
-        package = pkgs.gnome-themes-extra;
-      };
-    };
 
     services.hyprpaper = {
       enable = true;
@@ -127,4 +87,58 @@ in
       };
     };
   };
+  niri-config = lib.mkIf cfg.niri.enable {
+    my.dotfile.niri.mut = true;
+  };
+  common-config = lib.mkIf desktop-enabled {
+    home.packages = with pkgs; [
+      brightnessctl
+      blueman
+      networkmanagerapplet
+      seafile-client
+      soteria
+    ];
+
+    # Cursor theme
+    home.file.".icons/default".source =
+      "${pkgs.catppuccin-cursors.macchiatoSky}/share/icons/catppuccin-macchiato-sky-cursors"; # "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
+
+    # face
+    home.file.".face".source = ../src/face.png;
+
+    # auto mount disks
+    services.udiskie.enable = true;
+    # bt media control
+    services.mpris-proxy.enable = true;
+
+    # dark theme
+    dconf = {
+      enable = true;
+      settings = {
+        "org/gnome/desktop/interface" = {
+          color-scheme = "prefer-dark";
+        };
+      };
+    };
+
+    gtk = {
+      enable = true;
+      theme = {
+        name = "Adwaita-dark";
+        package = pkgs.gnome-themes-extra;
+      };
+    };
+  };
+in
+{
+  options.my = with lib; {
+    hyprland.enable = mkEnableOption "hyprland";
+    niri.enable = mkEnableOption "niri";
+  };
+
+  config = lib.mkMerge [
+    common-config
+    hyprland-config
+    niri-config
+  ];
 }

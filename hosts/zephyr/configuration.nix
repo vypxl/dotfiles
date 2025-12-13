@@ -12,6 +12,8 @@
 
   my.bundle.desktop.enable = true;
 
+  my.niri.enable = true;
+
   my.boot.splash = true;
   my.boot.limit-entries = 2;
   my.gdm.autologin = true;

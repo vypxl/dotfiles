@@ -1,0 +1,38 @@
+{
+  "calculator": {
+    "enabled": true,
+    "trigger": "=",
+    "noTrigger": true
+  },
+  "dankBatteryAlerts": {
+    "enabled": true,
+    "warningThreshold": 30
+  },
+  "emojiLauncher": {
+    "enabled": true,
+    "noTrigger": false,
+    "trigger": ":"
+  },
+  "niriWindows": {
+    "enabled": true,
+    "noTrigger": true,
+    "trigger": "!"
+  },
+  "webSearch": {
+    "enabled": true,
+    "defaultEngine": "duckduckgo",
+    "noTrigger": false,
+    "trigger": ";",
+    "searchEngines": [
+      {
+        "id": "perplexity",
+        "name": "Perplexity",
+        "icon": "perplexity",
+        "url": "https://www.perplexity.ai/search?q=%s",
+        "keywords": [
+          "p"
+        ]
+      }
+    ]
+  }
+}

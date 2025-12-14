@@ -10,11 +10,18 @@ in
   config = lib.mkIf cfg.ssh.enable {
     programs.ssh = {
       enable = true;
-      addKeysToAgent = "yes";
-      compression = true;
-      controlMaster = "auto";
-      controlPath = "~/.ssh/control-%r@%h:%p";
-      controlPersist = "10m";
+      enableDefaultConfig = false;
+
+      matchBlocks."*" = {
+        addKeysToAgent = "yes";
+        compression = true;
+        controlMaster = "auto";
+        controlPath = "~/.ssh/control-%r@%h:%p";
+        controlPersist = "10m";
+        forwardAgent = false;
+        serverAliveInterval = 0;
+        serverAliveCountMax = 3;
+      };
       includes = [ "~/.ssh/config.d/*" ];
     };
   };

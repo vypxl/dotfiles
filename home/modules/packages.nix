@@ -63,7 +63,7 @@ let
     imagemagick
     pandoc
     ffmpeg
-    poppler_utils
+    poppler-utils
     qmk
     unstable.aichat
   ];

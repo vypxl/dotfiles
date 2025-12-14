@@ -55,7 +55,7 @@ in
     (lib.mkIf cfg.desktop.enable {
       my.audio.enable = true;
       my.bluetooth.enable = true;
-      my.hyprland.enable = true;
+      my.hyprland.enable = lib.mkDefault true;
       my.gdm.enable = true;
       my.networking.dns.enable = lib.mkDefault true;
     })

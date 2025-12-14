@@ -9,6 +9,11 @@ let
   cfg = config.my;
   desktop-enabled = cfg.hyprland.enable || cfg.niri.enable;
   hyprland-config = lib.mkIf cfg.hyprland.enable {
+    my.dunst.enable = true;
+    my.fuzzel.enable = true;
+    my.waybar.enable = true;
+    my.wlogout.enable = true;
+
     home.packages = with pkgs; [
       hyprpicker
       hyprshot
@@ -89,7 +94,33 @@ let
   };
   niri-config = lib.mkIf cfg.niri.enable {
     my.dotfile.niri.mut = true;
+    my.dotfile.DankMaterialShell.mut = true;
+
+    home.packages = with pkgs; [
+      unstable.dsearch
+    ];
+
+    programs.dankMaterialShell = {
+      enable = true;
+
+      systemd = {
+        enable = true; # Systemd service for auto-start
+        restartIfChanged = true; # Auto-restart dms.service when dankMaterialShell changes
+      };
+
+      # Core features
+      enableSystemMonitoring = true; # System monitoring widgets (dgop)
+      # enableClipboard = true; # Clipboard history manager
+      enableVPN = true; # VPN management widget
+      # enableBrightnessControl = true; # Backlight/brightness controls
+      # enableColorPicker = true; # Color picker tool
+      enableDynamicTheming = true; # Wallpaper-based theming (matugen)
+      enableAudioWavelength = true; # Audio visualizer (cava)
+      enableCalendarEvents = true; # Calendar integration (khal)
+      # enableSystemSound = false; # System sound effects
+    };
   };
+
   common-config = lib.mkIf desktop-enabled {
     home.packages = with pkgs; [
       brightnessctl

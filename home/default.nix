@@ -1,9 +1,10 @@
-{ lib, config, ... }:
+{ lib, config, dankMaterialShell, ... }:
 let
   cfg = config.my.bundle;
 in
 {
   imports = [
+    dankMaterialShell.homeModules.dankMaterialShell.default
     ./modules/android.nix
     ./modules/bat.nix
     ./modules/desktop.nix
@@ -74,14 +75,9 @@ in
     })
 
     (lib.mkIf cfg.desktop.enable {
-      my.dunst.enable = true;
-      my.fuzzel.enable = true;
       my.gnome-keyring.enable = true;
-      my.hyprland.enable = true;
       my.kitty.enable = true;
       my.syncthing.enable = true;
-      my.waybar.enable = true;
-      my.wlogout.enable = true;
       my.xkb.enable = true;
       my.zed.enable = true;
 

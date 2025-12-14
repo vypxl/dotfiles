@@ -32,6 +32,7 @@ in
       zsa-udev-rules
       via
       steam-run-free
+      ntfs3g
     ];
 
     programs.nix-ld = {

@@ -1,7 +1,7 @@
 { config, lib, ... }:
 let
   cfg = config.my;
-  session = "hyprland-uwsm";
+  session = if cfg.hyprland.enable then "hyprland-uwsm" else (if cfg.niri.enable then "niri" else "");
   username = "thomas";
 in
 {
@@ -19,16 +19,14 @@ in
         user = username;
       };
 
-      defaultSession = session;
+      defaultSession = lib.mkIf (session != "") session;
     };
 
-    services.xserver.displayManager = {
-      gdm = {
-        enable = true;
-        banner = "Welcome to NixOS!";
-        autoSuspend = false;
-        wayland = true;
-      };
+    services.displayManager.gdm = {
+      enable = true;
+      banner = "Welcome to NixOS!";
+      autoSuspend = false;
+      wayland = true;
     };
 
     # see https://nixos.wiki/wiki/GNOME#automatic-login

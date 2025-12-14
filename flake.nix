@@ -1,9 +1,9 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.05";
+      url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-index-database.url = "github:nix-community/nix-index-database";
@@ -11,6 +11,11 @@
 
     omnix.url = "github:juspay/omnix";
     omnix.inputs.nixpkgs.follows = "nixpkgs";
+
+    dankMaterialShell = {
+      url = "github:AvengeMedia/DankMaterialShell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -21,6 +26,7 @@
       nixpkgs-unstable,
       nix-index-database,
       omnix,
+      dankMaterialShell,
       ...
     }@attrs:
     let
@@ -43,7 +49,7 @@
             home-manager.nixosModules.default
             nix-index-database.nixosModules.nix-index
             {
-              home-manager.extraSpecialArgs = { inherit hostname; };
+              home-manager.extraSpecialArgs = { inherit hostname dankMaterialShell; };
               home-manager.backupFileExtension = "hmbak";
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;

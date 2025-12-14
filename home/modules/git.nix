@@ -8,9 +8,10 @@ in
   };
 
   config = lib.mkIf cfg.git.enable {
-    programs.git = {
+    programs.delta = {
       enable = true;
-      delta = {
+      enableGitIntegration = true;
+      options = {
         enable = true;
         options = {
           line-numbers = true;
@@ -18,15 +19,42 @@ in
           dark = true;
         };
       };
+    };
 
-      userName = "vypxl";
-      userEmail = "thomas@vypxl.io";
-      signing.key = "/home/thomas/.ssh/id_ed25519.pub";
+    programs.git = {
+      enable = true;
 
-      signing.signByDefault = true;
+      signing = {
+        format = "ssh";
+        key = "/home/thomas/.ssh/id_ed25519.pub";
+        signByDefault = true;
+      };
 
-      aliases.h = "log --pretty='%C(yellow)%h %C(cyan)%cd %Cblue%aN%C(auto)%d %C(green)(%G?) %Creset%s' --graph --date=relative --date-order";
-      aliases.uncommit = "reset --soft HEAD^";
+      settings = {
+        alias.h = "log --pretty='%C(yellow)%h %C(cyan)%cd %Cblue%aN%C(auto)%d %C(green)(%G?) %Creset%s' --graph --date=relative --date-order";
+        alias.uncommit = "reset --soft HEAD^";
+
+        commit.gpgSign = true;
+
+        diff.colorMoved = "default";
+
+        gpg.ssh.allowedSignersFile = "${config.home.homeDirectory}/.ssh/allowed_signers";
+
+        init.defaultBranch = "main";
+
+        merge.conflictStyle = "zdiff3";
+
+        pull.rebase = true;
+
+        rebase.autoStash = true;
+
+        submodule.recurse = true;
+        
+        tag.gpgSign = true;
+
+        user.name = "vypxl";
+        user.email = "thomas@vypxl.io";
+      };
 
       includes = [
         {
@@ -38,40 +66,6 @@ in
           condition = "gitdir:~/dev/uni/";
         }
       ];
-
-      extraConfig = {
-        init = {
-          defaultBranch = "main";
-        };
-
-        merge = {
-          conflictStyle = "zdiff3";
-        };
-
-        pull = {
-          rebase = true;
-        };
-
-        rebase = {
-          autoStash = true;
-        };
-
-        diff = {
-          colorMoved = "default";
-        };
-
-        submodule = {
-          recurse = true;
-        };
-
-        gpg = {
-          format = "ssh";
-        };
-
-        gpg.ssh = {
-          allowedSignersFile = "${config.home.homeDirectory}/.ssh/allowed_signers";
-        };
-      };
     };
 
     home.file.".ssh/allowed_signers".text = ''

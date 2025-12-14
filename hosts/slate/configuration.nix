@@ -11,6 +11,9 @@
   my.gdm.autologin = true;
   my.networking.dns.enable = true;
 
+  my.niri.enable = true;
+  my.hyprland.enable = false;
+
   my.android.enable = true;
 
   networking.hostName = "slate";

@@ -44,7 +44,7 @@ in
     ];
     networking.networkmanager.dns = mkIf cfg.dns.enable "none";
 
-    services.dnscrypt-proxy2 = mkIf cfg.dns.enable {
+    services.dnscrypt-proxy = mkIf cfg.dns.enable {
       enable = true;
       settings = {
         ipv6_servers = true;

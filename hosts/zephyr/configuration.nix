@@ -13,6 +13,7 @@
   my.bundle.desktop.enable = true;
 
   my.niri.enable = true;
+  my.hyprland.enable = false;
 
   my.boot.splash = true;
   my.boot.limit-entries = 2;

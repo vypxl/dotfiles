@@ -130,7 +130,7 @@ let
   ];
   per-host = {
     zephyr = [
-      omnix.default
+      # omnix.default
       unstable.vault
       remmina
     ];

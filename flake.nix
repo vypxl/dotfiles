@@ -9,8 +9,8 @@
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
-    omnix.url = "github:juspay/omnix";
-    omnix.inputs.nixpkgs.follows = "nixpkgs";
+    # omnix.url = "github:juspay/omnix";
+    # omnix.inputs.nixpkgs.follows = "nixpkgs";
 
     dankMaterialShell = {
       url = "github:AvengeMedia/DankMaterialShell";
@@ -25,7 +25,7 @@
       nixpkgs,
       nixpkgs-unstable,
       nix-index-database,
-      omnix,
+      # omnix,
       dankMaterialShell,
       ...
     }@attrs:
@@ -37,7 +37,7 @@
           config.allowUnfree = true;
           config.android_sdk.accept_license = true;
         };
-        omnix = omnix.packages.${system};
+        # omnix = omnix.packages.${system};
       };
       machine =
         hostname: username:

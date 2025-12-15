@@ -19,7 +19,7 @@ in
     ];
     services.gnome-keyring.enable = true;
     programs.fish.shellInit = ''
-      set -gx SSH_AUTH_SOCK /run/user/(id -u)/keyring/ssh
+      set -gx SSH_AUTH_SOCK $XDG_RUNTIME_DIR/gcr/ssh
     '';
     systemd.user.services.gnome-keyring = {
       Service.Restart = lib.mkForce "always";

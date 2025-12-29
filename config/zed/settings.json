@@ -1,25 +1,44 @@
 {
+  "context_servers": {
+    "context7-mcp": {
+      "command": "context7-mcp",
+      "args": []
+    },
+    "chrome-devtools-mcp": {
+      "command": "npx",
+      "args": [
+        "chrome-devtools-mcp@latest",
+        "--executablePath=/etc/profiles/per-user/thomas/bin/brave",
+        "--headless",
+      ],
+    },
+    "linear-mcp": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.linear.app/mcp"],
+    },
+  },
   "features": {
-    "edit_prediction_provider": "zed"
+    "edit_prediction_provider": "zed",
   },
   "agent": {
     "always_allow_tool_actions": true,
     "default_profile": "write",
     "default_model": {
       "provider": "anthropic",
-      "model": "claude-sonnet-4-5-thinking-latest"
+      "model": "claude-opus-4-5-thinking-latest",
     },
     "inline_assistant_model": {
       "provider": "anthropic",
-      "model": "claude-sonnet-4-5-latest"
-    }
+      "model": "claude-sonnet-4-5-latest",
+    },
   },
   "telemetry": {
     "diagnostics": false,
-    "metrics": false
+    "metrics": false,
   },
   "auto_install_extensions": {
     "basher": true,
+    "biome": true,
     "catppuccin": true,
     "docker-compose": true,
     "dockerfile": true,
@@ -34,7 +53,7 @@
     "make": true,
     "nix": true,
     "svelte": true,
-    "toml": true
+    "toml": true,
   },
   "autosave": { "after_delay": { "milliseconds": 1500 } },
   "vim_mode": true,
@@ -45,30 +64,32 @@
   "theme": {
     "mode": "system",
     "light": "Catppuccin Macchiato",
-    "dark": "Catppuccin Macchiato"
+    "dark": "Catppuccin Macchiato",
   },
   "terminal": {
-    "line_height": "standard"
+    "line_height": "standard",
   },
   "lsp": {
     "nil": {
       "settings": {
         "formatting": {
-          "command": ["nixfmt"]
+          "command": ["nixfmt"],
         },
         "nix": {
           "flake": {
-            "autoArchive": true
-          }
-        }
-      }
+            "autoArchive": true,
+          },
+        },
+      },
     },
     "rust-analyzer": {
       "initialization_options": {
         "check": {
-          "command": "clippy"
-        }
-      }
-    }
-  }
+          "command": "clippy",
+          "workspace": false,
+          "extraArgs": ["--no-deps"],
+        },
+      },
+    },
+  },
 }

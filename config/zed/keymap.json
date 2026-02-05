@@ -10,26 +10,32 @@
     "context": "Workspace",
     "bindings": {
       // "shift shift": "file_finder::Toggle"
-    }
+    },
   },
   {
     "context": "Editor",
     "bindings": {
-      "ctrl-\\": "terminal_panel::ToggleFocus"
-    }
+      "ctrl-\\": "terminal_panel::ToggleFocus",
+    },
   },
   {
     "context": "Terminal",
     "bindings": {
-      "ctrl-\\": "workspace::ToggleBottomDock"
-    }
+      "ctrl-\\": "workspace::ToggleBottomDock",
+    },
   },
   {
     "context": "Terminal && !Dock",
     "bindings": {
       // This makes the lazygit pane de-maximize on close
       // "q": "workspace::ToggleZoom"
-    }
+    },
+  },
+  {
+    "context": "AgentPanel > Editor",
+    "bindings": {
+      "ctrl-n": "agent::NewThread",
+    },
   },
   {
     "context": "Editor && (vim_mode == normal || vim_mode == visual) && !VimWaiting && !menu",
@@ -44,34 +50,43 @@
       "alt-shift-left": "pane::ActivatePreviousItem",
       "alt-shift-right": "pane::ActivateNextItem",
       "ctrl-b": "workspace::ToggleLeftDock",
-      "space g":  ["action::Sequence", [["task::Spawn", { "task_name": "lazygit", "reveal_target": "center" }], "workspace::ToggleZoom"]]
-    }
+      "space g": [
+        "action::Sequence",
+        [
+          [
+            "task::Spawn",
+            { "task_name": "lazygit", "reveal_target": "center" },
+          ],
+          "workspace::ToggleZoom",
+        ],
+      ],
+    },
   },
   {
     "context": "vim_mode == visual",
     "bindings": {
       "shift-x": "vim::Exchange",
-      "ctrl-s": ["vim::PushAddSurrounds", {}]
-    }
+      "ctrl-s": ["vim::PushAddSurrounds", {}],
+    },
   },
   {
     "context": "AssistantPanel",
     "bindings": {
-      "ctrl-d": "pane::CloseActiveItem"
-    }
+      "ctrl-d": "pane::CloseActiveItem",
+    },
   },
   {
     "context": "vim_operator == a || vim_operator == i || vim_operator == ds || vim_operator == cs",
     "bindings": {
       "q": "vim::MiniQuotes",
-      "b": "vim::MiniBrackets"
-    }
+      "b": "vim::MiniBrackets",
+    },
   },
   {
     "context": "vim_mode == normal || vim_mode == visual",
     "bindings": {
       "s": "vim::PushSneak",
-      "shift-s": "vim::PushSneakBackward"
-    }
-  }
+      "shift-s": "vim::PushSneakBackward",
+    },
+  },
 ]

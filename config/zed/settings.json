@@ -1,8 +1,14 @@
 {
   "context_servers": {
+    "postgres-context-server": {
+      "enabled": true,
+      "settings": {
+        "database_url": "postgresql://postgres:postgres@localhost:54322/postgres",
+      },
+    },
     "context7-mcp": {
       "command": "context7-mcp",
-      "args": []
+      "args": [],
     },
     "chrome-devtools-mcp": {
       "command": "npx",
@@ -21,6 +27,24 @@
     "edit_prediction_provider": "zed",
   },
   "agent": {
+    "favorite_models": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-4-5-thinking-latest",
+      },
+      {
+        "provider": "google",
+        "model": "gemini-3-pro-preview",
+      },
+      {
+        "provider": "google",
+        "model": "gemini-3-flash-preview",
+      },
+      {
+        "provider": "openai",
+        "model": "gpt-5.2",
+      },
+    ],
     "always_allow_tool_actions": true,
     "default_profile": "write",
     "default_model": {

@@ -63,6 +63,7 @@ let
     imagemagick
     pandoc
     ffmpeg
+    keymapp
     poppler-utils
     qmk
     unstable.aichat
@@ -72,6 +73,7 @@ let
     bruno
     firefox
     unstable.ferdium
+    godot
     google-chrome
     nautilus # file manager
     nautilus-open-any-terminal # to open kitty instead of gnome-terminal

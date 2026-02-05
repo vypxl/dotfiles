@@ -34,5 +34,19 @@
         ]
       }
     ]
+  },
+  "asusControlCenter": {
+    "enabled": true
+  },
+  "displaySettings": {
+    "enabled": true
+  },
+  "powerUsagePlugin": {
+    "enabled": true,
+    "refreshInterval": 10
+  },
+  "wallpaperDiscovery": {
+    "enabled": true,
+    "downloadLocation": "~/Pictures/wallpapers"
   }
 }

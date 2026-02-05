@@ -100,13 +100,15 @@ let
       unstable.dsearch
     ];
 
-    programs.dankMaterialShell = {
+    programs.dank-material-shell = {
       enable = true;
 
       systemd = {
         enable = true; # Systemd service for auto-start
         restartIfChanged = true; # Auto-restart dms.service when dankMaterialShell changes
       };
+
+      dgop.package = pkgs.unstable.dgop;
 
       # Core features
       enableSystemMonitoring = true; # System monitoring widgets (dgop)

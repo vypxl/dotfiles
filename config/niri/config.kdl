@@ -1,5 +1,8 @@
-// Niri configuration transformed from Hyprland config
-// https://yalter.github.io/niri/Configuration:-Introduction
+include "dms/alttab.kdl"
+include "dms/binds.kdl"
+include "dms/colors.kdl"
+include "dms/layout.kdl"
+include "dms/wpblur.kdl"
 
 // Input device configuration
 input {
@@ -16,87 +19,31 @@ input {
         natural-scroll
     }
 
-    mouse {
-        // Default settings
-    }
-
-    // Focus windows when moving the mouse into them (like follow_mouse = 1)
-    focus-follows-mouse max-scroll-amount="0%"
+    focus-follows-mouse max-scroll-amount="10%"
 }
 
-// Named workspaces (equivalent to Hyprland special workspaces)
-workspace "scratchpad"
-workspace "ai"
-workspace "chat" {
-  open-on-output "DP-10"
-}
-
-// Layout configuration
 layout {
-    // Hyprland has gaps_in=5 and gaps_out=20, niri has single gaps value
-    // Using 10 as a compromise (outer gaps are handled by struts if needed)
     gaps 10
+}
 
-    center-focused-column "never"
+output "DP-10" {
+    mode "3440x1440@143.975"
+}
 
-    preset-column-widths {
-        proportion 0.33333
-        proportion 0.5
-        proportion 0.66667
-    }
-
-    default-column-width { proportion 0.5; }
-
-    // Focus ring with gradient matching Hyprland's active border
-    // Hyprland: rgba(33ccffee) rgba(00ff99ee) 45deg
-    focus-ring {
-        width 2
-        active-gradient from="#33ccff" to="#00ff99" angle=45
-        inactive-color "#595959"
-    }
-
-    // Border disabled since we're using focus-ring
-    border {
-        off
-    }
-
-    // Shadow matching Hyprland settings
-    // Hyprland: range=4, render_power=3, color=rgba(1a1a1aee)
-    shadow {
-        on
-        softness 10
-        spread 2
-        offset x=0 y=3
-        color "#1a1a1aee"
-    }
-
-    // Outer gaps simulation
-    struts {
-        left 10
-        right 10
-        top 10
-        bottom 10
-    }
+output "eDP-1" {
+    position x=0 y=0
 }
 
 // Startup applications
-// spawn-at-startup "syncthingtray" "--wait"
-// spawn-at-startup "blueman-applet"
-// spawn-at-startup "seafile-applet"
-// spawn-at-startup "ferdium"
+spawn-at-startup "syncthingtray" "--wait"
+spawn-at-startup "seafile-applet"
+spawn-at-startup "ferdium"
 
-// Hotkey overlay
 hotkey-overlay {
     skip-at-startup
 }
 
-// Screenshot path
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
-
-// Animations
-animations {
-    // Default animations enabled
-}
 
 // Prefer no client-side decorations for proper border rendering
 prefer-no-csd
@@ -162,7 +109,7 @@ window-rule {
 // Discord/Ferdium on workspace chat
 window-rule {
     match title=r#"^.*(WebCord|Discord|Ferdium).*$"#
-    open-on-workspace "chat"
+    open-on-output "eDP-1"
 }
 
 // Steam fixes
@@ -348,8 +295,4 @@ binds {
     // Ctrl+Alt+Delete { quit; }
 }
 
-include "dms/alttab.kdl"
-include "dms/binds.kdl"
-include "dms/colors.kdl"
-include "dms/layout.kdl"
-include "dms/wpblur.kdl"
+include "dms/outputs.kdl"

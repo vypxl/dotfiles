@@ -7,7 +7,7 @@
     "${builtins.fetchGit { url = "https://github.com/cgrohs27/nixos-hardware.git"; rev = "64bb927d282e67f9b37be2b5c1bd8ce3b73178d2"; }}/asus/zephyrus/ga403"
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_6_17;
+  boot.kernelPackages = pkgs.linuxPackages_6_18;
   hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
 
   my.bundle.desktop.enable = true;

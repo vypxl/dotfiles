@@ -1,10 +1,15 @@
-{ lib, config, dankMaterialShell, ... }:
+{
+  lib,
+  config,
+  dankMaterialShell,
+  ...
+}:
 let
   cfg = config.my.bundle;
 in
 {
   imports = [
-    dankMaterialShell.homeModules.dankMaterialShell.default
+    dankMaterialShell.homeModules.dank-material-shell
     ./modules/android.nix
     ./modules/bat.nix
     ./modules/desktop.nix

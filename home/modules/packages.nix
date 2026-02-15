@@ -73,7 +73,7 @@ let
     bruno
     firefox
     unstable.ferdium
-    godot
+    unstable.godot
     google-chrome
     nautilus # file manager
     nautilus-open-any-terminal # to open kitty instead of gnome-terminal

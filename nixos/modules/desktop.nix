@@ -37,6 +37,7 @@ in
 
     services.playerctld.enable = true;
     services.udisks2.enable = true;
+    services.upower.enable = true;
 
     # For some reason, gparted needs to be a system package
     # Otherwise we can't run it via polkit

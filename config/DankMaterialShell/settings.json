@@ -388,6 +388,10 @@
         {
           "id": "privacyIndicator",
           "enabled": true
+        },
+        {
+          "id": "notificationButton",
+          "enabled": true
         }
       ],
       "rightWidgets": [
@@ -412,19 +416,18 @@
           "enabled": true
         },
         {
-          "id": "notificationButton",
-          "enabled": true
-        },
-        {
-          "id": "battery",
-          "enabled": true
-        },
-        {
           "id": "asusControlCenter",
           "enabled": true
         },
         {
           "id": "controlCenterButton",
+          "enabled": true,
+          "showBluetoothIcon": true,
+          "showAudioPercent": false,
+          "showBatteryIcon": false
+        },
+        {
+          "id": "battery",
           "enabled": true
         }
       ],
@@ -527,6 +530,10 @@
   "desktopWidgetGridSettings": {},
   "desktopWidgetInstances": [],
   "desktopWidgetGroups": [],
-  "builtInPluginSettings": {},
+  "builtInPluginSettings": {
+    "dms_settings_search": {
+      "trigger": "?"
+    }
+  },
   "configVersion": 5
 }

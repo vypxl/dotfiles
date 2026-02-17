@@ -22,6 +22,12 @@ input {
     focus-follows-mouse max-scroll-amount="10%"
 }
 
+gestures {
+    hot-corners {
+        off
+    }
+}
+
 layout {
     gaps 10
 }

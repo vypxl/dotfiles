@@ -302,3 +302,5 @@ binds {
 }
 
 include "dms/outputs.kdl"
+
+include "dms/windowrules.kdl"

@@ -60,7 +60,9 @@ let
     google-cloud-sdk
   ];
   util = [
+    claude-code
     imagemagick
+    opencode
     pandoc
     ffmpeg
     keymapp

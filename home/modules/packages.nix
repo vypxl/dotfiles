@@ -74,11 +74,13 @@ let
     brave
     bruno
     firefox
+    unstable.darktable
     unstable.ferdium
     unstable.godot
     google-chrome
     nautilus # file manager
     nautilus-open-any-terminal # to open kitty instead of gnome-terminal
+    unstable.stremio-linux-shell
     sushi # previewer for nautilus
     obsidian
     pavucontrol

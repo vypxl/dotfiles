@@ -18,16 +18,12 @@ in
     nix.settings.trusted-users = [ "@wheel" ];
 
     nix.settings.substituters = [
-      "https://nix-community.cachix.org"
-      "https://devenv.cachix.org"
-      "https://numtide.cachix.org"
+      "https://cache.garnix.io"
       "s3://nix-binary-cache?profile=nix-cache&scheme=https&compression=zstd&endpoint=https://bdcd108ea508847194174597360224be.r2.cloudflarestorage.com"
     ];
 
     nix.settings.trusted-public-keys = [
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
-      "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE="
+      "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
       "nix.nunu.ai:Ny6XbPOvwxCHlH1xK+6i8qwhBxFQj6O053aH4gEVn7U="
     ];
 

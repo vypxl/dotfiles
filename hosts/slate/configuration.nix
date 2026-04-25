@@ -15,6 +15,8 @@
   my.hyprland.enable = false;
 
   my.android.enable = true;
+  
+  my.gaming.enable = true;
 
   networking.hostName = "slate";
   time.timeZone = "Europe/Zurich";

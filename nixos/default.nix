@@ -14,6 +14,7 @@ in
     ./modules/desktop.nix
     ./modules/docker.nix
     ./modules/fish.nix
+    ./modules/gaming.nix
     ./modules/gdm.nix
     ./modules/locale.nix
     ./modules/networking.nix

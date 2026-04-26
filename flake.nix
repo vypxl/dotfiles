@@ -9,6 +9,12 @@
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
+
+    hermes-agent.url = "github:NousResearch/hermes-agent";
+    hermes-agent.inputs.nixpkgs.follows = "nixpkgs";
+
     # omnix.url = "github:juspay/omnix";
     # omnix.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -25,13 +31,14 @@
       nixpkgs,
       nixpkgs-unstable,
       nix-index-database,
+      sops-nix,
+      hermes-agent,
       # omnix,
       dankMaterialShell,
       ...
     }@attrs:
     let
-      system = "x86_64-linux";
-      overlay = final: prev: {
+      overlayFor = system: final: prev: {
         unstable = import nixpkgs-unstable {
           inherit system;
           config.allowUnfree = true;
@@ -40,14 +47,24 @@
         # omnix = omnix.packages.${system};
       };
       machine =
-        hostname: username:
+        {
+          hostname,
+          username ? "thomas",
+          system ? "x86_64-linux",
+          withHome ? true,
+        }:
         nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = attrs;
           modules = [
-            { nixpkgs.overlays = [ overlay ]; }
-            home-manager.nixosModules.default
+            { nixpkgs.overlays = [ (overlayFor system) ]; }
             nix-index-database.nixosModules.nix-index
+            sops-nix.nixosModules.sops
+            hermes-agent.nixosModules.default
+            ./hosts/${hostname}/configuration.nix
+          ]
+          ++ nixpkgs.lib.optionals withHome [
+            home-manager.nixosModules.default
             {
               home-manager.extraSpecialArgs = { inherit hostname dankMaterialShell; };
               home-manager.backupFileExtension = "hmbak";
@@ -55,15 +72,19 @@
               home-manager.useUserPackages = true;
               home-manager.users."${username}" = import ./home/${username}.nix;
             }
-            ./hosts/${hostname}/configuration.nix
           ];
         };
     in
     {
       nixosConfigurations = {
-        stone = machine "stone" "thomas";
-        slate = machine "slate" "thomas";
-        zephyr = machine "zephyr" "thomas";
+        stone = machine { hostname = "stone"; };
+        slate = machine { hostname = "slate"; };
+        zephyr = machine { hostname = "zephyr"; };
+        armada = machine {
+          hostname = "armada";
+          system = "aarch64-linux";
+          withHome = false;
+        };
       };
     };
 }

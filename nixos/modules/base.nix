@@ -6,6 +6,7 @@
 }:
 let
   cfg = config.my;
+  isX86Linux = pkgs.stdenv.hostPlatform.isx86_64;
 in
 {
   options.my = with lib; {
@@ -18,22 +19,26 @@ in
       variant = "";
     };
 
-    hardware.keyboard.qmk.enable = true;
-    hardware.keyboard.zsa.enable = true;
-    services.udev.packages = [ pkgs.via ];
+    hardware.keyboard.qmk.enable = lib.mkIf isX86Linux true;
+    hardware.keyboard.zsa.enable = lib.mkIf isX86Linux true;
+    services.udev.packages = lib.optionals isX86Linux [ pkgs.via ];
     services.gvfs.enable = true; # Support MTP file systems (e.g. Android file transfer mode)
 
-    environment.systemPackages = with pkgs; [
-      git
-      vim
-      wget
+    environment.systemPackages =
+      with pkgs;
+      [
+        git
+        vim
+        wget
 
-      qmk-udev-rules
-      zsa-udev-rules
-      via
-      steam-run-free
-      ntfs3g
-    ];
+        ntfs3g
+      ]
+      ++ lib.optionals isX86Linux [
+        qmk-udev-rules
+        zsa-udev-rules
+        via
+        steam-run-free
+      ];
 
     programs.nix-ld = {
       enable = true;
@@ -42,14 +47,16 @@ in
       ];
     };
 
-    programs.appimage = {
+    programs.appimage = lib.mkIf isX86Linux {
       enable = true;
       binfmt = true;
-      package = pkgs.appimage-run.override { extraPkgs = pkgs: [
-        pkgs.icu
-        pkgs.libxcrypt-legacy
-        pkgs.zstd
-      ]; };
+      package = pkgs.appimage-run.override {
+        extraPkgs = pkgs: [
+          pkgs.icu
+          pkgs.libxcrypt-legacy
+          pkgs.zstd
+        ];
+      };
     };
   };
 }

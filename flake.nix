@@ -12,7 +12,9 @@
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
-    disko.url = "github:nix-community/disko";
+    # FIXME: pinned to v1.12.0 to work around disko#1203 (--vm-test broken with nixpkgs 25.11)
+    # https://github.com/nix-community/disko/issues/1203
+    disko.url = "github:nix-community/disko/ff442f5d1425feb86344c028298548024f21256d";
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
     hermes-agent.url = "github:NousResearch/hermes-agent";

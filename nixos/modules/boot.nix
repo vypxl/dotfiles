@@ -57,7 +57,7 @@ in
             ];
           };
           # Enable "Silent Boot"
-          consoleLogLevel = 0;
+          consoleLogLevel = lib.mkDefault 0;
           initrd.verbose = false;
           kernelParams = [
             "quiet"

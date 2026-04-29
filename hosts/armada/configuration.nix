@@ -10,6 +10,7 @@
   my.networking.enable = false;
   my.oracleCloud.enable = true;
   my.ssh.enable = true;
+  my.boot.splash = false;
 
   networking = {
     hostName = "armada";

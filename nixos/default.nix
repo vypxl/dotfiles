@@ -19,6 +19,7 @@ in
     ./modules/locale.nix
     ./modules/networking.nix
     ./modules/nix.nix
+    ./modules/ssh.nix
     ./modules/sudo.nix
     ./modules/swap.nix
     ./modules/user.nix
@@ -40,24 +41,24 @@ in
 
   config = lib.mkMerge [
     (lib.mkIf cfg.default.enable {
-      my.auto-upgrade.enable = true;
-      my.base.enable = true;
-      my.boot.enable = true;
-      my.docker.enable = true;
-      my.fish.enable = true;
-      my.locale.enable = true;
-      my.networking.enable = true;
-      my.nix.enable = true;
-      my.sudo.enable = true;
-      my.swap.enable = true;
-      my.user.enable = true;
+      my.auto-upgrade.enable = lib.mkDefault true;
+      my.base.enable = lib.mkDefault true;
+      my.boot.enable = lib.mkDefault true;
+      my.docker.enable = lib.mkDefault true;
+      my.fish.enable = lib.mkDefault true;
+      my.locale.enable = lib.mkDefault true;
+      my.networking.enable = lib.mkDefault true;
+      my.nix.enable = lib.mkDefault true;
+      my.sudo.enable = lib.mkDefault true;
+      my.swap.enable = lib.mkDefault true;
+      my.user.enable = lib.mkDefault true;
     })
 
     (lib.mkIf cfg.desktop.enable {
-      my.audio.enable = true;
-      my.bluetooth.enable = true;
+      my.audio.enable = lib.mkDefault true;
+      my.bluetooth.enable = lib.mkDefault true;
       my.hyprland.enable = lib.mkDefault true;
-      my.gdm.enable = true;
+      my.gdm.enable = lib.mkDefault true;
       my.networking.dns.enable = lib.mkDefault true;
     })
   ];

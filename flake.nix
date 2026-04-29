@@ -12,11 +12,11 @@
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
+    disko.url = "github:nix-community/disko";
+    disko.inputs.nixpkgs.follows = "nixpkgs";
+
     hermes-agent.url = "github:NousResearch/hermes-agent";
     hermes-agent.inputs.nixpkgs.follows = "nixpkgs";
-
-    # omnix.url = "github:juspay/omnix";
-    # omnix.inputs.nixpkgs.follows = "nixpkgs";
 
     dankMaterialShell = {
       url = "github:AvengeMedia/DankMaterialShell/stable";
@@ -33,7 +33,7 @@
       nix-index-database,
       sops-nix,
       hermes-agent,
-      # omnix,
+      disko,
       dankMaterialShell,
       ...
     }@attrs:
@@ -44,7 +44,6 @@
           config.allowUnfree = true;
           config.android_sdk.accept_license = true;
         };
-        # omnix = omnix.packages.${system};
       };
       machine =
         {
@@ -60,6 +59,7 @@
             { nixpkgs.overlays = [ (overlayFor system) ]; }
             nix-index-database.nixosModules.nix-index
             sops-nix.nixosModules.sops
+            disko.nixosModules.disko
             hermes-agent.nixosModules.default
             ./hosts/${hostname}/configuration.nix
           ]

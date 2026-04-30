@@ -1,0 +1,15 @@
+keys:
+  # ── User keys ──────────
+  - &thomas_vypxl age1q6xyz7l5vcsetamg5ged24n03zfezlk3jh2pv2s0k95k593yzf6qqpw44j # thomas@vypxl.io
+  - &thomas_nunu age153l73h58e4uq0celj0x8w7r5972l6m2ewghkd9t2wgdzcdhkzcusmx83ej  # thomas@nunu.ai
+
+  # ── Host keys (derived from SSH host ed25519 key) ───────────
+  - &armada age14nsx7zwx4ajadyly7amsdyarwfp04qgu7r6x70szzcr9t7hn85csha23fu # armada (vps.vypxl.io)
+
+creation_rules:
+  - path_regex: hosts/armada/secrets\.yaml$
+    key_groups:
+      - age:
+          - *thomas_vypxl
+          - *thomas_nunu
+          - *armada

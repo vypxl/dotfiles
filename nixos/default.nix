@@ -16,6 +16,7 @@ in
     ./modules/fish.nix
     ./modules/gaming.nix
     ./modules/gdm.nix
+    ./modules/k3s.nix
     ./modules/locale.nix
     ./modules/networking.nix
     ./modules/nix.nix

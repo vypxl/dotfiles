@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 {
   imports = [
     # ./services.nix
@@ -11,10 +11,19 @@
   my.oracleCloud.enable = true;
   my.ssh.enable = true;
   my.boot.splash = false;
+  my.k3s.enable = true;
+  my.k3s.flux.enable = true;
+  my.k3s.flux.tokenFile = config.sops.secrets.flux-github-token.path;
+
+  sops = {
+    defaultSopsFile = ./secrets.yaml;
+    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+    secrets.flux-github-token = { };
+  };
 
   networking = {
     hostName = "armada";
-    domain = "vypxl.io";
+    domain = "vps.vypxl.io";
     networkmanager.enable = true;
 
     firewall = {

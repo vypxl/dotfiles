@@ -77,6 +77,9 @@ in
 
     # ── Shell convenience ───────────────────────────────────────
     environment.variables.KUBECONFIG = "/etc/rancher/k3s/k3s.yaml";
+    programs.fish.shellInit = ''
+      set -gx KUBECONFIG "/etc/rancher/k3s/k3s.yaml"
+    '';
 
     # ── Flux bootstrap service ──────────────────────────────────
     # Runs once after k3s is ready. Idempotent — safe to re-run on

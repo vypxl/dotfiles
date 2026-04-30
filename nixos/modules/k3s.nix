@@ -25,7 +25,7 @@ in
       enable = mkEnableOption "Flux GitOps bootstrap";
       repo = mkOption {
         type = types.str;
-        default = "dots";
+        default = "dotfiles";
         description = "GitHub repository name.";
       };
       owner = mkOption {

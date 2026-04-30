@@ -7,7 +7,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 5m # how often to check for new commits
-  url: https://github.com/vypxl/dots # ← change if your repo URL differs
+  url: https://github.com/vypxl/dotfiles
   ref:
     branch: main
   secretRef:
@@ -26,7 +26,7 @@ spec:
     kind: GitRepository
     name: dots
   path: ./hosts/armada/cluster/infra
-  prune: true # delete resources you remove from git
+  prune: true # delete resources removed from git
   wait: true
   timeout: 5m
 

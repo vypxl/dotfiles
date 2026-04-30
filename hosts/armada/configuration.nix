@@ -11,9 +11,14 @@
   my.oracleCloud.enable = true;
   my.ssh.enable = true;
   my.boot.splash = false;
-  my.k3s.enable = true;
-  my.k3s.flux.enable = true;
-  my.k3s.flux.tokenFile = config.sops.secrets.flux-github-token.path;
+  my.k3s = {
+    enable = true;
+    flux = {
+      enable = true;
+      tokenFile = config.sops.secrets.flux-github-token.path;
+      path = "hosts/armada/cluster/flux";
+    };
+  };
 
   sops = {
     defaultSopsFile = ./secrets.yaml;

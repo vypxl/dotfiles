@@ -1,0 +1,51 @@
+---
+# This tells Flux where to find your Git repo
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: dots
+  namespace: flux-system
+spec:
+  interval: 5m # how often to check for new commits
+  url: https://github.com/vypxl/dots # ← change if your repo URL differs
+  ref:
+    branch: main
+  secretRef:
+    name: flux-system # credential created during bootstrap
+
+---
+# This tells Flux to apply everything in cluster/infra/
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: infra
+  namespace: flux-system
+spec:
+  interval: 10m
+  sourceRef:
+    kind: GitRepository
+    name: dots
+  path: ./hosts/armada/cluster/infra
+  prune: true # delete resources you remove from git
+  wait: true
+  timeout: 5m
+
+---
+# This tells Flux to apply everything in cluster/apps/
+# It depends on infra being ready first
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: apps
+  namespace: flux-system
+spec:
+  interval: 10m
+  dependsOn:
+    - name: infra
+  sourceRef:
+    kind: GitRepository
+    name: dots
+  path: ./hosts/armada/cluster/apps
+  prune: true
+  wait: true
+  timeout: 5m

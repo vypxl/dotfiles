@@ -40,7 +40,6 @@ in
       };
       path = mkOption {
         type = types.str;
-        default = "cluster/flux";
         description = "Path inside the repo where Flux looks for its sync config.";
       };
       tokenFile = mkOption {

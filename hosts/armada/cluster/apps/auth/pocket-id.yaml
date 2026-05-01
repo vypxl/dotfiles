@@ -34,7 +34,7 @@ spec:
             - secretRef:
                 name: pocket-id
           volumeMounts:
-            - name: data
+            - name: pocket-id-data
               mountPath: /app/data
           resources:
             limits:
@@ -57,7 +57,7 @@ spec:
             periodSeconds: 10
   volumeClaimTemplates:
     - metadata:
-        name: data
+        name: pocket-id-data
       spec:
         accessModes: ["ReadWriteOnce"]
         resources:

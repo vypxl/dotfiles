@@ -79,12 +79,9 @@ spec:
           image: docker.io/headscale/headscale:v0.28.0
           args:
             - serve
-          env:
-            - name: HEADSCALE_OIDC_CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: headscale-oidc
-                  key: OIDC_CLIENT_SECRET
+          envFrom:
+            - secretRef:
+                name: headscale
           ports:
             - name: http
               containerPort: 8080

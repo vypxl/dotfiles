@@ -1,6 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - whoami.yaml
-  - homepage.yaml
   - auth/
+  - headscale.yaml
+  - homepage.yaml
+  - secrets.yaml
+  - whoami.yaml

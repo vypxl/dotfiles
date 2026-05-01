@@ -1,0 +1,204 @@
+# ─── Headscale Namespace ─────────────────────────────────────────────────────
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: headscale
+---
+# ─── Headscale Config ────────────────────────────────────────────────────────
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: headscale-config
+  namespace: headscale
+data:
+  config.yaml: |
+    ---
+    server_url: https://headscale.${DOMAIN}
+    listen_addr: 0.0.0.0:8080
+    metrics_listen_addr: 0.0.0.0:9090
+    grpc_listen_addr: 127.0.0.1:50443
+
+    noise:
+      private_key_path: /var/lib/headscale/noise_private.key
+
+    prefixes:
+      v4: 100.64.0.0/10
+      v6: fd7a:115c:a1e0::/48
+
+    derp:
+      urls:
+        - https://controlplane.tailscale.com/derpmap/default
+      auto_update_enabled: true
+
+    database:
+      type: sqlite
+      gorm:
+        prepare_stmt: true
+        parameterized_queries: true
+        skip_err_record_not_found: true
+        slow_threshold: 1000
+      sqlite:
+        path: /var/lib/headscale/db.sqlite
+
+    dns:
+      base_domain: ts.${DOMAIN}
+      nameservers:
+        global:
+          - 1.1.1.1
+          - 1.0.0.1
+          - 2606:4700:4700::1111
+          - 2606:4700:4700::1001
+
+    oidc:
+      issuer: "https://id.${DOMAIN}"
+      client_id: "1736e16a-c3bc-476d-be28-cf65503f899b"
+      scope: ["openid", "profile", "email", "groups"]
+      email_verified_required: false
+      allowed_groups:
+        - "headscale"
+      pkce:
+        enabled: true
+---
+# ─── Headscale StatefulSet ───────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: headscale
+  namespace: headscale
+  labels:
+    app.kubernetes.io/name: headscale
+spec:
+  serviceName: headscale
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: headscale
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: headscale
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: headscale
+          image: docker.io/headscale/headscale:v0.28.0
+          args:
+            - serve
+          env:
+            - name: HEADSCALE_OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: headscale-oidc
+                  key: OIDC_CLIENT_SECRET
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+            - name: metrics
+              containerPort: 9090
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /etc/headscale
+              readOnly: true
+            - name: data
+              mountPath: /var/lib/headscale
+            - name: run
+              mountPath: /var/run/headscale
+          resources:
+            limits:
+              memory: 256Mi
+              cpu: 500m
+            requests:
+              memory: 128Mi
+              cpu: 50m
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          startupProbe:
+            exec:
+              command:
+                - headscale
+                - health
+            failureThreshold: 30
+            periodSeconds: 10
+          livenessProbe:
+            exec:
+              command:
+                - headscale
+                - health
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 10
+      volumes:
+        - name: config
+          configMap:
+            name: headscale-config
+        - name: run
+          emptyDir: {}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 2Gi
+---
+# ─── Headscale Service ───────────────────────────────────────────────────────
+apiVersion: v1
+kind: Service
+metadata:
+  name: headscale
+  namespace: headscale
+  labels:
+    app.kubernetes.io/name: headscale
+spec:
+  selector:
+    app.kubernetes.io/name: headscale
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+    - name: metrics
+      port: 9090
+      targetPort: metrics
+---
+# ─── Headscale Ingress ───────────────────────────────────────────────────────
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: headscale
+  namespace: headscale
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: "Network"
+    gethomepage.dev/name: "Headscale"
+    gethomepage.dev/icon: "headscale"
+    gethomepage.dev/href: "https://headscale.${DOMAIN}"
+    gethomepage.dev/description: "Tailscale control server"
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: "headscale.${DOMAIN}"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: headscale
+                port:
+                  number: 8080
+  tls:
+    - secretName: headscale-tls
+      hosts:
+        - "headscale.${DOMAIN}"

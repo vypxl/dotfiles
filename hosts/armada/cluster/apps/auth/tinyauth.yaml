@@ -33,6 +33,18 @@ spec:
               value: "2"
             - name: USERS
               value: "${ACME_EMAIL}"
+            - name: TINYAUTH_OAUTH_PROVIDERS_POCKETID_AUTHURL
+              value: "https://id.${DOMAIN}/authorize"
+            - name: TINYAUTH_OAUTH_PROVIDERS_POCKETID_TOKENURL
+              value: "https://id.${DOMAIN}/api/oidc/token"
+            - name: TINYAUTH_OAUTH_PROVIDERS_POCKETID_USERINFOURL
+              value: "https://id.${DOMAIN}/api/oidc/userinfo"
+            - name: TINYAUTH_OAUTH_PROVIDERS_POCKETID_REDIRECTURL
+              value: "https://auth.${DOMAIN}/api/oauth/callback/pocketid"
+            - name: TINYAUTH_OAUTH_PROVIDERS_POCKETID_SCOPES
+              value: "openid email profile groups"
+            - name: TINYAUTH_OAUTH_PROVIDERS_POCKETID_NAME
+              value: "Pocket ID"
           envFrom:
             - secretRef:
                 name: tinyauth

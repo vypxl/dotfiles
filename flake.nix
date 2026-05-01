@@ -95,7 +95,11 @@
     // flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] (
       system:
       let
-        pkgs = import nixpkgs { inherit system; };
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [ (overlayFor system) ];
+          config.allowUnfree = true;
+        };
         get-age-key = pkgs.writeShellScriptBin "get-age-key" ''
           set -euo pipefail
 
@@ -133,6 +137,7 @@
             kubernetes-helm
             fluxcd
             k9s
+            terraform
           ];
 
           shellHook = ''

@@ -77,6 +77,13 @@ metadata:
   namespace: auth
   labels:
     app.kubernetes.io/name: lldap
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: "Auth"
+    gethomepage.dev/name: "LLDAP"
+    gethomepage.dev/icon: "lldap"
+    gethomepage.dev/href: "https://ldap.${DOMAIN}"
+    gethomepage.dev/description: "LDAP directory"
 spec:
   selector:
     app.kubernetes.io/name: lldap

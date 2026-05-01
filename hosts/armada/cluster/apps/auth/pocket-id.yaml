@@ -1,0 +1,54 @@
+# Flux source for the Pocket ID Helm chart (hosted on GitHub, no Helm repo)
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: pocket-id-helm
+  namespace: flux-system
+spec:
+  interval: 24h
+  url: https://github.com/hobbit44/pocket-id-helm
+  ref:
+    branch: main
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: pocket-id
+  namespace: auth
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: .
+      sourceRef:
+        kind: GitRepository
+        name: pocket-id-helm
+        namespace: flux-system
+      reconcileStrategy: Revision
+  values:
+    config:
+      appUrl: "https://id.${DOMAIN}"
+    persistence:
+      enabled: true
+      size: 2Gi
+    ingress:
+      enabled: true
+      className: traefik
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt
+      hosts:
+        - host: "id.${DOMAIN}"
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        - secretName: pocket-id-tls
+          hosts:
+            - "id.${DOMAIN}"
+    resources:
+      limits:
+        memory: 128Mi
+        cpu: 200m
+      requests:
+        memory: 64Mi
+        cpu: 50m

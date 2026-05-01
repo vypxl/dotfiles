@@ -1,0 +1,98 @@
+# ─── Tinyauth Deployment ─────────────────────────────────────────────────────
+# Secrets are in secrets.yaml (SOPS-encrypted)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tinyauth
+  namespace: auth
+  labels:
+    app.kubernetes.io/name: tinyauth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tinyauth
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: tinyauth
+    spec:
+      containers:
+        - name: tinyauth
+          image: ghcr.io/steveiliop56/tinyauth:4
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          env:
+            - name: APP_URL
+              value: "https://auth.${DOMAIN}"
+            - name: COOKIE_DOMAIN
+              value: "${DOMAIN}"
+            - name: PROXY_COUNT
+              value: "2"
+            - name: USERS
+              value: "${ACME_EMAIL}"
+          envFrom:
+            - secretRef:
+                name: tinyauth
+          resources:
+            limits:
+              memory: 64Mi
+              cpu: 100m
+            requests:
+              memory: 32Mi
+              cpu: 25m
+          livenessProbe:
+            httpGet:
+              path: /api/healthcheck
+              port: http
+            initialDelaySeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /api/healthcheck
+              port: http
+            initialDelaySeconds: 5
+---
+# ─── Tinyauth Service ────────────────────────────────────────────────────────
+apiVersion: v1
+kind: Service
+metadata:
+  name: tinyauth
+  namespace: auth
+  labels:
+    app.kubernetes.io/name: tinyauth
+spec:
+  selector:
+    app.kubernetes.io/name: tinyauth
+  ports:
+    - name: http
+      port: 3000
+      targetPort: http
+---
+# ─── Tinyauth Ingress ────────────────────────────────────────────────────────
+# Tinyauth itself needs to be browser-accessible for the login redirect flow.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tinyauth
+  namespace: auth
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: "auth.${DOMAIN}"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: tinyauth
+                port:
+                  number: 3000
+  tls:
+    - secretName: tinyauth-tls
+      hosts:
+        - "auth.${DOMAIN}"

@@ -49,3 +49,12 @@ spec:
   prune: true
   wait: true
   timeout: 5m
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+  postBuild:
+    substitute:
+      DOMAIN: "lab.vypxl.io"
+      LDAP_BASE_DN: "dc=lab,dc=vypxl,dc=io"
+      ACME_EMAIL: "webmaster@vypxl.io"

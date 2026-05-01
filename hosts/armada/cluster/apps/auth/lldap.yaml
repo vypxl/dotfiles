@@ -1,0 +1,117 @@
+# ─── LLDAP StatefulSet ───────────────────────────────────────────────────────
+# Secrets are in secrets.yaml (SOPS-encrypted)
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: lldap
+  namespace: auth
+  labels:
+    app.kubernetes.io/name: lldap
+spec:
+  serviceName: lldap
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: lldap
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: lldap
+    spec:
+      containers:
+        - name: lldap
+          image: lldap/lldap:v0.6.1
+          ports:
+            - name: ldap
+              containerPort: 3890
+              protocol: TCP
+            - name: web
+              containerPort: 17170
+              protocol: TCP
+          env:
+            - name: TZ
+              value: "UTC"
+            - name: LLDAP_LDAP_BASE_DN
+              value: "${LDAP_BASE_DN}"
+            - name: LLDAP_HTTP_URL
+              value: "https://ldap.${DOMAIN}"
+          envFrom:
+            - secretRef:
+                name: lldap
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          resources:
+            limits:
+              memory: 64Mi
+              cpu: 100m
+            requests:
+              memory: 32Mi
+              cpu: 25m
+          livenessProbe:
+            httpGet:
+              path: /
+              port: web
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: web
+            initialDelaySeconds: 5
+            periodSeconds: 5
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
+---
+# ─── LLDAP Services ──────────────────────────────────────────────────────────
+apiVersion: v1
+kind: Service
+metadata:
+  name: lldap
+  namespace: auth
+  labels:
+    app.kubernetes.io/name: lldap
+spec:
+  selector:
+    app.kubernetes.io/name: lldap
+  ports:
+    - name: ldap
+      port: 3890
+      targetPort: ldap
+    - name: web
+      port: 17170
+      targetPort: web
+---
+# ─── LLDAP Ingress (web UI only, LDAP stays cluster-internal) ────────────────
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lldap
+  namespace: auth
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    # Protect the LLDAP admin UI behind Tinyauth forward auth
+    traefik.ingress.kubernetes.io/router.middlewares: auth-tinyauth@kubernetescrd
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: "ldap.${DOMAIN}"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: lldap
+                port:
+                  number: 17170
+  tls:
+    - secretName: lldap-tls
+      hosts:
+        - "ldap.${DOMAIN}"

@@ -89,7 +89,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "k3s.service" ];
       requires = [ "k3s.service" ];
-      path = with pkgs; [ fluxcd kubectl git ];
+      path = with pkgs; [ fluxcd kubectl git ssh-to-age ];
       environment.KUBECONFIG = "/etc/rancher/k3s/k3s.yaml";
 
       serviceConfig = {
@@ -123,6 +123,16 @@ in
           --branch=${cfg.flux.branch} \
           --path=${cfg.flux.path} \
           --personal
+
+        # Derive the age key from the SSH host key (same as sops-nix does)
+        echo "Creating SOPS age secret..."
+        ssh-to-age -private-key -i /etc/ssh/ssh_host_ed25519_key > /tmp/age.key
+        kubectl -n flux-system create secret generic sops-age \
+          --from-file=age.agekey=/tmp/age.key \
+          --dry-run=client -o yaml | kubectl apply -f -
+        rm /tmp/age.key
+
+        echo "Flux bootstrap complete."
       '';
     };
   };

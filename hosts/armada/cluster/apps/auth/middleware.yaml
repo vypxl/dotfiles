@@ -1,0 +1,18 @@
+# ─── Traefik ForwardAuth Middleware ───────────────────────────────────────────
+# Add this middleware to any Ingress to require Tinyauth login:
+#   annotations:
+#     traefik.ingress.kubernetes.io/router.middlewares: auth-tinyauth@kubernetescrd
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: tinyauth
+  namespace: auth
+spec:
+  forwardAuth:
+    address: http://tinyauth.auth.svc.cluster.local:3000/api/auth/traefik
+    trustForwardHeader: true
+    authResponseHeaders:
+      - Remote-User
+      - Remote-Group
+      - Remote-Name
+      - Remote-Email

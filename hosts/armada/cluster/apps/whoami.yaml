@@ -1,7 +1,6 @@
 ---
 # A tiny test app — responds with HTTP headers so you can verify everything works.
-# Access it with: kubectl port-forward svc/whoami 8080:80
-# Then visit http://localhost:8080
+# Visit https://whoami.lab.vypxl.io (gated behind Tinyauth passkey login)
 
 apiVersion: apps/v1
 kind: Deployment
@@ -41,3 +40,29 @@ spec:
   ports:
     - port: 80
       targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: whoami
+  namespace: default
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    traefik.ingress.kubernetes.io/router.middlewares: auth-tinyauth@kubernetescrd
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: "whoami.${DOMAIN}"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: whoami
+                port:
+                  number: 80
+  tls:
+    - secretName: whoami-tls
+      hosts:
+        - "whoami.${DOMAIN}"

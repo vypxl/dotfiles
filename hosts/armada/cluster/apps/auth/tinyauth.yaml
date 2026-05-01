@@ -19,20 +19,16 @@ spec:
     spec:
       containers:
         - name: tinyauth
-          image: ghcr.io/steveiliop56/tinyauth:4
+          image: ghcr.io/steveiliop56/tinyauth:v5
           ports:
             - name: http
               containerPort: 3000
               protocol: TCP
           env:
-            - name: APP_URL
+            - name: TINYAUTH_APP_URL
               value: "https://auth.${DOMAIN}"
-            - name: COOKIE_DOMAIN
+            - name: TINYAUTH_COOKIE_DOMAIN
               value: "${DOMAIN}"
-            - name: PROXY_COUNT
-              value: "2"
-            - name: USERS
-              value: "${ACME_EMAIL}"
             - name: TINYAUTH_OAUTH_PROVIDERS_POCKETID_AUTHURL
               value: "https://id.${DOMAIN}/authorize"
             - name: TINYAUTH_OAUTH_PROVIDERS_POCKETID_TOKENURL
@@ -56,17 +52,20 @@ spec:
               memory: 32Mi
               cpu: 25m
           livenessProbe:
-            httpGet:
-              path: /api/healthcheck
-              port: http
+            exec:
+              command:
+                - tinyauth
+                - healthcheck
             initialDelaySeconds: 10
+            periodSeconds: 30
           readinessProbe:
-            httpGet:
-              path: /api/healthcheck
-              port: http
+            exec:
+              command:
+                - tinyauth
+                - healthcheck
             initialDelaySeconds: 5
+            periodSeconds: 10
 ---
-# ─── Tinyauth Service ────────────────────────────────────────────────────────
 apiVersion: v1
 kind: Service
 metadata:
@@ -82,8 +81,6 @@ spec:
       port: 3000
       targetPort: http
 ---
-# ─── Tinyauth Ingress ────────────────────────────────────────────────────────
-# Tinyauth itself needs to be browser-accessible for the login redirect flow.
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:

@@ -71,13 +71,6 @@ metadata:
   namespace: auth
   labels:
     app.kubernetes.io/name: tinyauth
-  annotations:
-    gethomepage.dev/enabled: "true"
-    gethomepage.dev/group: "Auth"
-    gethomepage.dev/name: "Tinyauth"
-    gethomepage.dev/icon: "tinyauth"
-    gethomepage.dev/href: "https://auth.${DOMAIN}"
-    gethomepage.dev/description: "Forward auth proxy"
 spec:
   selector:
     app.kubernetes.io/name: tinyauth
@@ -93,6 +86,12 @@ metadata:
   namespace: auth
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: "Auth"
+    gethomepage.dev/name: "Tinyauth"
+    gethomepage.dev/icon: "tinyauth"
+    gethomepage.dev/href: "https://auth.${DOMAIN}"
+    gethomepage.dev/description: "Forward auth proxy"
 spec:
   ingressClassName: traefik
   rules:

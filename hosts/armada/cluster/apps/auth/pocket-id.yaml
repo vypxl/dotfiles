@@ -72,13 +72,6 @@ metadata:
   namespace: auth
   labels:
     app.kubernetes.io/name: pocket-id
-  annotations:
-    gethomepage.dev/enabled: "true"
-    gethomepage.dev/group: "Auth"
-    gethomepage.dev/name: "Pocket ID"
-    gethomepage.dev/icon: "pocket-id"
-    gethomepage.dev/href: "https://id.${DOMAIN}"
-    gethomepage.dev/description: "OIDC identity provider"
 spec:
   selector:
     app.kubernetes.io/name: pocket-id
@@ -95,6 +88,12 @@ metadata:
   namespace: auth
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: "Auth"
+    gethomepage.dev/name: "Pocket ID"
+    gethomepage.dev/icon: "pocket-id"
+    gethomepage.dev/href: "https://id.${DOMAIN}"
+    gethomepage.dev/description: "OIDC identity provider"
 spec:
   ingressClassName: traefik
   rules:

@@ -77,13 +77,6 @@ metadata:
   namespace: auth
   labels:
     app.kubernetes.io/name: lldap
-  annotations:
-    gethomepage.dev/enabled: "true"
-    gethomepage.dev/group: "Auth"
-    gethomepage.dev/name: "LLDAP"
-    gethomepage.dev/icon: "lldap"
-    gethomepage.dev/href: "https://ldap.${DOMAIN}"
-    gethomepage.dev/description: "LDAP directory"
 spec:
   selector:
     app.kubernetes.io/name: lldap
@@ -105,6 +98,12 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt
     # Protect the LLDAP admin UI behind Tinyauth forward auth
     traefik.ingress.kubernetes.io/router.middlewares: auth-tinyauth@kubernetescrd
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: "Auth"
+    gethomepage.dev/name: "LLDAP"
+    gethomepage.dev/icon: "lldap"
+    gethomepage.dev/href: "https://ldap.${DOMAIN}"
+    gethomepage.dev/description: "LDAP directory"
 spec:
   ingressClassName: traefik
   rules:

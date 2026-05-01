@@ -26,6 +26,7 @@ spec:
         namespace: flux-system
       reconcileStrategy: Revision
   values:
+    existingSecret: pocket-id
     config:
       appUrl: "https://id.${DOMAIN}"
     persistence:

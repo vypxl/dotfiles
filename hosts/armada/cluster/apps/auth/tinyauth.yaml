@@ -25,10 +25,8 @@ spec:
               containerPort: 3000
               protocol: TCP
           env:
-            - name: TINYAUTH_APP_URL
+            - name: TINYAUTH_APPURL
               value: "https://auth.${DOMAIN}"
-            - name: TINYAUTH_COOKIE_DOMAIN
-              value: "${DOMAIN}"
             - name: TINYAUTH_OAUTH_PROVIDERS_POCKETID_AUTHURL
               value: "https://id.${DOMAIN}/authorize"
             - name: TINYAUTH_OAUTH_PROVIDERS_POCKETID_TOKENURL

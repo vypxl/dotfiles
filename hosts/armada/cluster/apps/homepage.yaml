@@ -100,6 +100,9 @@ data:
   services.yaml: ""
   bookmarks.yaml: ""
   docker.yaml: ""
+  proxmox.yaml: ""
+  custom.js: ""
+  custom.css: ""
 ---
 # ─── Deployment ──────────────────────────────────────────────────────────────
 apiVersion: apps/v1
@@ -147,6 +150,12 @@ spec:
               containerPort: 3000
               protocol: TCP
           volumeMounts:
+            - mountPath: /app/config/custom.js
+              name: homepage-config
+              subPath: custom.js
+            - mountPath: /app/config/custom.css
+              name: homepage-config
+              subPath: custom.css
             - mountPath: /app/config/bookmarks.yaml
               name: homepage-config
               subPath: bookmarks.yaml
@@ -156,6 +165,9 @@ spec:
             - mountPath: /app/config/kubernetes.yaml
               name: homepage-config
               subPath: kubernetes.yaml
+            - mountPath: /app/config/proxmox.yaml
+              name: homepage-config
+              subPath: proxmox.yaml
             - mountPath: /app/config/services.yaml
               name: homepage-config
               subPath: services.yaml

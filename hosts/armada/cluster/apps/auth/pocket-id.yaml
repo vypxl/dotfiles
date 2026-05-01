@@ -1,55 +1,107 @@
-# Flux source for the Pocket ID Helm chart (hosted on GitHub, no Helm repo)
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: GitRepository
-metadata:
-  name: pocket-id-helm
-  namespace: flux-system
-spec:
-  interval: 24h
-  url: https://github.com/hobbit44/pocket-id-helm
-  ref:
-    branch: main
----
-apiVersion: helm.toolkit.fluxcd.io/v2
-kind: HelmRelease
+# ─── Pocket ID StatefulSet ────────────────────────────────────────────────────
+# Secrets are in secrets.yaml (SOPS-encrypted)
+apiVersion: apps/v1
+kind: StatefulSet
 metadata:
   name: pocket-id
   namespace: auth
+  labels:
+    app.kubernetes.io/name: pocket-id
 spec:
-  interval: 30m
-  chart:
+  serviceName: pocket-id
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: pocket-id
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: pocket-id
     spec:
-      chart: .
-      sourceRef:
-        kind: GitRepository
-        name: pocket-id-helm
-        namespace: flux-system
-      reconcileStrategy: Revision
-  values:
-    existingSecret: pocket-id
-    config:
-      appUrl: "https://id.${DOMAIN}"
-    persistence:
-      enabled: true
-      size: 2Gi
-    ingress:
-      enabled: true
-      className: traefik
-      annotations:
-        cert-manager.io/cluster-issuer: letsencrypt
+      containers:
+        - name: pocket-id
+          image: ghcr.io/pocket-id/pocket-id:v2.4.0
+          ports:
+            - name: http
+              containerPort: 1411
+              protocol: TCP
+          env:
+            - name: APP_URL
+              value: "https://id.${DOMAIN}"
+            - name: TRUST_PROXY
+              value: "true"
+          envFrom:
+            - secretRef:
+                name: pocket-id
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+          resources:
+            limits:
+              memory: 128Mi
+              cpu: 200m
+            requests:
+              memory: 64Mi
+              cpu: 50m
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 10
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 2Gi
+---
+# ─── Pocket ID Service ───────────────────────────────────────────────────────
+apiVersion: v1
+kind: Service
+metadata:
+  name: pocket-id
+  namespace: auth
+  labels:
+    app.kubernetes.io/name: pocket-id
+spec:
+  selector:
+    app.kubernetes.io/name: pocket-id
+  ports:
+    - name: http
+      port: 1411
+      targetPort: http
+---
+# ─── Pocket ID Ingress ───────────────────────────────────────────────────────
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pocket-id
+  namespace: auth
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: "id.${DOMAIN}"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: pocket-id
+                port:
+                  number: 1411
+  tls:
+    - secretName: pocket-id-tls
       hosts:
-        - host: "id.${DOMAIN}"
-          paths:
-            - path: /
-              pathType: Prefix
-      tls:
-        - secretName: pocket-id-tls
-          hosts:
-            - "id.${DOMAIN}"
-    resources:
-      limits:
-        memory: 128Mi
-        cpu: 200m
-      requests:
-        memory: 64Mi
-        cpu: 50m
+        - "id.${DOMAIN}"

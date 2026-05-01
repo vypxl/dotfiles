@@ -79,8 +79,8 @@ in
       interactiveShellInit = ''
         fish_vi_key_bindings
       '';
-      loginShellInit = '''';
-      shellInit = '''';
+      loginShellInit = "";
+      shellInit = "";
     };
   };
 }

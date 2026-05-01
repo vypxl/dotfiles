@@ -13,11 +13,13 @@ in
     #   memoryPercent = 33;
     # };
 
-    swapDevices = [{
-      device = "/var/lib/swapfile";
-      size = 16 * 1024;
-      options = [ "discard" ];
-    }];
+    swapDevices = [
+      {
+        device = "/var/lib/swapfile";
+        size = 16 * 1024;
+        options = [ "discard" ];
+      }
+    ];
 
     boot.kernel.sysctl = {
       "vm.swappiness" = 30;
@@ -31,4 +33,3 @@ in
     ];
   };
 }
-

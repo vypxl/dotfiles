@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.my;
 in
@@ -8,7 +13,7 @@ in
   };
 
   config = lib.mkIf cfg.zellij.enable {
-  home.packages = [ pkgs.zellij ];
-  my.dotfile."zellij".enable = true;
+    home.packages = [ pkgs.zellij ];
+    my.dotfile."zellij".enable = true;
+  };
 }
-;}

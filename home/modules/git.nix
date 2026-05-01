@@ -49,7 +49,7 @@ in
         rebase.autoStash = true;
 
         submodule.recurse = true;
-        
+
         tag.gpgSign = true;
 
         user.name = "vypxl";

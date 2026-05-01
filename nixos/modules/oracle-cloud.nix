@@ -16,7 +16,12 @@ in
   imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
 
   config = lib.mkIf cfg.oracleCloud.enable {
-    boot.initrd.availableKernelModules = [ "xhci_pci" "virtio_pci" "virtio_scsi" "usbhid" ];
+    boot.initrd.availableKernelModules = [
+      "xhci_pci"
+      "virtio_pci"
+      "virtio_scsi"
+      "usbhid"
+    ];
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
     boot.kernelParams = [ "net.ifnames=0" ];

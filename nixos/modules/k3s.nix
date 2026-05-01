@@ -64,7 +64,10 @@ in
     # ── Firewall ────────────────────────────────────────────────
     networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ 6443 ];
-      trustedInterfaces = [ "cni0" "flannel.1" ];
+      trustedInterfaces = [
+        "cni0"
+        "flannel.1"
+      ];
     };
 
     # ── CLI tools ───────────────────────────────────────────────
@@ -89,7 +92,12 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "k3s.service" ];
       requires = [ "k3s.service" ];
-      path = with pkgs; [ fluxcd kubectl git ssh-to-age ];
+      path = with pkgs; [
+        fluxcd
+        kubectl
+        git
+        ssh-to-age
+      ];
       environment.KUBECONFIG = "/etc/rancher/k3s/k3s.yaml";
 
       serviceConfig = {

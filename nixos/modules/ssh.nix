@@ -20,7 +20,7 @@ in
         PermitRootLogin = "prohibit-password";
       };
     };
-    
+
     users.users.thomas.openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGdcyJt7QCpshfGWnjWsomJ3EbZI3k/xuWVdcpOP57TL thomas@vypxl.io"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPy8CJvxjK1mPCHym+pBVoKeNNYRP9cfRY2k5yF7Io9s thomas@nunu.ai"

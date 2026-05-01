@@ -11,6 +11,19 @@ metadata:
   namespace: default
   labels:
     app.kubernetes.io/name: homepage
+secrets:
+  - name: homepage
+---
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/service-account-token
+metadata:
+  name: homepage
+  namespace: default
+  labels:
+    app.kubernetes.io/name: homepage
+  annotations:
+    kubernetes.io/service-account.name: homepage
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -25,8 +38,17 @@ rules:
   - apiGroups: [""]
     resources: ["services", "endpoints"]
     verbs: ["get", "list"]
-  - apiGroups: ["networking.k8s.io"]
+  - apiGroups: ["extensions", "networking.k8s.io"]
     resources: ["ingresses"]
+    verbs: ["get", "list"]
+  - apiGroups: ["traefik.io"]
+    resources: ["ingressroutes"]
+    verbs: ["get", "list"]
+  - apiGroups: ["gateway.networking.k8s.io"]
+    resources: ["httproutes", "gateways"]
+    verbs: ["get", "list"]
+  - apiGroups: ["metrics.k8s.io"]
+    resources: ["nodes", "pods"]
     verbs: ["get", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -98,16 +120,53 @@ spec:
         app.kubernetes.io/name: homepage
     spec:
       serviceAccountName: homepage
+      automountServiceAccountToken: true
       containers:
         - name: homepage
           image: ghcr.io/gethomepage/homepage:latest
+          imagePullPolicy: Always
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            seccompProfile:
+              type: RuntimeDefault
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: HOMEPAGE_ALLOWED_HOSTS
+              value: "$(MY_POD_IP):3000,${DOMAIN}"
           ports:
             - name: http
               containerPort: 3000
               protocol: TCP
           volumeMounts:
-            - name: config
-              mountPath: /app/config
+            - mountPath: /app/config/bookmarks.yaml
+              name: homepage-config
+              subPath: bookmarks.yaml
+            - mountPath: /app/config/docker.yaml
+              name: homepage-config
+              subPath: docker.yaml
+            - mountPath: /app/config/kubernetes.yaml
+              name: homepage-config
+              subPath: kubernetes.yaml
+            - mountPath: /app/config/services.yaml
+              name: homepage-config
+              subPath: services.yaml
+            - mountPath: /app/config/settings.yaml
+              name: homepage-config
+              subPath: settings.yaml
+            - mountPath: /app/config/widgets.yaml
+              name: homepage-config
+              subPath: widgets.yaml
+            - mountPath: /app/config/logs
+              name: logs
           resources:
             limits:
               memory: 256Mi
@@ -128,9 +187,11 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 5
       volumes:
-        - name: config
+        - name: homepage-config
           configMap:
             name: homepage
+        - name: logs
+          emptyDir: {}
 ---
 # ─── Service ─────────────────────────────────────────────────────────────────
 apiVersion: v1

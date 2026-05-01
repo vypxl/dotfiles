@@ -39,6 +39,11 @@ spec:
               value: "openid email profile groups"
             - name: TINYAUTH_OAUTH_PROVIDERS_POCKETID_NAME
               value: "Pocket ID"
+            # service-grain access controls
+            # Usage: TINYAUTH_APPS_<app_name>_OAUTH_GROUPS: groups
+            # app_name is <app>.${DOMAIN}
+            - name: TINYAUTH_APPS_LDAP_OAUTH_GROUPS
+              value: "admin"
           envFrom:
             - secretRef:
                 name: tinyauth

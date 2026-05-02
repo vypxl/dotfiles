@@ -37,7 +37,7 @@ spec:
               # yaml-language-server: $schema=https://agentgateway.dev/schema/config
               binds:
               - port: 3000
-                listeners:
+                listeners: []
               EOF
           volumeMounts:
             - name: config

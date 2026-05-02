@@ -80,18 +80,18 @@ spec:
                 - ALL
           startupProbe:
             httpGet:
-              path: /healthz
+              path: /healthz/ready
               port: 15021
             failureThreshold: 10
             periodSeconds: 5
           livenessProbe:
             httpGet:
-              path: /healthz
+              path: /healthz/ready
               port: 15021
             periodSeconds: 30
           readinessProbe:
             httpGet:
-              path: /healthz
+              path: /healthz/ready
               port: 15021
             periodSeconds: 10
       volumes:

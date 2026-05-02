@@ -18,6 +18,9 @@ data:
   config.yaml: |
     # yaml-language-server: $schema=https://agentgateway.dev/schema/config
 
+    # ── Admin UI (bind to all interfaces so Traefik ingress can reach it) ─
+    admin_addr: "0.0.0.0:15000"
+
     # ── LLM providers ──────────────────────────────────────────────────────
     llm:
       models:

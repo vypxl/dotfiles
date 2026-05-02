@@ -61,6 +61,12 @@ in
       ];
     };
 
+    # ── Networking ──────────────────────────────────────────────
+    # K3s sets this at runtime, but a NetworkManager or systemd-sysctl
+    # reload can reset it.  Pin it in the NixOS sysctl config so pod
+    # traffic always survives.
+    boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
+
     # ── Firewall ────────────────────────────────────────────────
     networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ 6443 ];

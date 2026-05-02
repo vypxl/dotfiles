@@ -8,15 +8,16 @@
 # MCP endpoint: http://agentgateway:4000 (same port, /mcp path)
 # UI:           https://ai.${DOMAIN} (behind tinyauth)
 
-# ─── Deployment ──────────────────────────────────────────────────────────────
+# ─── StatefulSet ─────────────────────────────────────────────────────────────
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: agentgateway
   namespace: default
   labels:
     app.kubernetes.io/name: agentgateway
 spec:
+  serviceName: agentgateway
   replicas: 1
   selector:
     matchLabels:
@@ -33,6 +34,7 @@ spec:
             - sh
             - -c
             - |
+              [ -f /etc/agentgateway/config.yaml ] && exit 0
               cat <<'EOF' > /etc/agentgateway/config.yaml
               # yaml-language-server: $schema=https://agentgateway.dev/schema/config
               binds:
@@ -99,9 +101,14 @@ spec:
               path: /healthz/ready
               port: 15021
             periodSeconds: 10
-      volumes:
-        - name: config
-          emptyDir: {}
+  volumeClaimTemplates:
+    - metadata:
+        name: config
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
 ---
 # ─── Service ─────────────────────────────────────────────────────────────────
 apiVersion: v1

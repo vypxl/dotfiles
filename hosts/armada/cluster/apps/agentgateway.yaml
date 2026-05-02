@@ -8,25 +8,6 @@
 # MCP endpoint: http://agentgateway:4000 (same port, /mcp path)
 # UI:           https://ai.${DOMAIN} (behind tinyauth)
 
-# ─── Config ──────────────────────────────────────────────────────────────────
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: agentgateway-config
-  namespace: default
-data:
-  config.yaml: |
-    # yaml-language-server: $schema=https://agentgateway.dev/schema/config
-
-    # ── LLM providers ──────────────────────────────────────────────────────
-    llm:
-      models:
-        - name: anthropic/claude-sonnet-4-6
-          provider: anthropic
-          params:
-            model: claude-sonnet-4-20250514
-            apiKey: "$ANTHROPIC_API_KEY"
----
 # ─── Deployment ──────────────────────────────────────────────────────────────
 apiVersion: apps/v1
 kind: Deployment
@@ -67,7 +48,6 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /etc/agentgateway
-              readOnly: true
           resources:
             limits:
               memory: 128Mi
@@ -99,8 +79,7 @@ spec:
             periodSeconds: 10
       volumes:
         - name: config
-          configMap:
-            name: agentgateway-config
+          emptyDir: {}
 ---
 # ─── Service ─────────────────────────────────────────────────────────────────
 apiVersion: v1
@@ -137,10 +116,16 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
     traefik.ingress.kubernetes.io/router.middlewares: auth-tinyauth@kubernetescrd
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: "AI"
+    gethomepage.dev/name: "Agentgateway"
+    gethomepage.dev/icon: "agentgateway"
+    gethomepage.dev/href: "https://ui.ai.${DOMAIN}"
+    gethomepage.dev/description: "LLM & MCP Gateway"
 spec:
   ingressClassName: traefik
   rules:
-    - host: "ai.${DOMAIN}"
+    - host: "ui.ai.${DOMAIN}"
       http:
         paths:
           - path: /
@@ -153,7 +138,7 @@ spec:
   tls:
     - secretName: agentgateway-ui-tls
       hosts:
-        - "ai.${DOMAIN}"
+        - "ui.ai.${DOMAIN}"
 ---
 # ─── Ingress (LLM API — behind tinyauth) ────────────────────────────────────
 apiVersion: networking.k8s.io/v1
@@ -167,7 +152,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: "llm.${DOMAIN}"
+    - host: "ai.${DOMAIN}"
       http:
         paths:
           - path: /
@@ -180,4 +165,4 @@ spec:
   tls:
     - secretName: agentgateway-api-tls
       hosts:
-        - "llm.${DOMAIN}"
+        - "ai.${DOMAIN}"

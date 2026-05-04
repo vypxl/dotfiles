@@ -1,0 +1,125 @@
+# ─── Bifrost ────────────────────────────────────────────────────────────────
+# High-performance AI gateway with an OpenAI-compatible HTTP API and Web UI.
+# Quickstart: https://docs.getbifrost.ai/quickstart/gateway/setting-up
+#
+# Mirrors the quickstart Docker form:
+#   docker run -p 8080:8080 -v $(pwd)/data:/app/data maximhq/bifrost
+#
+# API/UI endpoint: http://bifrost:8080 (cluster-internal)
+# Public API:      https://ai.${DOMAIN} (behind tinyauth)
+
+# ─── StatefulSet ─────────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: bifrost
+  namespace: default
+  labels:
+    app.kubernetes.io/name: bifrost
+spec:
+  serviceName: bifrost
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: bifrost
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: bifrost
+    spec:
+      containers:
+        - name: bifrost
+          image: maximhq/bifrost:latest
+          imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: ai
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: "1"
+            requests:
+              memory: 128Mi
+              cpu: 100m
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          startupProbe:
+            tcpSocket:
+              port: http
+            failureThreshold: 30
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 30
+          readinessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 10
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
+---
+# ─── Service ─────────────────────────────────────────────────────────────────
+apiVersion: v1
+kind: Service
+metadata:
+  name: bifrost
+  namespace: default
+  labels:
+    app.kubernetes.io/name: bifrost
+spec:
+  selector:
+    app.kubernetes.io/name: bifrost
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+---
+# ─── Ingress (UI — behind tinyauth) ──────────────────────────────────────────
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bifrost-ui
+  namespace: default
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    traefik.ingress.kubernetes.io/router.middlewares: auth-tinyauth@kubernetescrd
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: "AI"
+    gethomepage.dev/name: "Bifrost"
+    gethomepage.dev/icon: "mdi-bridge"
+    gethomepage.dev/href: "https://ai.${DOMAIN}"
+    gethomepage.dev/description: "AI Gateway"
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: "ai.${DOMAIN}"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: bifrost
+                port:
+                  number: 8080
+  tls:
+    - secretName: bifrost-ui-tls
+      hosts:
+        - "ai.${DOMAIN}"

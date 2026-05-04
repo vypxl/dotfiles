@@ -1,0 +1,71 @@
+# ─── Shared PostgreSQL Cluster ────────────────────────────────────────────────
+# Single Postgres 17 instance shared by multiple services.
+# Each service gets its own database + user with full isolation.
+#
+# The Zalando operator creates a K8s Secret per user:
+#   <username>.<cluster-name>.credentials.postgresql.acid.zalan.do
+#
+# e.g. for hindsight:
+#   Secret: hindsight.shared-postgres.credentials.postgresql.acid.zalan.do
+#   Keys:   username, password
+#
+# Connect from other pods:
+#   host: shared-postgres.postgres.svc.cluster.local
+#   port: 5432
+#   db:   hindsight (or firecrawl)
+#
+# Lives in apps/ (not infra/) because it depends on the postgres-operator
+# CRDs which are installed by the HelmRelease in infra/.
+
+apiVersion: acid.zalan.do/v1
+kind: postgresql
+metadata:
+  name: shared-postgres
+  namespace: postgres
+  labels:
+    app.kubernetes.io/name: shared-postgres
+spec:
+  teamId: "armada"
+  numberOfInstances: 1
+
+  postgresql:
+    version: "17"
+
+  volume:
+    size: 10Gi
+
+  # ── Users ──────────────────────────────────────────────────────────────────
+  # One login role per service. The operator auto-generates passwords and
+  # stores them in K8s Secrets (see header comment for naming convention).
+  users:
+    hindsight: []
+    firecrawl: []
+
+  # ── Databases ──────────────────────────────────────────────────────────────
+  # Maps database name → owner role. Each user owns exactly one database.
+  # Ownership + revoked public access = full cross-database isolation.
+  databases:
+    hindsight: hindsight
+    firecrawl: firecrawl
+
+  # ── Extensions ─────────────────────────────────────────────────────────────
+  # preparedDatabases ensures pgvector is installed in each database.
+  # defaultUsers: false avoids creating extra _owner/_reader/_writer roles
+  # since we already defined our own users above.
+  preparedDatabases:
+    hindsight:
+      defaultUsers: false
+      extensions:
+        vector: public
+    firecrawl:
+      defaultUsers: false
+      extensions:
+        vector: public
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: "2"
+      memory: 1Gi

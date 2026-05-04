@@ -1,0 +1,42 @@
+# ─── Zalando Postgres Operator ────────────────────────────────────────────────
+# Manages PostgreSQL clusters declaratively via the `postgresql` CRD.
+# Docs: https://postgres-operator.readthedocs.io/
+#
+# The operator watches for `postgresql` CRs and provisions Spilo-based
+# Postgres clusters with users, databases, extensions, and credentials.
+# The actual cluster CR lives in apps/postgres.yaml (needs CRDs from here).
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: postgres
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: postgres-operator
+  namespace: flux-system
+spec:
+  interval: 24h
+  url: https://opensource.zalando.com/postgres-operator/charts/postgres-operator
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: postgres-operator
+  namespace: postgres
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: postgres-operator
+      version: "1.*"
+      sourceRef:
+        kind: HelmRepository
+        name: postgres-operator
+        namespace: flux-system
+  install:
+    createNamespace: true
+    crds: Create
+  upgrade:
+    crds: CreateReplace

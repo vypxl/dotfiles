@@ -9,19 +9,20 @@
 #   Secret: hindsight.shared-postgres.credentials.postgresql.acid.zalan.do
 #   Keys:   username, password
 #
-# Connect from other pods:
-#   host: shared-postgres.postgres.svc.cluster.local
+# Connect from other pods in the default namespace:
+#   host: shared-postgres
 #   port: 5432
 #   db:   hindsight (or firecrawl)
 #
 # Lives in apps/ (not infra/) because it depends on the postgres-operator
 # CRDs which are installed by the HelmRelease in infra/.
+# The operator runs in the postgres namespace but watches all namespaces.
 
 apiVersion: acid.zalan.do/v1
 kind: postgresql
 metadata:
   name: shared-postgres
-  namespace: postgres
+  namespace: default
   labels:
     app.kubernetes.io/name: shared-postgres
 spec:

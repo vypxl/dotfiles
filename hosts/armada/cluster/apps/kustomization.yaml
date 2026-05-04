@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - auth/
   - bifrost.yaml
+  - hindsight.yaml
   - postgres.yaml
   - headscale.yaml
   - homepage.yaml

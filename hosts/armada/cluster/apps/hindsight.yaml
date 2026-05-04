@@ -1,0 +1,112 @@
+# ─── Hindsight ────────────────────────────────────────────────────────────────
+# State-of-the-art AI agent memory system.
+# Docs: https://hindsight.vectorize.io/developer/installation
+#
+# Endpoints (cluster-internal):
+#   API:           http://hindsight-api:8888
+#   Control Plane: http://hindsight-control-plane:3000
+#
+# Uses external PostgreSQL from shared-postgres (postgres.yaml) and routes
+# LLM calls through the Bifrost AI gateway (bifrost.yaml) via the generic
+# OpenAI-compatible provider.
+#
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: hindsight
+  namespace: flux-system
+spec:
+  type: oci
+  interval: 24h
+  url: oci://ghcr.io/vectorize-io/charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: hindsight
+  namespace: default
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: hindsight
+      sourceRef:
+        kind: HelmRepository
+        name: hindsight
+        namespace: flux-system
+
+  # ── Inject Postgres password from the Zalando-managed secret ───────────────
+  valuesFrom:
+    - kind: Secret
+      name: hindsight.shared-postgres.credentials.postgresql.acid.zalan.do
+      valuesKey: password
+      targetPath: postgresql.external.password
+    - kind: Secret
+      name: hindsight
+      valuesKey: HINDSIGHT_API_LLM_API_KEY
+      targetPath: api.secrets.HINDSIGHT_API_LLM_API_KEY
+
+  values:
+    # ── API ──────────────────────────────────────────────────────────────────
+    api:
+      env:
+        # Generic OpenAI-compatible provider routed through Bifrost
+        HINDSIGHT_API_LLM_PROVIDER: "openai"
+        HINDSIGHT_API_LLM_BASE_URL: "http://bifrost:8080/v1"
+        HINDSIGHT_API_LLM_MODEL: "gpt-4o-mini"
+      resources:
+        limits:
+          cpu: "2"
+          memory: 4Gi
+        requests:
+          cpu: 250m
+          memory: 512Mi
+
+    # ── Control Plane (Web UI) ───────────────────────────────────────────────
+    controlPlane:
+      enabled: true
+      resources:
+        limits:
+          cpu: 500m
+          memory: 256Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+
+    # ── External PostgreSQL (shared-postgres in default namespace) ────────────
+    # Password is injected via valuesFrom above.
+    postgresql:
+      enabled: false
+      external:
+        host: "shared-postgres"
+        port: 5432
+        database: "hindsight"
+        username: "hindsight"
+
+    # ── Ingress (Control Plane UI — behind tinyauth) ────────────────────────
+    ingress:
+      enabled: true
+      className: "traefik"
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt
+        traefik.ingress.kubernetes.io/router.middlewares: auth-tinyauth@kubernetescrd
+        gethomepage.dev/enabled: "true"
+        gethomepage.dev/group: "AI"
+        gethomepage.dev/name: "Hindsight"
+        gethomepage.dev/icon: "mdi-brain"
+        gethomepage.dev/href: "https://hindsight.${DOMAIN}"
+        gethomepage.dev/description: "AI Agent Memory"
+      hosts:
+        - host: "hindsight.${DOMAIN}"
+          paths:
+            - path: /
+              pathType: Prefix
+              service: controlPlane
+      tls:
+        - secretName: hindsight-tls
+          hosts:
+            - "hindsight.${DOMAIN}"
+
+    # ── Workers ──────────────────────────────────────────────────────────────
+    worker:
+      enabled: false

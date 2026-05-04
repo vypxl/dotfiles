@@ -30,3 +30,8 @@ tf-plan:
 
 tf-apply:
   cd terraform && terraform apply
+
+get-kubeconfig-armada:
+  ssh lab.vypxl.io cat /etc/rancher/k3s/k3s.yaml \
+    | sed 's|server: https://127.0.0.1:6443|server: https://lab.vypxl.io:6443|' \
+    > .kubectl.yaml

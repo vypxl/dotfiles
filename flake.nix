@@ -143,6 +143,7 @@
 
           shellHook = ''
             export SOPS_AGE_KEY_CMD="get-age-key"
+            export KUBECONFIG="$PWD/.kubectl.yaml"
 
             # OCI Object Storage doesn't support AWS chunked encoding
             export AWS_REQUEST_CHECKSUM_CALCULATION=WHEN_REQUIRED

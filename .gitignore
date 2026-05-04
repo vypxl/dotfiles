@@ -2,3 +2,10 @@ TODO.md
 config/DankMaterialShell/plugins
 .codex
 .direnv/
+
+# Terraform
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.backup
+terraform/*.tfvars
+terraform/generated/

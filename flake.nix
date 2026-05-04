@@ -137,11 +137,16 @@
             kubernetes-helm
             fluxcd
             k9s
+            oci-cli
             terraform
           ];
 
           shellHook = ''
             export SOPS_AGE_KEY_CMD="get-age-key"
+
+            # OCI Object Storage doesn't support AWS chunked encoding
+            export AWS_REQUEST_CHECKSUM_CALCULATION=WHEN_REQUIRED
+            export AWS_RESPONSE_CHECKSUM_VALIDATION=WHEN_REQUIRED
           '';
         };
       }

@@ -14,3 +14,19 @@ eval:
 
 build:
   nix build .#nixosConfigurations.{{host}}.config.system.build.toplevel
+
+# OCI / Terraform
+oci-login:
+  oci session authenticate
+
+oci-refresh:
+  oci session refresh
+
+tf-init:
+  cd terraform && terraform init
+
+tf-plan:
+  cd terraform && terraform plan
+
+tf-apply:
+  cd terraform && terraform apply

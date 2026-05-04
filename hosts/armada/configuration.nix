@@ -33,7 +33,7 @@
 
   networking = {
     hostName = "armada";
-    domain = "vps.vypxl.io";
+    domain = "lab.vypxl.io";
     networkmanager.enable = true;
 
     firewall = {

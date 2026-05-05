@@ -6,7 +6,7 @@
 #   docker run -p 8080:8080 -v $(pwd)/data:/app/data maximhq/bifrost
 #
 # API/UI endpoint: http://bifrost:8080 (cluster-internal)
-# Public API:      https://ai.${DOMAIN} (behind tinyauth)
+# Public API:      https://ai.${DOMAIN}
 
 # ─── StatefulSet ─────────────────────────────────────────────────────────────
 apiVersion: apps/v1
@@ -91,7 +91,7 @@ spec:
       port: 8080
       targetPort: http
 ---
-# ─── Ingress (UI — behind tinyauth) ──────────────────────────────────────────
+# ─── Ingress (UI) ──────────────────────────────────────────
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -99,7 +99,6 @@ metadata:
   namespace: default
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
-    traefik.ingress.kubernetes.io/router.middlewares: auth-tinyauth@kubernetescrd
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: "AI"
     gethomepage.dev/name: "Bifrost"

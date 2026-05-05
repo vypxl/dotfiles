@@ -4,6 +4,7 @@
 #
 # Public API/UI:   https://firecrawl.${DOMAIN} (behind tinyauth)
 # Internal API:    http://firecrawl-api:3002
+# Internal MCP:    http://firecrawl-mcp:3000/v2/mcp
 
 apiVersion: v1
 kind: Namespace
@@ -42,6 +43,27 @@ spec:
       ports:
         - protocol: TCP
           port: 3002
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-openwebui-to-mcp
+  namespace: firecrawl
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: firecrawl
+      app.kubernetes.io/component: mcp
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: default
+      ports:
+        - protocol: TCP
+          port: 3000
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -511,6 +533,70 @@ spec:
   ports:
     - name: http
       port: 3002
+      targetPort: http
+---
+# ─── MCP Server ──────────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: firecrawl-mcp
+  namespace: firecrawl
+  labels:
+    app.kubernetes.io/name: firecrawl
+    app.kubernetes.io/component: mcp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: firecrawl
+      app.kubernetes.io/component: mcp
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: firecrawl
+        app.kubernetes.io/component: mcp
+    spec:
+      containers:
+        - name: mcp
+          image: node:22-alpine
+          imagePullPolicy: IfNotPresent
+          command:
+            - npx
+          args:
+            - -y
+            - firecrawl-mcp
+          env:
+            - name: HTTP_STREAMABLE_SERVER
+              value: "true"
+            - name: FIRECRAWL_API_URL
+              value: "http://firecrawl-api:3002"
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: firecrawl-mcp
+  namespace: firecrawl
+  labels:
+    app.kubernetes.io/name: firecrawl
+    app.kubernetes.io/component: mcp
+spec:
+  selector:
+    app.kubernetes.io/name: firecrawl
+    app.kubernetes.io/component: mcp
+  ports:
+    - name: http
+      port: 3000
       targetPort: http
 ---
 # ─── Queue Worker ────────────────────────────────────────────────────────────

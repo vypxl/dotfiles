@@ -110,6 +110,7 @@ spec:
         gethomepage.dev/icon: "open-webui"
         gethomepage.dev/href: "https://chat.${DOMAIN}"
         gethomepage.dev/description: "Chat UI"
+        gethomepage.dev/pod-selector: "app.kubernetes.io/instance=openwebui,app.kubernetes.io/component=open-webui"
 
     sso:
       enabled: true

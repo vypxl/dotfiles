@@ -1,0 +1,713 @@
+# ─── Firecrawl ────────────────────────────────────────────────────────────────
+# Self-hosted web crawler/scraper API.
+# Docs: https://docs.firecrawl.dev/contributing/self-host
+#
+# Public API/UI:   https://firecrawl.${DOMAIN} (behind tinyauth)
+# Internal API:    http://firecrawl-api:3002
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: firecrawl
+  labels:
+    app.kubernetes.io/name: firecrawl
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+  namespace: firecrawl
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-traefik-to-api
+  namespace: firecrawl
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: firecrawl
+      app.kubernetes.io/component: api
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - protocol: TCP
+          port: 3002
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-firecrawl-namespace
+  namespace: firecrawl
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: firecrawl
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: firecrawl
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: firecrawl
+  namespace: firecrawl
+  labels:
+    app.kubernetes.io/name: firecrawl
+data:
+  NUM_WORKERS_PER_QUEUE: "2"
+  HOST: "0.0.0.0"
+  PORT: "3002"
+  WORKER_PORT: "3005"
+  EXTRACT_WORKER_PORT: "3004"
+  NUQ_WORKER_PORT: "3006"
+  POSTGRES_USER: "firecrawl"
+  POSTGRES_DB: "firecrawl"
+  POSTGRES_HOST: "firecrawl-nuq-postgres"
+  POSTGRES_PORT: "5432"
+  REDIS_URL: "redis://firecrawl-redis:6379"
+  REDIS_RATE_LIMIT_URL: "redis://firecrawl-redis:6379"
+  NUQ_RABBITMQ_URL: "amqp://firecrawl-rabbitmq:5672"
+  PLAYWRIGHT_MICROSERVICE_URL: "http://firecrawl-playwright:3000/scrape"
+  USE_DB_AUTHENTICATION: "false"
+  CRAWL_CONCURRENT_REQUESTS: "2"
+  MAX_CONCURRENT_JOBS: "2"
+  BROWSER_POOL_SIZE: "2"
+  IS_KUBERNETES: "true"
+  ENV: "production"
+  LOGGING_LEVEL: "INFO"
+  FIRECRAWL_APP_SCHEME: "https"
+  FIRECRAWL_APP_HOST: "firecrawl.${DOMAIN}"
+  OPENAI_BASE_URL: "http://bifrost.default.svc.cluster.local:8080/v1"
+  MODEL_NAME: "moonshotai/kimi-k2.6"
+  MODEL_EMBEDDING_NAME: "text-embedding-3-small"
+  NO_PROXY: "localhost,127.0.0.1,firecrawl-redis,firecrawl-rabbitmq,firecrawl-nuq-postgres,firecrawl-playwright,bifrost.default.svc.cluster.local"
+---
+# ─── Redis ───────────────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: firecrawl-redis
+  namespace: firecrawl
+  labels:
+    app.kubernetes.io/name: firecrawl
+    app.kubernetes.io/component: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: firecrawl
+      app.kubernetes.io/component: redis
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: firecrawl
+        app.kubernetes.io/component: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:alpine
+          imagePullPolicy: IfNotPresent
+          args:
+            - redis-server
+            - --bind
+            - 0.0.0.0
+          ports:
+            - name: redis
+              containerPort: 6379
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 25m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          readinessProbe:
+            tcpSocket:
+              port: redis
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: redis
+            periodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: firecrawl-redis
+  namespace: firecrawl
+  labels:
+    app.kubernetes.io/name: firecrawl
+    app.kubernetes.io/component: redis
+spec:
+  selector:
+    app.kubernetes.io/name: firecrawl
+    app.kubernetes.io/component: redis
+  ports:
+    - name: redis
+      port: 6379
+      targetPort: redis
+---
+# ─── RabbitMQ ────────────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: firecrawl-rabbitmq
+  namespace: firecrawl
+  labels:
+    app.kubernetes.io/name: firecrawl
+    app.kubernetes.io/component: rabbitmq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: firecrawl
+      app.kubernetes.io/component: rabbitmq
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: firecrawl
+        app.kubernetes.io/component: rabbitmq
+    spec:
+      containers:
+        - name: rabbitmq
+          image: rabbitmq:3-management
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: amqp
+              containerPort: 5672
+              protocol: TCP
+            - name: management
+              containerPort: 15672
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 50m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          readinessProbe:
+            exec:
+              command:
+                - rabbitmq-diagnostics
+                - -q
+                - check_running
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            exec:
+              command:
+                - rabbitmq-diagnostics
+                - -q
+                - check_running
+            initialDelaySeconds: 30
+            periodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: firecrawl-rabbitmq
+  namespace: firecrawl
+  labels:
+    app.kubernetes.io/name: firecrawl
+    app.kubernetes.io/component: rabbitmq
+spec:
+  selector:
+    app.kubernetes.io/name: firecrawl
+    app.kubernetes.io/component: rabbitmq
+  ports:
+    - name: amqp
+      port: 5672
+      targetPort: amqp
+    - name: management
+      port: 15672
+      targetPort: management
+---
+# ─── NuQ PostgreSQL ──────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: firecrawl-nuq-postgres
+  namespace: firecrawl
+  labels:
+    app.kubernetes.io/name: firecrawl
+    app.kubernetes.io/component: nuq-postgres
+spec:
+  serviceName: firecrawl-nuq-postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: firecrawl
+      app.kubernetes.io/component: nuq-postgres
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: firecrawl
+        app.kubernetes.io/component: nuq-postgres
+    spec:
+      containers:
+        - name: nuq-postgres
+          image: ghcr.io/firecrawl/nuq-postgres:latest
+          imagePullPolicy: Always
+          env:
+            - name: POSTGRES_USER
+              value: firecrawl
+            - name: POSTGRES_DB
+              value: firecrawl
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: firecrawl
+                  key: POSTGRES_PASSWORD
+          ports:
+            - name: postgres
+              containerPort: 5432
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          readinessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - firecrawl
+                - -d
+                - firecrawl
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - firecrawl
+                - -d
+                - firecrawl
+            initialDelaySeconds: 30
+            periodSeconds: 30
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 5Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: firecrawl-nuq-postgres
+  namespace: firecrawl
+  labels:
+    app.kubernetes.io/name: firecrawl
+    app.kubernetes.io/component: nuq-postgres
+spec:
+  selector:
+    app.kubernetes.io/name: firecrawl
+    app.kubernetes.io/component: nuq-postgres
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: postgres
+---
+# ─── Playwright Service ──────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: firecrawl-playwright
+  namespace: firecrawl
+  labels:
+    app.kubernetes.io/name: firecrawl
+    app.kubernetes.io/component: playwright
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: firecrawl
+      app.kubernetes.io/component: playwright
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: firecrawl
+        app.kubernetes.io/component: playwright
+    spec:
+      containers:
+        - name: playwright
+          image: ghcr.io/firecrawl/playwright-service:latest
+          imagePullPolicy: Always
+          env:
+            - name: PORT
+              value: "3000"
+            - name: ALLOW_LOCAL_WEBHOOKS
+              value: "false"
+            - name: MAX_CONCURRENT_PAGES
+              value: "2"
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          volumeMounts:
+            - name: shm
+              mountPath: /dev/shm
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 2Gi
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 30
+      volumes:
+        - name: shm
+          emptyDir:
+            medium: Memory
+            sizeLimit: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: firecrawl-playwright
+  namespace: firecrawl
+  labels:
+    app.kubernetes.io/name: firecrawl
+    app.kubernetes.io/component: playwright
+spec:
+  selector:
+    app.kubernetes.io/name: firecrawl
+    app.kubernetes.io/component: playwright
+  ports:
+    - name: http
+      port: 3000
+      targetPort: http
+---
+# ─── API ─────────────────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: firecrawl-api
+  namespace: firecrawl
+  labels:
+    app.kubernetes.io/name: firecrawl
+    app.kubernetes.io/component: api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: firecrawl
+      app.kubernetes.io/component: api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: firecrawl
+        app.kubernetes.io/component: api
+    spec:
+      terminationGracePeriodSeconds: 180
+      containers:
+        - name: api
+          image: ghcr.io/firecrawl/firecrawl:latest
+          imagePullPolicy: Always
+          command:
+            - node
+          args:
+            - --import
+            - ./dist/src/otel.js
+            - --max-old-space-size=1024
+            - dist/src/index.js
+          envFrom:
+            - configMapRef:
+                name: firecrawl
+            - secretRef:
+                name: firecrawl
+          env:
+            - name: FLY_PROCESS_GROUP
+              value: app
+          ports:
+            - name: http
+              containerPort: 3002
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 1536Mi
+          startupProbe:
+            httpGet:
+              path: /v0/health/liveness
+              port: http
+            failureThreshold: 30
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /v0/health/readiness
+              port: http
+            periodSeconds: 30
+          livenessProbe:
+            httpGet:
+              path: /v0/health/liveness
+              port: http
+            periodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: firecrawl-api
+  namespace: firecrawl
+  labels:
+    app.kubernetes.io/name: firecrawl
+    app.kubernetes.io/component: api
+spec:
+  selector:
+    app.kubernetes.io/name: firecrawl
+    app.kubernetes.io/component: api
+  ports:
+    - name: http
+      port: 3002
+      targetPort: http
+---
+# ─── Queue Worker ────────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: firecrawl-worker
+  namespace: firecrawl
+  labels:
+    app.kubernetes.io/name: firecrawl
+    app.kubernetes.io/component: worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: firecrawl
+      app.kubernetes.io/component: worker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: firecrawl
+        app.kubernetes.io/component: worker
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: worker
+          image: ghcr.io/firecrawl/firecrawl:latest
+          imagePullPolicy: Always
+          command:
+            - node
+          args:
+            - --import
+            - ./dist/src/otel.js
+            - --max-old-space-size=1024
+            - dist/src/services/queue-worker.js
+          envFrom:
+            - configMapRef:
+                name: firecrawl
+            - secretRef:
+                name: firecrawl
+          env:
+            - name: FLY_PROCESS_GROUP
+              value: worker
+            - name: PORT
+              value: "3005"
+          ports:
+            - name: http
+              containerPort: 3005
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 100m
+              memory: 384Mi
+            limits:
+              cpu: "1"
+              memory: 1536Mi
+          livenessProbe:
+            httpGet:
+              path: /liveness
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+---
+# ─── Extract Worker ──────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: firecrawl-extract-worker
+  namespace: firecrawl
+  labels:
+    app.kubernetes.io/name: firecrawl
+    app.kubernetes.io/component: extract-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: firecrawl
+      app.kubernetes.io/component: extract-worker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: firecrawl
+        app.kubernetes.io/component: extract-worker
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: extract-worker
+          image: ghcr.io/firecrawl/firecrawl:latest
+          imagePullPolicy: Always
+          command:
+            - node
+          args:
+            - --import
+            - ./dist/src/otel.js
+            - --max-old-space-size=1024
+            - dist/src/services/extract-worker.js
+          envFrom:
+            - configMapRef:
+                name: firecrawl
+            - secretRef:
+                name: firecrawl
+          env:
+            - name: FLY_PROCESS_GROUP
+              value: extract-worker
+            - name: PORT
+              value: "3004"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 384Mi
+            limits:
+              cpu: "1"
+              memory: 1536Mi
+---
+# ─── NuQ Worker ──────────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: firecrawl-nuq-worker
+  namespace: firecrawl
+  labels:
+    app.kubernetes.io/name: firecrawl
+    app.kubernetes.io/component: nuq-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: firecrawl
+      app.kubernetes.io/component: nuq-worker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: firecrawl
+        app.kubernetes.io/component: nuq-worker
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: nuq-worker
+          image: ghcr.io/firecrawl/firecrawl:latest
+          imagePullPolicy: Always
+          command:
+            - node
+          args:
+            - --import
+            - ./dist/src/otel.js
+            - --max-old-space-size=1024
+            - dist/src/services/worker/nuq-worker.js
+          envFrom:
+            - configMapRef:
+                name: firecrawl
+            - secretRef:
+                name: firecrawl
+          env:
+            - name: FLY_PROCESS_GROUP
+              value: nuq-worker
+          ports:
+            - name: http
+              containerPort: 3006
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 100m
+              memory: 384Mi
+            limits:
+              cpu: "1"
+              memory: 1536Mi
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+---
+# ─── Ingress ─────────────────────────────────────────────────────────────────
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: firecrawl
+  namespace: firecrawl
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    traefik.ingress.kubernetes.io/router.middlewares: auth-tinyauth@kubernetescrd
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: "AI"
+    gethomepage.dev/name: "Firecrawl"
+    gethomepage.dev/icon: "firecrawl"
+    gethomepage.dev/href: "https://firecrawl.${DOMAIN}"
+    gethomepage.dev/description: "Web crawling API"
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: "firecrawl.${DOMAIN}"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: firecrawl-api
+                port:
+                  number: 3002
+  tls:
+    - secretName: firecrawl-tls
+      hosts:
+        - "firecrawl.${DOMAIN}"

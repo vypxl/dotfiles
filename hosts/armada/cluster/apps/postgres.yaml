@@ -12,7 +12,7 @@
 # Connect from other pods in the default namespace:
 #   host: shared-postgres
 #   port: 5432
-#   db:   hindsight (or firecrawl)
+#   db:   hindsight
 #
 # Lives in apps/ (not infra/) because it depends on the postgres-operator
 # CRDs which are installed by the HelmRelease in infra/.
@@ -40,14 +40,12 @@ spec:
   # stores them in K8s Secrets (see header comment for naming convention).
   users:
     hindsight: []
-    firecrawl: []
 
   # ── Databases ──────────────────────────────────────────────────────────────
   # Maps database name → owner role. Each user owns exactly one database.
   # Ownership + revoked public access = full cross-database isolation.
   databases:
     hindsight: hindsight
-    firecrawl: firecrawl
 
   # ── Extensions ─────────────────────────────────────────────────────────────
   # preparedDatabases ensures pgvector is installed in each database.
@@ -55,10 +53,6 @@ spec:
   # since we already defined our own users above.
   preparedDatabases:
     hindsight:
-      defaultUsers: false
-      extensions:
-        vector: public
-    firecrawl:
       defaultUsers: false
       extensions:
         vector: public

@@ -263,8 +263,10 @@ spec:
     spec:
       containers:
         - name: nuq-postgres
-          image: ghcr.io/firecrawl/nuq-postgres:latest
-          imagePullPolicy: Always
+          # TODO: remove local image when https://github.com/firecrawl/firecrawl/issues/3291 is closed
+          # image: ghcr.io/firecrawl/nuq-postgres:latest
+          image: localhost/nuq-postgres:latest
+          imagePullPolicy: Never
           env:
             - name: POSTGRES_USER
               value: firecrawl
@@ -445,8 +447,6 @@ spec:
           command:
             - node
           args:
-            - --import
-            - ./dist/src/otel.js
             - --max-old-space-size=1024
             - dist/src/index.js
           envFrom:
@@ -531,8 +531,6 @@ spec:
           command:
             - node
           args:
-            - --import
-            - ./dist/src/otel.js
             - --max-old-space-size=1024
             - dist/src/services/queue-worker.js
           envFrom:
@@ -592,8 +590,6 @@ spec:
           command:
             - node
           args:
-            - --import
-            - ./dist/src/otel.js
             - --max-old-space-size=1024
             - dist/src/services/extract-worker.js
           envFrom:
@@ -643,8 +639,6 @@ spec:
           command:
             - node
           args:
-            - --import
-            - ./dist/src/otel.js
             - --max-old-space-size=1024
             - dist/src/services/worker/nuq-worker.js
           envFrom:

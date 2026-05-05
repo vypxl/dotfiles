@@ -56,6 +56,16 @@
     ripgrep
   ];
 
+  my.localDockerImages.images.firecrawl-nuq = {
+    repo = "https://github.com/firecrawl/firecrawl.git";
+    branch = "main";
+    context = "apps/nuq-postgres";
+    image = "localhost/nuq-postgres:latest";
+    stateDir = "/var/lib/firecrawl-nuq-postgres";
+    schedule = "daily";
+    importToK3s = true;
+  };
+
   nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
   system.stateVersion = "25.11";
 }

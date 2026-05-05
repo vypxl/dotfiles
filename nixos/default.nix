@@ -18,6 +18,7 @@ in
     ./modules/gdm.nix
     ./modules/k3s.nix
     ./modules/locale.nix
+    ./modules/local-docker-image.nix
     ./modules/networking.nix
     ./modules/nix.nix
     ./modules/ssh.nix

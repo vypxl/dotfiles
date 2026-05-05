@@ -4,7 +4,7 @@
 #
 # Public API/UI:   https://firecrawl.${DOMAIN} (behind tinyauth)
 # Internal API:    http://firecrawl-api:3002
-# Internal MCP:    http://firecrawl-mcp:3000/v2/mcp
+# Internal MCP:    http://firecrawl-mcp:3000/mcp
 
 apiVersion: v1
 kind: Namespace
@@ -568,6 +568,8 @@ spec:
           env:
             - name: HTTP_STREAMABLE_SERVER
               value: "true"
+            - name: HOST
+              value: "0.0.0.0"
             - name: FIRECRAWL_API_URL
               value: "http://firecrawl-api:3002"
           ports:

@@ -5,6 +5,7 @@ resources:
   - bifrost.yaml
   - firecrawl.yaml
   - hindsight.yaml
+  - openwebui.yaml
   - postgres.yaml
   - headscale.yaml
   - homepage.yaml

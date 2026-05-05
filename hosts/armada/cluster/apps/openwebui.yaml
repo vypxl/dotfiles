@@ -1,0 +1,167 @@
+# ─── Open WebUI ──────────────────────────────────────────────────────────────
+# Chat UI backed by Bifrost's OpenAI-compatible gateway.
+# Docs: https://docs.openwebui.com/enterprise/deployment/kubernetes-helm/
+#
+# Public UI:       https://chat.${DOMAIN}
+# AI backend:      http://bifrost.default.svc.cluster.local:8080/v1
+# OIDC provider:   https://id.${DOMAIN}
+#
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: open-webui
+  namespace: flux-system
+spec:
+  interval: 24h
+  url: https://helm.openwebui.com/
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: openwebui
+  namespace: default
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: open-webui
+      version: "14.2.0"
+      sourceRef:
+        kind: HelmRepository
+        name: open-webui
+        namespace: flux-system
+
+  values:
+    fullnameOverride: openwebui
+    replicaCount: 1
+
+    # Use Bifrost for model access instead of deploying local model services.
+    ollama:
+      enabled: false
+    pipelines:
+      enabled: false
+    enableOpenaiApi: true
+    openaiBaseApiUrl: "http://bifrost.default.svc.cluster.local:8080/v1"
+    openaiApiKeyExistingSecret: openwebui
+    openaiApiKeyExistingSecretKey: BIFROST_API_KEY
+
+    # Redis is used for websocket/session coordination.
+    websocket:
+      enabled: true
+      manager: redis
+      redis:
+        enabled: true
+        resources:
+          limits:
+            cpu: 250m
+            memory: 256Mi
+          requests:
+            cpu: 25m
+            memory: 64Mi
+
+    tika:
+      enabled: true
+
+    persistence:
+      enabled: true
+      provider: local
+      size: 5Gi
+      accessModes:
+        - ReadWriteOnce
+
+    resources:
+      limits:
+        cpu: "2"
+        memory: 2Gi
+      requests:
+        cpu: 250m
+        memory: 512Mi
+
+    startupProbe:
+      httpGet:
+        path: /health
+        port: http
+      periodSeconds: 5
+      failureThreshold: 30
+    readinessProbe:
+      httpGet:
+        path: /health/db
+        port: http
+      periodSeconds: 10
+      failureThreshold: 3
+    livenessProbe:
+      httpGet:
+        path: /health
+        port: http
+      periodSeconds: 30
+      failureThreshold: 3
+
+    ingress:
+      enabled: true
+      class: traefik
+      host: "chat.${DOMAIN}"
+      tls: true
+      existingSecret: openwebui-tls
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt
+        gethomepage.dev/enabled: "true"
+        gethomepage.dev/group: "AI"
+        gethomepage.dev/name: "Open WebUI"
+        gethomepage.dev/icon: "open-webui"
+        gethomepage.dev/href: "https://chat.${DOMAIN}"
+        gethomepage.dev/description: "Chat UI"
+
+    sso:
+      enabled: true
+      enableSignup: true
+      mergeAccountsByEmail: true
+      oidc:
+        enabled: true
+        clientExistingSecret: openwebui
+        clientIdExistingSecretKey: OAUTH_CLIENT_ID
+        clientExistingSecretKey: OAUTH_CLIENT_SECRET
+        providerUrl: "https://id.${DOMAIN}/.well-known/openid-configuration"
+        providerName: "Pocket ID"
+        scopes: "openid email profile"
+
+    extraEnvVars:
+      - name: WEBUI_SECRET_KEY
+        valueFrom:
+          secretKeyRef:
+            name: openwebui
+            key: WEBUI_SECRET_KEY
+      - name: ENABLE_OAUTH_PERSISTENT_CONFIG
+        value: "false"
+      - name: ENABLE_LOGIN_FORM
+        value: "false"
+      - name: DEFAULT_USER_ROLE
+        value: "user"
+      - name: OPENID_REDIRECT_URI
+        value: "https://chat.${DOMAIN}/oauth/oidc/callback"
+      - name: CORS_ALLOW_ORIGIN
+        value: "https://chat.${DOMAIN}"
+      - name: UVICORN_WORKERS
+        value: "1"
+      - name: ENABLE_DB_MIGRATIONS
+        value: "true"
+      - name: DATABASE_TYPE
+        value: "postgresql"
+      - name: DATABASE_HOST
+        value: "shared-postgres"
+      - name: DATABASE_PORT
+        value: "5432"
+      - name: DATABASE_NAME
+        value: "openwebui"
+      - name: DATABASE_USER
+        value: "openwebui"
+      - name: DATABASE_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: openwebui.shared-postgres.credentials.postgresql.acid.zalan.do
+            key: password
+      - name: VECTOR_DB
+        value: "pgvector"
+      - name: PGVECTOR_CREATE_EXTENSION
+        value: "false"
+      - name: RAG_EMBEDDING_ENGINE
+        value: "openai"

@@ -40,12 +40,14 @@ spec:
   # stores them in K8s Secrets (see header comment for naming convention).
   users:
     hindsight: []
+    openwebui: []
 
   # ── Databases ──────────────────────────────────────────────────────────────
   # Maps database name → owner role. Each user owns exactly one database.
   # Ownership + revoked public access = full cross-database isolation.
   databases:
     hindsight: hindsight
+    openwebui: openwebui
 
   # ── Extensions ─────────────────────────────────────────────────────────────
   # preparedDatabases ensures pgvector is installed in each database.
@@ -53,6 +55,10 @@ spec:
   # since we already defined our own users above.
   preparedDatabases:
     hindsight:
+      defaultUsers: false
+      extensions:
+        vector: public
+    openwebui:
       defaultUsers: false
       extensions:
         vector: public

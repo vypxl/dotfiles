@@ -162,6 +162,6 @@ spec:
       - name: VECTOR_DB
         value: "pgvector"
       - name: PGVECTOR_CREATE_EXTENSION
-        value: "false"
+        value: "true"
       - name: RAG_EMBEDDING_ENGINE
         value: "openai"

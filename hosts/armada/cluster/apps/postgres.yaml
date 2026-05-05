@@ -49,20 +49,6 @@ spec:
     hindsight: hindsight
     openwebui: openwebui
 
-  # ── Extensions ─────────────────────────────────────────────────────────────
-  # preparedDatabases ensures pgvector is installed in each database.
-  # defaultUsers: false avoids creating extra _owner/_reader/_writer roles
-  # since we already defined our own users above.
-  preparedDatabases:
-    hindsight:
-      defaultUsers: false
-      extensions:
-        vector: public
-    openwebui:
-      defaultUsers: false
-      extensions:
-        vector: public
-
   resources:
     requests:
       cpu: 100m

@@ -52,6 +52,10 @@ spec:
       name: hindsight-api
       valuesKey: HINDSIGHT_API_TENANT_API_KEY
       targetPath: api.secrets.HINDSIGHT_API_TENANT_API_KEY
+    - kind: Secret
+      name: hindsight-api
+      valuesKey: HINDSIGHT_API_TENANT_API_KEY
+      targetPath: controlPlane.secrets.HINDSIGHT_CP_DATAPLANE_API_KEY
 
   values:
     # ── API ──────────────────────────────────────────────────────────────────

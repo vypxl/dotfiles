@@ -115,7 +115,7 @@ data:
   FIRECRAWL_APP_SCHEME: "https"
   FIRECRAWL_APP_HOST: "firecrawl.${DOMAIN}"
   OPENAI_BASE_URL: "http://bifrost.default.svc.cluster.local:8080/v1"
-  MODEL_NAME: "moonshotai/kimi-k2.6"
+  MODEL_NAME: "moonshot/kimi-k2.6"
   MODEL_EMBEDDING_NAME: "text-embedding-3-small"
   NO_PROXY: "localhost,127.0.0.1,firecrawl-redis,firecrawl-rabbitmq,firecrawl-nuq-postgres,firecrawl-playwright,bifrost.default.svc.cluster.local"
 ---

@@ -24,6 +24,7 @@
   my.boot.limit-entries = 2;
   my.gdm.autologin = true;
   my.networking.dns.enable = false;
+  my.gaming.enable = true;
 
   environment.systemPackages = with pkgs; [
     _1password-gui

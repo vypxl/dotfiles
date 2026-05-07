@@ -5,6 +5,9 @@
 # Endpoints (cluster-internal):
 #   API:           http://hindsight-api:8888
 #   Control Plane: http://hindsight-control-plane:3000
+# Public:
+#   API:           https://hindsight-api.${DOMAIN}
+#   Control Plane: https://hindsight.${DOMAIN}
 #
 # Uses external PostgreSQL from shared-postgres (postgres.yaml) and routes
 # LLM calls through the Bifrost AI gateway (bifrost.yaml) via the generic
@@ -45,6 +48,10 @@ spec:
       name: hindsight
       valuesKey: HINDSIGHT_API_LLM_API_KEY
       targetPath: api.secrets.HINDSIGHT_API_LLM_API_KEY
+    - kind: Secret
+      name: hindsight-api
+      valuesKey: HINDSIGHT_API_TENANT_API_KEY
+      targetPath: api.secrets.HINDSIGHT_API_TENANT_API_KEY
 
   values:
     # ── API ──────────────────────────────────────────────────────────────────
@@ -53,7 +60,9 @@ spec:
         # Generic OpenAI-compatible provider routed through Bifrost
         HINDSIGHT_API_LLM_PROVIDER: "openai"
         HINDSIGHT_API_LLM_BASE_URL: "http://bifrost:8080/v1"
-        HINDSIGHT_API_LLM_MODEL: "gpt-4o-mini"
+        HINDSIGHT_API_LLM_MODEL: "openai/gpt-4.1-nano"
+        # Require Authorization: Bearer <HINDSIGHT_API_TENANT_API_KEY>
+        HINDSIGHT_API_TENANT_EXTENSION: "hindsight_api.extensions.builtin.tenant:ApiKeyTenantExtension"
       resources:
         limits:
           cpu: "2"
@@ -110,3 +119,29 @@ spec:
     # ── Workers ──────────────────────────────────────────────────────────────
     worker:
       enabled: false
+---
+# ─── API Ingress (Bearer API key auth handled by Hindsight) ──────────────────
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hindsight-api
+  namespace: default
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: "hindsight-api.${DOMAIN}"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: hindsight-api
+                port:
+                  number: 8888
+  tls:
+    - secretName: hindsight-api-tls
+      hosts:
+        - "hindsight-api.${DOMAIN}"

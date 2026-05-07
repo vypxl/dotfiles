@@ -357,7 +357,7 @@ resource "oci_core_instance" "armada" {
     vcpus         = 4
   }
   source_details {
-    boot_volume_size_in_gbs         = "100"
+    boot_volume_size_in_gbs         = "153"
     boot_volume_vpus_per_gb         = "10"
     is_preserve_boot_volume_enabled = false
     kms_key_id                      = null

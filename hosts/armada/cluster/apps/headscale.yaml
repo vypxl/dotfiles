@@ -103,7 +103,7 @@ spec:
               cpu: 500m
             requests:
               memory: 128Mi
-              cpu: 50m
+              cpu: 10m
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true

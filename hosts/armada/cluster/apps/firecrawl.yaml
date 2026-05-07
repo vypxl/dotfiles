@@ -154,7 +154,7 @@ spec:
               protocol: TCP
           resources:
             requests:
-              cpu: 25m
+              cpu: 10m
               memory: 64Mi
             limits:
               cpu: 250m
@@ -319,7 +319,7 @@ spec:
               mountPath: /var/lib/postgresql/data
           resources:
             requests:
-              cpu: 100m
+              cpu: 20m
               memory: 256Mi
             limits:
               cpu: "1"
@@ -411,7 +411,7 @@ spec:
               mountPath: /dev/shm
           resources:
             requests:
-              cpu: 100m
+              cpu: 30m
               memory: 512Mi
             limits:
               cpu: "1"
@@ -496,7 +496,7 @@ spec:
               protocol: TCP
           resources:
             requests:
-              cpu: 250m
+              cpu: 25m
               memory: 512Mi
             limits:
               cpu: "1"
@@ -578,7 +578,7 @@ spec:
               protocol: TCP
           resources:
             requests:
-              cpu: 50m
+              cpu: 10m
               memory: 128Mi
             limits:
               cpu: 500m
@@ -648,7 +648,7 @@ spec:
               protocol: TCP
           resources:
             requests:
-              cpu: 100m
+              cpu: 25m
               memory: 384Mi
             limits:
               cpu: "1"
@@ -703,7 +703,7 @@ spec:
               value: "3004"
           resources:
             requests:
-              cpu: 100m
+              cpu: 25m
               memory: 384Mi
             limits:
               cpu: "1"
@@ -754,7 +754,7 @@ spec:
               protocol: TCP
           resources:
             requests:
-              cpu: 100m
+              cpu: 25m
               memory: 384Mi
             limits:
               cpu: "1"

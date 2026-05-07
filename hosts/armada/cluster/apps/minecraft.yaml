@@ -1,0 +1,105 @@
+# ─── Minecraft: Homestead Cozy ──────────────────────────────────────────────
+# Java Edition server using itzg/docker-minecraft-server through the itzg
+# Kubernetes Helm chart.
+#
+# Public server: minecraft.${DOMAIN}
+# Modpack:       Homestead - A Cozy Survival Experience
+#
+# Required secret:
+#   name: minecraft-curseforge
+#   key:  cf-api-key
+# 
+# Management
+#   rcon can be used via kubectl:
+#   
+#   kubectl exec -it statefulset/minecraft -- rcon-cli whitelist on
+#   kubectl exec -it statefulset/minecraft -- rcon-cli whitelist add PlayerName
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: itzg-minecraft
+  namespace: flux-system
+spec:
+  interval: 24h
+  url: https://itzg.github.io/minecraft-server-charts/
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: minecraft
+  namespace: default
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: minecraft
+      version: "5.1.2"
+      sourceRef:
+        kind: HelmRepository
+        name: itzg-minecraft
+        namespace: flux-system
+
+  values:
+    fullnameOverride: minecraft
+    replicaCount: 1
+    strategyType: RollingUpdate
+
+    image:
+      repository: itzg/minecraft-server
+      tag: java21
+      pullPolicy: Always
+
+    workloadAsStatefulSet: true
+
+    resources:
+      requests:
+        cpu: "2"
+        memory: 4Gi
+      limits:
+        cpu: "4"
+        memory: 8Gi
+
+    startupProbe:
+      enabled: true
+      failureThreshold: 90
+      periodSeconds: 10
+    readinessProbe:
+      initialDelaySeconds: 120
+      periodSeconds: 10
+      failureThreshold: 12
+    livenessProbe:
+      initialDelaySeconds: 300
+      periodSeconds: 30
+      failureThreshold: 6
+
+    minecraftServer:
+      eula: "TRUE"
+      type: AUTO_CURSEFORGE
+      version: "1.20.1"
+      memory: 8G
+      difficulty: easy
+      gameMode: survival
+      motd: "Homestead"
+      maxPlayers: 10
+      viewDistance: 10
+      serviceType: LoadBalancer
+      servicePort: 25565
+      rcon:
+        enabled: true
+
+      autoCurseForge:
+        apiKey:
+          existingSecret: minecraft-curseforge
+          secretKey: cf-api-key
+        slug: homestead-cozy
+        parallelDownloads: 8
+
+    extraEnv:
+      SIMULATION_DISTANCE: "6"
+
+    persistence:
+      dataDir:
+        enabled: true
+        Size: 40Gi
+        accessModes:
+          - ReadWriteOnce

@@ -1,6 +1,8 @@
 # ─── Homepage Dashboard ──────────────────────────────────────────────────────
 # A modern dashboard for the cluster. Services are auto-discovered via
-# Kubernetes annotations (gethomepage.dev/*) on Service resources.
+# Kubernetes annotations (gethomepage.dev/*) on Ingress, Traefik IngressRoute,
+# or Gateway API HTTPRoute resources. If an app does not have a real route,
+# add it explicitly to the services.yaml setting in this file instead.
 # Visit https://home.lab.vypxl.io (gated behind Tinyauth passkey login)
 
 # ─── RBAC ─────────────────────────────────────────────────────────────────────
@@ -97,7 +99,12 @@ data:
           cpu: true
           memory: true
           showLabel: true
-  services.yaml: ""
+  services.yaml: |
+    - Games:
+        - Minecraft:
+            icon: minecraft
+            href: "minecraft://minecraft.${DOMAIN}"
+            description: Minecraft server
   bookmarks.yaml: ""
   docker.yaml: ""
   proxmox.yaml: ""

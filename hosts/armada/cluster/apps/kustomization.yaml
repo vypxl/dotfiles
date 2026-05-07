@@ -6,6 +6,7 @@ resources:
   - firecrawl.yaml
   - hindsight.yaml
   - openwebui.yaml
+  - minecraft.yaml
   - postgres.yaml
   - headscale.yaml
   - homepage.yaml

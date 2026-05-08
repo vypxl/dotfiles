@@ -7,6 +7,9 @@
 }:
 with pkgs;
 let
+  npx-shim = { package, name }: pkgs.writeShellScriptBin name ''
+    exec npx -y ${package} "$@"
+  '';
   base = [
     just
     inetutils
@@ -60,7 +63,6 @@ let
     google-cloud-sdk
   ];
   util = [
-    claude-code
     imagemagick
     opencode
     pandoc
@@ -69,6 +71,8 @@ let
     poppler-utils
     qmk
     unstable.aichat
+
+    (npx-shim { package = "@openai/codex"; name = "codex"; })
   ];
   graphical = [
     brave
@@ -136,7 +140,6 @@ let
   ];
   per-host = {
     zephyr = [
-      # omnix.default
       unstable.vault
       remmina
     ];

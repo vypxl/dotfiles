@@ -30,6 +30,7 @@ metadata:
   namespace: default
 spec:
   interval: 30m
+  timeout: 15m
   chart:
     spec:
       chart: hindsight

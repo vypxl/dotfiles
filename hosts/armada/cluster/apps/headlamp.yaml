@@ -24,7 +24,7 @@ metadata:
   name: headlamp
   namespace: default
 spec:
-  interval: 30m
+  interval: 24h
   timeout: 15m
   chart:
     spec:

@@ -26,7 +26,8 @@ metadata:
   name: postgres-operator
   namespace: postgres
 spec:
-  interval: 30m
+  interval: 24h
+  timeout: 15m
   chart:
     spec:
       chart: postgres-operator

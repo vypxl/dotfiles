@@ -29,7 +29,7 @@ metadata:
   name: minecraft
   namespace: default
 spec:
-  interval: 30m
+  interval: 24h
   timeout: 15m
   upgrade:
     force: true

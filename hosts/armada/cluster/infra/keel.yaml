@@ -18,7 +18,8 @@ metadata:
   name: keel
   namespace: keel
 spec:
-  interval: 30m
+  interval: 24h
+  timeout: 15m
   chart:
     spec:
       chart: keel

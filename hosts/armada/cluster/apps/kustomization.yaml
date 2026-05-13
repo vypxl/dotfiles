@@ -9,6 +9,7 @@ resources:
   - minecraft.yaml
   - postgres.yaml
   - headscale.yaml
+  - headlamp.yaml
   - homepage.yaml
   - secrets.yaml
   - whoami.yaml

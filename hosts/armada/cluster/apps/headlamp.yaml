@@ -1,0 +1,92 @@
+# ─── Headlamp ────────────────────────────────────────────────────────────────
+# Kubernetes dashboard with OIDC login through Pocket ID.
+#
+# Public UI:     https://headlamp.${DOMAIN}
+# OIDC provider: https://id.${DOMAIN}
+# Redirect URI:  https://headlamp.${DOMAIN}/oidc-callback
+#
+# Required secret:
+#   Secret name: headlamp
+#   Key:         OIDC_CLIENT_SECRET
+#
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: headlamp
+  namespace: flux-system
+spec:
+  interval: 24h
+  url: https://kubernetes-sigs.github.io/headlamp/
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: headlamp
+  namespace: default
+spec:
+  interval: 30m
+  timeout: 15m
+  chart:
+    spec:
+      chart: headlamp
+      sourceRef:
+        kind: HelmRepository
+        name: headlamp
+        namespace: flux-system
+  values:
+    fullnameOverride: headlamp
+    replicaCount: 1
+
+    config:
+      inCluster: true
+      inClusterContextName: armada
+      enableHelm: true
+      oidc:
+        secret:
+          create: false
+        callbackURL: "https://headlamp.${DOMAIN}/oidc-callback"
+        usePKCE: true
+        externalSecret:
+          enabled: true
+          name: headlamp
+
+    env:
+      - name: OIDC_CLIENT_ID
+        value: 2caedea4-9cb5-4f97-bfa5-215b04542a3c
+      - name: OIDC_ISSUER_URL
+        value: "https://id.${DOMAIN}"
+      - name: OIDC_SCOPES
+        value: "openid profile email groups"
+      - name: OIDC_CALLBACK_URL
+        value: "https://headlamp.${DOMAIN}/oidc-callback"
+      - name: OIDC_USE_PKCE
+        value: "true"
+
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 10m
+        memory: 128Mi
+
+    ingress:
+      enabled: true
+      ingressClassName: traefik
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt
+        gethomepage.dev/enabled: "true"
+        gethomepage.dev/group: "Cluster"
+        gethomepage.dev/name: "Headlamp"
+        gethomepage.dev/icon: "headlamp"
+        gethomepage.dev/href: "https://headlamp.${DOMAIN}"
+        gethomepage.dev/description: "Kubernetes dashboard"
+      hosts:
+        - host: "headlamp.${DOMAIN}"
+          paths:
+            - path: /
+              type: Prefix
+      tls:
+        - secretName: headlamp-tls
+          hosts:
+            - "headlamp.${DOMAIN}"

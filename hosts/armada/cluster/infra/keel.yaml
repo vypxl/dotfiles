@@ -3,6 +3,39 @@ kind: Namespace
 metadata:
   name: keel
 ---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-traefik-to-keel
+  namespace: keel
+spec:
+  podSelector:
+    matchLabels:
+      app: keel
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: traefik
+      ports:
+        - protocol: TCP
+          port: 9300
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: keel-basic-auth-header
+  namespace: keel
+spec:
+  headers:
+    customRequestHeaders:
+      Authorization: "Basic YWRtaW46YWRtaW4="
+---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
@@ -45,14 +78,19 @@ spec:
       externalPort: 9300
 
     secret:
-      create: false
+      create: true
+
+    basicauth:
+      enabled: true
+      user: admin
+      password: admin
 
     ingress:
       enabled: true
       ingressClassName: traefik
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt
-        traefik.ingress.kubernetes.io/router.middlewares: auth-tinyauth@kubernetescrd
+        traefik.ingress.kubernetes.io/router.middlewares: auth-tinyauth@kubernetescrd,keel-keel-basic-auth-header@kubernetescrd
         gethomepage.dev/enabled: "true"
         gethomepage.dev/group: "Infra"
         gethomepage.dev/name: "Keel"

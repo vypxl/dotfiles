@@ -29,6 +29,9 @@ spec:
   prune: true # delete resources removed from git
   wait: true
   timeout: 5m
+  postBuild:
+    substitute:
+      DOMAIN: "lab.vypxl.io"
 
 ---
 # This tells Flux to apply everything in cluster/apps/

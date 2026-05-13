@@ -7,6 +7,11 @@ metadata:
   namespace: auth
   labels:
     app.kubernetes.io/name: lldap
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/match-tag: "true"
+    keel.sh/pollSchedule: "@every 6h"
 spec:
   serviceName: lldap
   replicas: 1
@@ -20,7 +25,8 @@ spec:
     spec:
       containers:
         - name: lldap
-          image: lldap/lldap:v0.6.1
+          image: lldap/lldap:latest
+          imagePullPolicy: Always
           ports:
             - name: ldap
               containerPort: 3890

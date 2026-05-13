@@ -25,7 +25,6 @@ spec:
   chart:
     spec:
       chart: open-webui
-      version: "14.2.0"
       sourceRef:
         kind: HelmRepository
         name: open-webui

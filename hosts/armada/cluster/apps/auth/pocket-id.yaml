@@ -7,6 +7,11 @@ metadata:
   namespace: auth
   labels:
     app.kubernetes.io/name: pocket-id
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/match-tag: "true"
+    keel.sh/pollSchedule: "@every 6h"
 spec:
   serviceName: pocket-id
   replicas: 1
@@ -20,7 +25,8 @@ spec:
     spec:
       containers:
         - name: pocket-id
-          image: ghcr.io/pocket-id/pocket-id:v2.6.2
+          image: ghcr.io/pocket-id/pocket-id:latest
+          imagePullPolicy: Always
           ports:
             - name: http
               containerPort: 1411

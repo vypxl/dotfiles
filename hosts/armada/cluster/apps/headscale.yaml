@@ -61,6 +61,11 @@ metadata:
   namespace: default
   labels:
     app.kubernetes.io/name: headscale
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/match-tag: "true"
+    keel.sh/pollSchedule: "@every 6h"
 spec:
   serviceName: headscale
   replicas: 1
@@ -76,7 +81,8 @@ spec:
         fsGroup: 1000
       containers:
         - name: headscale
-          image: docker.io/headscale/headscale:v0.28.0
+          image: docker.io/headscale/headscale:latest
+          imagePullPolicy: Always
           args:
             - serve
           envFrom:

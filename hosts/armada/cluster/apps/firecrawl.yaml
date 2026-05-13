@@ -128,6 +128,11 @@ metadata:
   labels:
     app.kubernetes.io/name: firecrawl
     app.kubernetes.io/component: redis
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/match-tag: "true"
+    keel.sh/pollSchedule: "@every 6h"
 spec:
   replicas: 1
   selector:
@@ -143,7 +148,7 @@ spec:
       containers:
         - name: redis
           image: redis:alpine
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           args:
             - redis-server
             - --bind
@@ -194,6 +199,11 @@ metadata:
   labels:
     app.kubernetes.io/name: firecrawl
     app.kubernetes.io/component: rabbitmq
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/match-tag: "true"
+    keel.sh/pollSchedule: "@every 6h"
 spec:
   replicas: 1
   selector:
@@ -209,7 +219,7 @@ spec:
       containers:
         - name: rabbitmq
           image: rabbitmq:3-management
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - name: amqp
               containerPort: 5672
@@ -379,6 +389,11 @@ metadata:
   labels:
     app.kubernetes.io/name: firecrawl
     app.kubernetes.io/component: playwright
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/match-tag: "true"
+    keel.sh/pollSchedule: "@every 6h"
 spec:
   replicas: 1
   selector:
@@ -460,6 +475,11 @@ metadata:
   labels:
     app.kubernetes.io/name: firecrawl
     app.kubernetes.io/component: api
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/match-tag: "true"
+    keel.sh/pollSchedule: "@every 6h"
 spec:
   replicas: 1
   selector:
@@ -544,6 +564,11 @@ metadata:
   labels:
     app.kubernetes.io/name: firecrawl
     app.kubernetes.io/component: mcp
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/match-tag: "true"
+    keel.sh/pollSchedule: "@every 6h"
 spec:
   replicas: 1
   selector:
@@ -559,7 +584,7 @@ spec:
       containers:
         - name: mcp
           image: node:22-alpine
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           command:
             - npx
           args:
@@ -610,6 +635,11 @@ metadata:
   labels:
     app.kubernetes.io/name: firecrawl
     app.kubernetes.io/component: worker
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/match-tag: "true"
+    keel.sh/pollSchedule: "@every 6h"
 spec:
   replicas: 1
   selector:
@@ -669,6 +699,11 @@ metadata:
   labels:
     app.kubernetes.io/name: firecrawl
     app.kubernetes.io/component: extract-worker
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/match-tag: "true"
+    keel.sh/pollSchedule: "@every 6h"
 spec:
   replicas: 1
   selector:
@@ -718,6 +753,11 @@ metadata:
   labels:
     app.kubernetes.io/name: firecrawl
     app.kubernetes.io/component: nuq-worker
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/match-tag: "true"
+    keel.sh/pollSchedule: "@every 6h"
 spec:
   replicas: 1
   selector:

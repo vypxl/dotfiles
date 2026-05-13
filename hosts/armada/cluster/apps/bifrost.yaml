@@ -16,6 +16,11 @@ metadata:
   namespace: default
   labels:
     app.kubernetes.io/name: bifrost
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/match-tag: "true"
+    keel.sh/pollSchedule: "@every 6h"
 spec:
   serviceName: bifrost
   replicas: 1

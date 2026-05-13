@@ -4,3 +4,4 @@ resources:
   - cert-manager.yaml
   - keel.yaml
   - postgres-operator.yaml
+  - secrets.yaml

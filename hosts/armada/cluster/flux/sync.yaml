@@ -29,6 +29,10 @@ spec:
   prune: true # delete resources removed from git
   wait: true
   timeout: 5m
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   postBuild:
     substitute:
       DOMAIN: "lab.vypxl.io"

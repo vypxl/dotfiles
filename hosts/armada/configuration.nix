@@ -18,6 +18,11 @@
   my.boot.splash = false;
   my.k3s = {
     enable = true;
+    oidc = {
+      enable = true;
+      issuerUrl = "https://id.lab.vypxl.io";
+      clientId = "kubernetes";
+    };
     flux = {
       enable = true;
       tokenFile = config.sops.secrets.flux-github-token.path;

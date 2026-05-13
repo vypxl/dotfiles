@@ -21,6 +21,38 @@ in
       description = "Whether to open the Kubernetes API port (6443) in the firewall.";
     };
 
+    oidc = {
+      enable = mkEnableOption "OIDC authentication for the Kubernetes API server";
+      issuerUrl = mkOption {
+        type = types.str;
+        description = "OIDC issuer URL trusted by the Kubernetes API server.";
+      };
+      clientId = mkOption {
+        type = types.str;
+        description = "OIDC client ID expected in token audience claims.";
+      };
+      usernameClaim = mkOption {
+        type = types.str;
+        default = "email";
+        description = "OIDC claim to use as the Kubernetes username.";
+      };
+      usernamePrefix = mkOption {
+        type = types.str;
+        default = "oidc:";
+        description = "Prefix added to OIDC usernames.";
+      };
+      groupsClaim = mkOption {
+        type = types.str;
+        default = "groups";
+        description = "OIDC claim to use as Kubernetes groups.";
+      };
+      groupsPrefix = mkOption {
+        type = types.str;
+        default = "oidc:";
+        description = "Prefix added to OIDC groups.";
+      };
+    };
+
     flux = {
       enable = mkEnableOption "Flux GitOps bootstrap";
       repo = mkOption {
@@ -58,7 +90,18 @@ in
         "--write-kubeconfig-mode=644" # let non-root users read kubeconfig
         "--tls-san=${cfg.domain}" # allow remote kubectl via domain name
         "--tls-san=${config.networking.hostName}"
-      ];
+      ]
+      + lib.optionalString cfg.oidc.enable (
+        " "
+        + toString [
+          "--kube-apiserver-arg=oidc-issuer-url=${cfg.oidc.issuerUrl}"
+          "--kube-apiserver-arg=oidc-client-id=${cfg.oidc.clientId}"
+          "--kube-apiserver-arg=oidc-username-claim=${cfg.oidc.usernameClaim}"
+          "--kube-apiserver-arg=oidc-username-prefix=${cfg.oidc.usernamePrefix}"
+          "--kube-apiserver-arg=oidc-groups-claim=${cfg.oidc.groupsClaim}"
+          "--kube-apiserver-arg=oidc-groups-prefix=${cfg.oidc.groupsPrefix}"
+        ]
+      );
     };
 
     # ── Networking ──────────────────────────────────────────────

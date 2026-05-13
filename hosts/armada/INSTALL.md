@@ -27,3 +27,18 @@ In the Pocket ID admin UI:
    - **Allowed User Groups:** `headscale`
 4. Save, then generate a **Client Secret**.
 5. Save the **Client Secret** as `OIDC_CLIENT_SECRET` in `sops hosts/armada/cluster/apps/secrets.yaml`.
+
+## Headlamp & Pocket ID
+
+In the Pocket ID admin UI:
+
+1. Create a `admin` group and add users allowed to administer the cluster.
+2. Go to **OIDC Clients** and create or edit the `Kubernetes / Headlamp` client.
+3. Use:
+   - **Name:** `Kubernetes / Headlamp`
+   - **Callback URL:** `https://headlamp.lab.vypxl.io/oidc-callback`
+   - **PKCE:** enabled
+   - **Allowed User Groups:** `admin`
+   - **Client ID:** `kubernetes`
+4. Save, then generate a **Client Secret**.
+5. Save the **Client Secret** as `OIDC_CLIENT_SECRET` in `sops hosts/armada/cluster/apps/secrets.yaml`.

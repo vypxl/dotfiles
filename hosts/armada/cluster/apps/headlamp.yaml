@@ -52,7 +52,7 @@ spec:
 
     env:
       - name: OIDC_CLIENT_ID
-        value: 2caedea4-9cb5-4f97-bfa5-215b04542a3c
+        value: kubernetes
       - name: OIDC_ISSUER_URL
         value: "https://id.${DOMAIN}"
       - name: OIDC_SCOPES

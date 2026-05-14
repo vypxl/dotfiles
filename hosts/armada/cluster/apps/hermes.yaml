@@ -1,0 +1,133 @@
+# ─── Hermes Agent ────────────────────────────────────────────────────────────
+# Agent gateway and web dashboard backed by Bifrost's OpenAI-compatible API.
+#
+# Public UI:  https://hermes.${DOMAIN}
+# AI backend: configure manually in the dashboard after first boot.
+#
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: hermes
+  namespace: default
+  labels:
+    app.kubernetes.io/name: hermes
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/match-tag: "true"
+    keel.sh/pollSchedule: "@every 6h"
+spec:
+  serviceName: hermes
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: hermes
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: hermes
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: hermes
+          image: nousresearch/hermes-agent:latest
+          imagePullPolicy: Always
+          args:
+            - gateway
+            - run
+          env:
+            - name: HERMES_DASHBOARD
+              value: "1"
+            - name: HERMES_DASHBOARD_HOST
+              value: "0.0.0.0"
+            - name: HERMES_DASHBOARD_PORT
+              value: "9119"
+            - name: API_SERVER_ENABLED
+              value: "false"
+          envFrom:
+            - secretRef:
+                name: hermes
+          ports:
+            - name: dashboard
+              containerPort: 9119
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: /opt/data
+          resources:
+            limits:
+              cpu: "2"
+              memory: 4Gi
+            requests:
+              cpu: 100m
+              memory: 1Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+          startupProbe:
+            tcpSocket:
+              port: dashboard
+            failureThreshold: 30
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: dashboard
+            periodSeconds: 30
+          readinessProbe:
+            tcpSocket:
+              port: dashboard
+            periodSeconds: 10
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 5Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hermes
+  namespace: default
+  labels:
+    app.kubernetes.io/name: hermes
+spec:
+  selector:
+    app.kubernetes.io/name: hermes
+  ports:
+    - name: dashboard
+      port: 9119
+      targetPort: dashboard
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hermes
+  namespace: default
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    traefik.ingress.kubernetes.io/router.middlewares: auth-tinyauth@kubernetescrd
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: "AI"
+    gethomepage.dev/name: "Hermes"
+    gethomepage.dev/icon: "mdi-robot"
+    gethomepage.dev/href: "https://hermes.${DOMAIN}"
+    gethomepage.dev/description: "Agent Dashboard"
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: "hermes.${DOMAIN}"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: hermes
+                port:
+                  number: 9119
+  tls:
+    - secretName: hermes-tls
+      hosts:
+        - "hermes.${DOMAIN}"

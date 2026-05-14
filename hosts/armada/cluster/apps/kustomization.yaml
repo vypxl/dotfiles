@@ -10,6 +10,7 @@ resources:
   - postgres.yaml
   - headscale.yaml
   - headlamp.yaml
+  - hermes.yaml
   - homepage.yaml
   - secrets.yaml
   - whoami.yaml

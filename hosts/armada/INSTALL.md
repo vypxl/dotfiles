@@ -42,3 +42,4 @@ In the Pocket ID admin UI:
    - **Client ID:** `kubernetes`
 4. Save, then generate a **Client Secret**.
 5. Save the **Client Secret** as `OIDC_CLIENT_SECRET` in `sops hosts/armada/cluster/apps/secrets.yaml`.
+6. Make sure every user in the `admin` group has their **email marked as verified** in Pocket ID.

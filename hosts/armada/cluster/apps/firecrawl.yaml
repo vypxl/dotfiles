@@ -119,7 +119,7 @@ data:
   EXTRACT_WORKER_PORT: "3004"
   NUQ_WORKER_PORT: "3006"
   POSTGRES_USER: "firecrawl"
-  POSTGRES_DB: "firecrawl"
+  POSTGRES_DB: "postgres"
   POSTGRES_HOST: "firecrawl-nuq-postgres"
   POSTGRES_PORT: "5432"
   REDIS_URL: "redis://firecrawl-redis:6379"
@@ -335,7 +335,7 @@ spec:
             - name: POSTGRES_USER
               value: firecrawl
             - name: POSTGRES_DB
-              value: firecrawl
+              value: postgres
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:

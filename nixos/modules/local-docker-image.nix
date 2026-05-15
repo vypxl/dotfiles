@@ -229,6 +229,7 @@ let
 
         podman build --pull=always -t "$image" ${dockerfileArg} "$build_context"
         ${lib.optionalString image.importToK3s ''
+          rm -f "$image_tar"
           podman save "$image" -o "$image_tar"
           ${k3sCtr} import "$image_tar"
           rm -f "$image_tar"

@@ -48,10 +48,10 @@ spec:
               mountPath: /app/data
           resources:
             limits:
-              memory: 512Mi
+              memory: 1536Mi
               cpu: "1"
             requests:
-              memory: 128Mi
+              memory: 768Mi
               cpu: 25m
           securityContext:
             allowPrivilegeEscalation: false

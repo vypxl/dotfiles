@@ -11,11 +11,6 @@ metadata:
   namespace: default
   labels:
     app.kubernetes.io/name: hermes
-  annotations:
-    keel.sh/policy: force
-    keel.sh/trigger: poll
-    keel.sh/match-tag: "true"
-    keel.sh/pollSchedule: "@every 6h"
 spec:
   serviceName: hermes
   replicas: 1
@@ -30,8 +25,8 @@ spec:
       automountServiceAccountToken: false
       containers:
         - name: hermes
-          image: nousresearch/hermes-agent:latest
-          imagePullPolicy: Always
+          image: localhost/hermes-agent:latest
+          imagePullPolicy: Never
           args:
             - gateway
             - run

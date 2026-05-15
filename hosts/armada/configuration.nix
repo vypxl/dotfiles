@@ -67,9 +67,32 @@
     branch = "main";
     context = "apps/nuq-postgres";
     image = "localhost/nuq-postgres:latest";
-    stateDir = "/var/lib/firecrawl-nuq-postgres";
     schedule = "daily";
     importToK3s = true;
+  };
+
+  my.localDockerImages.images.hermes = {
+    image = "localhost/hermes-agent:latest";
+    dockerfileText = ''
+      FROM docker.io/nousresearch/hermes-agent:latest
+
+      USER root
+      RUN apt-get update \
+        && apt-get install -y --no-install-recommends vim \
+        && rm -rf /var/lib/apt/lists/*
+      RUN echo '/opt/hermes/.venv/bin/python3 /opt/hermes/.venv/bin/hermes $@' > /usr/local/bin/hermes \
+        && chmod +x /usr/local/bin/hermes
+      RUN chsh -s /bin/bash hermes
+
+      USER hermes
+      RUN uv pip install hermes-agent[hindsight]
+    '';
+    baseImage = "docker.io/nousresearch/hermes-agent:latest";
+    schedule = "daily";
+    importToK3s = true;
+    restartKube = [
+      { resource = "statefulset/hermes"; }
+    ];
   };
 
   nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";

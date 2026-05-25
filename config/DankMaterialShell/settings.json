@@ -460,12 +460,17 @@
         },
         {
           "id": "focusedWindow",
-          "enabled": true
+          "enabled": false,
+          "focusedWindowCompactMode": true
         }
       ],
       "centerWidgets": [
         "music",
-        "clock",
+        {
+          "id": "clock",
+          "enabled": true,
+          "clockCompactMode": false
+        },
         "weather",
         {
           "id": "privacyIndicator",

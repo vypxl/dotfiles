@@ -35,6 +35,8 @@ in
         nixi = "nix profile install nixpkgs#";
         nixr = "nix run nixpkgs#";
         venv = "source .venv/bin/activate.fish";
+
+        cu = "cursor-agent";
       };
       shellAliases = {
         ls = "eza --git";

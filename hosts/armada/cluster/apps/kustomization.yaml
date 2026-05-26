@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - auth/
   - bifrost.yaml
+  - composer-api.yaml
   - firecrawl.yaml
   - hindsight.yaml
   - openwebui.yaml

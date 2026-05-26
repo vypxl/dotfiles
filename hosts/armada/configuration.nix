@@ -62,6 +62,38 @@
     ripgrep
   ];
 
+  my.localDockerImages.images.composer-api-responses-proxy = {
+    repo = "https://github.com/standardagents/composer-api.git";
+    branch = "main";
+    image = "localhost/composer-api-responses-proxy:latest";
+    dockerfileText = ''
+      FROM node:22-alpine
+
+      WORKDIR /app
+
+      ENV NODE_ENV=production
+      ENV CURSOR_SDK_PROXY_HOST=0.0.0.0
+      ENV CURSOR_SDK_PROXY_PORT=8791
+
+      COPY package.json package-lock.json ./
+      RUN npm ci --omit=dev
+
+      COPY scripts/cursor-sdk-responses-proxy.mjs ./scripts/cursor-sdk-responses-proxy.mjs
+
+      EXPOSE 8791
+
+      USER node
+
+      CMD ["node", "scripts/cursor-sdk-responses-proxy.mjs"]
+    '';
+    baseImage = "docker.io/library/node:22-alpine";
+    schedule = "daily";
+    importToK3s = true;
+    restartKube = [
+      { resource = "statefulset/composer-api"; }
+    ];
+  };
+
   my.localDockerImages.images.firecrawl-nuq = {
     repo = "https://github.com/firecrawl/firecrawl.git";
     branch = "main";

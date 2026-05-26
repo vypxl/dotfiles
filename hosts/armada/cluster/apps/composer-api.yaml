@@ -1,0 +1,94 @@
+# ─── Composer API (Responses proxy) ─────────────────────────────────────────
+# OpenAI-compatible Responses API backed by Cursor Composer (Node proxy).
+# Upstream: https://github.com/standardagents/composer-api
+#
+# Cluster URL: http://composer-api.default.svc.cluster.local:8791/sdk/v1
+# Auth: Bearer token = Cursor user API key (per request; not stored in-cluster)
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: composer-api
+  namespace: default
+  labels:
+    app.kubernetes.io/name: composer-api
+spec:
+  serviceName: composer-api
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: composer-api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: composer-api
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: responses-proxy
+          image: localhost/composer-api-responses-proxy:latest
+          imagePullPolicy: Never
+          env:
+            - name: CURSOR_SDK_PROXY_HOST
+              value: "0.0.0.0"
+            - name: CURSOR_SDK_PROXY_PORT
+              value: "8791"
+            - name: CURSOR_SDK_PROXY_STATE_ROOT
+              value: "/data/state"
+            - name: CURSOR_SDK_PROXY_CWD
+              value: "/data/workspace"
+          ports:
+            - name: http
+              containerPort: 8791
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1Gi
+            requests:
+              cpu: 50m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          startupProbe:
+            tcpSocket:
+              port: http
+            failureThreshold: 30
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 30
+          readinessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 10
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: composer-api
+  namespace: default
+  labels:
+    app.kubernetes.io/name: composer-api
+spec:
+  selector:
+    app.kubernetes.io/name: composer-api
+  ports:
+    - name: http
+      port: 8791
+      targetPort: http

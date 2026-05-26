@@ -372,7 +372,7 @@ spec:
                 - -U
                 - firecrawl
                 - -d
-                - firecrawl
+                - postgres
             initialDelaySeconds: 30
             periodSeconds: 30
   volumeClaimTemplates:

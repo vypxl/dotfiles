@@ -126,6 +126,113 @@ let
     exec ${pkgs.nodejs}/bin/npx -y @upstash/context7-mcp --api-key "$API_KEY"
   '';
 
+  secret = pkgs.writeShellScriptBin "secret" ''
+    #!${pkgs.bash}/bin/bash
+    set -euo pipefail
+
+    SECRET_TOOL=${pkgs.libsecret}/bin/secret-tool
+    ZENITY=${pkgs.zenity}/bin/zenity
+    SERVICE="secret-cli"
+
+    usage() {
+      cat <<-EOF
+    secret: a simple secret cli based on secret-tool
+
+    Usage:
+      secret set <key>    # read secret from stdin
+      secret get <key>    # retrieve secret value
+      secret init <key>   # get secret and set if not already set
+      secret rm <keys>    # remove secret from keyring
+      secret ls           # list all secrets (keys only)
+
+      secret wrap <keys> <cmd> [args]  # export the given secrets as env vars and run the command
+
+    Notes:
+      - commands that accept multiple keys (rm, wrap) accept a comma separated list of keys
+    EOF
+      exit 2
+    }
+
+    cmd="''${1:-}"
+    key="''${2:-}"
+
+    [[ -n "$cmd" ]] || usage
+
+    store() {
+      key="$1"
+      "$SECRET_TOOL" store --label="secret $key" service "$SERVICE" account "$key"
+    }
+
+    lookup() {
+      key="$1"
+      "$SECRET_TOOL" lookup service "$SERVICE" account "$key"
+    }
+
+    # like store, but falls back to zenity if stdin is not a tty
+    init() {
+      key="$1"
+      # if stdin is a tty, prompt for the secret
+      # otherwise, prompt using zenity
+      if [[ -t 0 ]]; then
+        echo "Secret '$key' is not set, enter it now:" >&2
+        store "$key"
+      else
+        "$ZENITY" --password --title="Secret '$key'" 2>/dev/null | store "$key"
+      fi
+    }
+
+    split() {
+      local input="$1"
+      local -n dest="$2"
+      IFS=',' read -ra dest <<< "$input"
+    }
+
+    case "$cmd" in
+      set|store|s)
+        [[ -n "$key" ]] || usage
+        store "$key"
+        ;;
+      get|lookup|l|g)
+        [[ -n "$key" ]] || usage
+        lookup "$key"
+        ;;
+      init)
+        [[ -n "$key" ]] || usage
+        sec=$(lookup "$key" || true)
+        if [[ -n "$sec" ]]; then
+          echo "$sec"
+        else
+          init "$key"
+          lookup "$key"
+        fi
+        ;;
+      delete|drop|rm)
+        [[ -n "$key" ]] || usage
+        split "$key" keys
+        for k in "''${keys[@]}"; do
+          "$SECRET_TOOL" clear service "$SERVICE" account "$k"
+        done
+        ;;
+      wrap)
+        [[ -n "$key" ]] || usage
+        [[ -n "$3" ]] || usage
+        split "$key" keys
+        for k in "''${keys[@]}"; do
+          lookup "$k" >/dev/null 2>&1 || init "$k"
+          export "$k"=$(lookup "$k")
+        done
+        exec "$3" "''${@:4}"
+        ;;
+      list|ls)
+        "$SECRET_TOOL" search service "$SERVICE" --all 2>&1 | awk '/^attribute\.account/ {print $3}'
+        ;;
+      *)
+        echo "unknown command: $cmd" >&2
+        usage
+        ;;
+    esac
+  '';
+
   git-compact-status = pkgs.writeShellScriptBin "git-compact-status" ''
     if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
       exit 0
@@ -170,6 +277,7 @@ in
       hypr_suspend
 
       git-compact-status
+      secret
       context7-mcp
     ];
   };

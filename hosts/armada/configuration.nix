@@ -36,6 +36,8 @@
     secrets.flux-github-token = { };
   };
 
+  nix.settings.access-tokens = "github.com=${config.sops.secrets.flux-github-token.path}";
+
   networking = {
     hostName = "armada";
     domain = "lab.vypxl.io";

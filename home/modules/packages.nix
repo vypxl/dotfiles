@@ -72,7 +72,7 @@ let
     qmk
     unstable.aichat
 
-    cursor-cli
+    unstable.cursor-cli
     (npx-shim { package = "@openai/codex"; name = "codex"; })
     (npx-shim { package = "@schpet/linear-cli"; name = "linear"; })
   ];

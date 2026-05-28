@@ -34,9 +34,20 @@
     defaultSopsFile = ./secrets.yaml;
     age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
     secrets.flux-github-token = { };
+
+    # nix CLI parses /etc/nix/nix.conf as the invoking user; !include fails silently
+    # if the file is root-only (0400). Wheel must be able to read this fragment.
+    templates."nix-access-tokens.conf" = {
+      content = "access-tokens = github.com=${config.sops.placeholder."flux-github-token"}\n";
+      mode = "0440";
+      group = config.users.groups.wheel.name;
+      restartUnits = [ "nix-daemon.service" ];
+    };
   };
 
-  nix.settings.access-tokens = "github.com=${config.sops.secrets.flux-github-token.path}";
+  nix.extraOptions = ''
+    !include ${config.sops.templates."nix-access-tokens.conf".path}
+  '';
 
   networking = {
     hostName = "armada";

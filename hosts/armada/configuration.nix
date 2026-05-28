@@ -132,9 +132,7 @@
       RUN chsh -s /bin/bash hermes
 
       WORKDIR /opt/hermes
-      # Install optional Python extra into the baked venv; keep .venv
-      # owned by hermes so lazy_deps and supervised processes can write.
-      RUN uv pip install --no-cache-dir '.[hindsight]' \
+      RUN uv pip install --no-cache-dir -e '.[hindsight]' \
         && chown -R hermes:hermes /opt/hermes/.venv
     '';
     baseImage = "docker.io/nousresearch/hermes-agent:latest";

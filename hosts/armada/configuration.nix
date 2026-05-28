@@ -110,16 +110,21 @@
     dockerfileText = ''
       FROM docker.io/nousresearch/hermes-agent:latest
 
+      # s6-overlay images must finish as root: /init chowns /opt/data and
+      # supervised services drop to the hermes user via s6-setuidgid.
+      # Do not end with USER hermes — that breaks K8s pods with
+      # allowPrivilegeEscalation: false (see upstream Dockerfile comments).
       USER root
       RUN apt-get update \
         && apt-get install -y --no-install-recommends vim \
         && rm -rf /var/lib/apt/lists/*
-      RUN echo '/opt/hermes/.venv/bin/python3 /opt/hermes/.venv/bin/hermes $@' > /usr/local/bin/hermes \
-        && chmod +x /usr/local/bin/hermes
       RUN chsh -s /bin/bash hermes
 
-      USER hermes
-      RUN uv pip install hermes-agent[hindsight]
+      WORKDIR /opt/hermes
+      # Install optional Python extra into the baked venv; keep .venv
+      # owned by hermes so lazy_deps and supervised processes can write.
+      RUN uv pip install --no-cache-dir '.[hindsight]' \
+        && chown -R hermes:hermes /opt/hermes/.venv
     '';
     baseImage = "docker.io/nousresearch/hermes-agent:latest";
     schedule = "daily";

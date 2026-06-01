@@ -37,6 +37,8 @@ spec:
               value: "0.0.0.0"
             - name: HERMES_DASHBOARD_PORT
               value: "9119"
+            - name: HERMES_DASHBOARD_INSECURE
+              value: "1"
             - name: API_SERVER_ENABLED
               value: "false"
           envFrom:

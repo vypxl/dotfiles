@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 {
   imports = [
     ./hardware-configuration.nix
@@ -6,14 +6,13 @@
     # TODO: move to NixOS official repo when merged
     "${
       builtins.fetchGit {
-        url = "https://github.com/cgrohs27/nixos-hardware.git";
-        rev = "64bb927d282e67f9b37be2b5c1bd8ce3b73178d2";
+        url = "https://github.com/vypxl/nixos-hardware.git";
+        rev = "199d1f7a8d9fd55f26dc9659549a8c0a8f5a8a81";
       }
     }/asus/zephyrus/ga403"
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_6_18;
-  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   my.bundle.desktop.enable = true;
 

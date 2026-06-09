@@ -26,7 +26,6 @@ in
       enable = true;
       banner = "Welcome to NixOS!";
       autoSuspend = false;
-      wayland = true;
     };
 
     # see https://nixos.wiki/wiki/GNOME#automatic-login

@@ -154,7 +154,7 @@ let
       };
     };
 
-    gtk = {
+    gtk.gtk4 = {
       enable = true;
       theme = {
         name = "Adwaita-dark";

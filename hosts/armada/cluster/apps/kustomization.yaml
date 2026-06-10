@@ -4,15 +4,15 @@ resources:
   - actually-bot.yaml
   - auth/
   - bifrost.yaml
-  - composer-api.yaml
-  - firecrawl.yaml
+  # - composer-api.yaml
+  # - firecrawl.yaml
   - hindsight.yaml
-  - openwebui.yaml
+  # - openwebui.yaml
   - minecraft.yaml
   - postgres.yaml
   - headscale.yaml
-  - headlamp.yaml
+  # - headlamp.yaml
   - hermes.yaml
   - homepage.yaml
   - secrets.yaml
-  - whoami.yaml
+  # - whoami.yaml

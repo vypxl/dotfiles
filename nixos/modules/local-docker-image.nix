@@ -194,7 +194,7 @@ let
       ];
 
       serviceConfig = {
-        Type = "oneshot";
+        Type = "simple";
         WorkingDirectory = stateDir;
       };
 

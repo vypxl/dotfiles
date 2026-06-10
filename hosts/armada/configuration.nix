@@ -6,7 +6,6 @@
 }:
 {
   imports = [
-    # ./services.nix
     ../../nixos
     ../../nixos/modules/oracle-cloud.nix
   ];
@@ -114,6 +113,18 @@
     image = "localhost/nuq-postgres:latest";
     schedule = "daily";
     importToK3s = true;
+  };
+
+  my.localDockerImages.images.actually-bot = {
+    repo = "https://github.com/vypxl/actually_bot.git";
+    repoTokenFile = config.sops.secrets.flux-github-token.path;
+    branch = "main";
+    image = "localhost/actually-bot:latest";
+    schedule = "daily";
+    importToK3s = true;
+    restartKube = [
+      { resource = "deployment/actually-bot"; }
+    ];
   };
 
   my.localDockerImages.images.hermes = {

@@ -1,0 +1,40 @@
+# ─── Actually Bot ────────────────────────────────────────────────────────────
+# Private bot built locally on armada from https://github.com/vypxl/actually_bot.
+#
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: actually-bot
+  namespace: default
+  labels:
+    app.kubernetes.io/name: actually-bot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: actually-bot
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: actually-bot
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: actually-bot
+          image: localhost/actually-bot:latest
+          imagePullPolicy: Never
+          envFrom:
+            - secretRef:
+                name: actually-bot
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 10m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL

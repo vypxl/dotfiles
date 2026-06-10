@@ -17,6 +17,12 @@ let
           description = "Git repository URL containing the Docker build context.";
         };
 
+        repoTokenFile = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = "Optional file containing a GitHub token for HTTPS repository clones.";
+        };
+
         branch = mkOption {
           type = types.str;
           default = "main";
@@ -156,6 +162,21 @@ let
           ''
             image_present=1
           '';
+      gitAuthSetup = lib.optionalString (image.repoTokenFile != null) ''
+        git_askpass="$state/git-askpass"
+        {
+          printf '%s\n' '#!/bin/sh'
+          printf '%s\n' 'case "$1" in'
+          printf '%s\n' '  *Username*) printf "%s\n" x-access-token ;;'
+          printf '%s\n' '  *Password*) cat "$LOCAL_DOCKER_IMAGE_REPO_TOKEN_FILE" ;;'
+          printf '%s\n' '  *) printf "\n" ;;'
+          printf '%s\n' 'esac'
+        } > "$git_askpass"
+        chmod 0700 "$git_askpass"
+        export GIT_ASKPASS="$git_askpass"
+        export GIT_TERMINAL_PROMPT=0
+        export LOCAL_DOCKER_IMAGE_REPO_TOKEN_FILE=${lib.escapeShellArg image.repoTokenFile}
+      '';
     in
     {
       description = "Build and import local Docker image ${name}";
@@ -190,6 +211,7 @@ let
         branch=${lib.escapeShellArg image.branch}
 
         mkdir -p "$state"
+        ${gitAuthSetup}
 
         revision=""
         ${lib.optionalString (image.repo != null) ''

@@ -6,13 +6,6 @@
 # Internal API:    http://firecrawl-api:3002
 # Internal MCP:    http://firecrawl-mcp:3000/mcp
 
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: firecrawl
-  labels:
-    app.kubernetes.io/name: firecrawl
----
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:

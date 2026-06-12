@@ -9,6 +9,7 @@ resources:
   - hindsight.yaml
   # - openwebui.yaml
   - minecraft.yaml
+  - papra.yaml
   - postgres.yaml
   - headscale.yaml
   # - headlamp.yaml

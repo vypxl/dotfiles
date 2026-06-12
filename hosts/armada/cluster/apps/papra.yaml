@@ -1,0 +1,143 @@
+# ─── Papra ───────────────────────────────────────────────────────────────────
+# Document management app.
+#
+# Public UI: https://docs.${DOMAIN}
+#
+# Papra keeps its SQLite database in /app/app-data and stores documents in S3.
+# Secrets are in secrets.yaml (SOPS-encrypted), secretRef name: papra.
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: papra
+  namespace: default
+  labels:
+    app.kubernetes.io/name: papra
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/match-tag: "true"
+    keel.sh/pollSchedule: "@every 6h"
+spec:
+  serviceName: papra
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: papra
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: papra
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: papra
+          image: ghcr.io/papra-hq/papra:latest
+          imagePullPolicy: Always
+          env:
+            - name: APP_BASE_URL
+              value: "https://docs.${DOMAIN}"
+            - name: DOCUMENT_STORAGE_DRIVER
+              value: s3
+            - name: DOCUMENT_STORAGE_ENCRYPTION_IS_ENABLED
+              value: "true"
+            - name: AUTH_IP_ADDRESS_HEADERS
+              value: x-forwarded-for
+            - name: AUTH_IS_REGISTRATION_ENABLED
+              value: "true"
+            - name: AUTH_IS_PASSWORD_RESET_ENABLED
+              value: "false"
+            - name: AUTH_FIRST_USER_AS_ADMIN
+              value: "true"
+            - name: AUTH_SHOW_LEGAL_LINKS
+              value: "false"
+            - name: AUTH_PROVIDERS_EMAIL_IS_ENABLED
+              value: "false"
+          envFrom:
+            - secretRef:
+                name: papra
+          ports:
+            - name: http
+              containerPort: 1221
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: /app/app-data
+          resources:
+            limits:
+              cpu: "2"
+              memory: 2Gi
+            requests:
+              cpu: 25m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          startupProbe:
+            tcpSocket:
+              port: http
+            failureThreshold: 30
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 30
+          readinessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 10
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 5Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: papra
+  namespace: default
+  labels:
+    app.kubernetes.io/name: papra
+spec:
+  selector:
+    app.kubernetes.io/name: papra
+  ports:
+    - name: http
+      port: 1221
+      targetPort: http
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: papra
+  namespace: default
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: "Documents"
+    gethomepage.dev/name: "Papra"
+    gethomepage.dev/icon: "mdi-file-document-outline"
+    gethomepage.dev/href: "https://docs.${DOMAIN}"
+    gethomepage.dev/description: "Document Management"
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: "docs.${DOMAIN}"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: papra
+                port:
+                  number: 1221
+  tls:
+    - secretName: papra-tls
+      hosts:
+        - "docs.${DOMAIN}"

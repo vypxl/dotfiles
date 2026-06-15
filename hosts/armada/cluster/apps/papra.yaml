@@ -52,6 +52,16 @@ spec:
               value: "false"
             - name: AUTH_PROVIDERS_EMAIL_IS_ENABLED
               value: "false"
+            - name: INTAKE_EMAILS_IS_ENABLED
+              value: "true"
+            - name: INTAKE_EMAILS_DRIVER
+              value: "catch-all"
+            - name: INTAKE_EMAILS_CATCH_ALL_DOMAIN
+              value: "docs.${DOMAIN}"
+            - name: INTAKE_EMAILS_USERNAME_DRIVER
+              value: "pattern"
+            - name: INTAKE_EMAILS_USERNAME_DRIVER_PATTERN
+              value: "{{user.name}}"
           envFrom:
             - secretRef:
                 name: papra

@@ -278,9 +278,23 @@ let
         Unit = "${serviceName}.service";
       };
     };
+
+  imageServiceNames = map (name: "${mkServiceName name}.service") (lib.attrNames cfg.images);
 in
 {
   options.my.localDockerImages = with lib; {
+    ensureSchedule = mkOption {
+      type = types.str;
+      default = "hourly";
+      description = "systemd OnCalendar expression for checking that local images are present in k3s.";
+    };
+
+    pruneSchedule = mkOption {
+      type = types.str;
+      default = "daily";
+      description = "systemd OnCalendar expression for pruning unused Podman build/cache data.";
+    };
+
     images = mkOption {
       type = types.attrsOf (types.submodule imageModule);
       default = { };
@@ -306,12 +320,73 @@ in
       name: _: "d ${mkStateDir name} 0755 root root - -"
     ) cfg.images;
 
-    systemd.services = lib.mapAttrs' (
-      name: image: lib.nameValuePair (mkServiceName name) (mkImageService name image)
-    ) cfg.images;
+    systemd.services =
+      lib.mapAttrs' (
+        name: image: lib.nameValuePair (mkServiceName name) (mkImageService name image)
+      ) cfg.images
+      // {
+        local-docker-images-ensure = {
+          description = "Ensure local Docker images are present in k3s";
+          after = [ "k3s.service" ];
+          requires = [ "k3s.service" ];
 
-    systemd.timers = lib.mapAttrs' (
-      name: image: lib.nameValuePair (mkServiceName name) (mkImageTimer name image)
-    ) cfg.images;
+          path = [ pkgs.systemd ];
+
+          serviceConfig = {
+            Type = "oneshot";
+            TimeoutStartSec = "infinity";
+          };
+
+          script = ''
+            set -euo pipefail
+            systemctl start ${lib.concatMapStringsSep " " lib.escapeShellArg imageServiceNames}
+          '';
+        };
+
+        local-docker-images-podman-prune = {
+          description = "Prune unused Podman data for local Docker images";
+
+          path = with pkgs; [
+            podman
+          ];
+
+          serviceConfig = {
+            Type = "oneshot";
+            TimeoutStartSec = "infinity";
+          };
+
+          script = ''
+            set -euo pipefail
+            podman system prune --force
+            podman builder prune --all --force
+          '';
+        };
+      };
+
+    systemd.timers =
+      lib.mapAttrs' (
+        name: image: lib.nameValuePair (mkServiceName name) (mkImageTimer name image)
+      ) cfg.images
+      // {
+        local-docker-images-ensure = {
+          description = "Ensure local Docker images are present in k3s";
+          wantedBy = [ "timers.target" ];
+          timerConfig = {
+            OnCalendar = cfg.ensureSchedule;
+            Persistent = true;
+            Unit = "local-docker-images-ensure.service";
+          };
+        };
+
+        local-docker-images-podman-prune = {
+          description = "Prune unused Podman data for local Docker images";
+          wantedBy = [ "timers.target" ];
+          timerConfig = {
+            OnCalendar = cfg.pruneSchedule;
+            Persistent = true;
+            Unit = "local-docker-images-podman-prune.service";
+          };
+        };
+      };
   };
 }

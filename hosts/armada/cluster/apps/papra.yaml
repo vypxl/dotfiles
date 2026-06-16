@@ -62,10 +62,6 @@ spec:
               value: "pattern"
             - name: INTAKE_EMAILS_USERNAME_DRIVER_PATTERN
               value: "{{user.name}}"
-            - name: AWS_REQUEST_CHECKSUM_CALCULATION
-              value: WHEN_REQUIRED
-            - name: AWS_RESPONSE_CHECKSUM_VALIDATION
-              value: WHEN_REQUIRED
           envFrom:
             - secretRef:
                 name: papra

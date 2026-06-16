@@ -139,10 +139,19 @@ let
       usesK3s = image.importToK3s || image.restartKube != [ ];
       k3sCtr = "${config.services.k3s.package}/bin/k3s ctr -n k8s.io images";
       kubectl = "${config.services.k3s.package}/bin/k3s kubectl";
-      restartKubeCommands = lib.concatMapStringsSep "\n" (
-        restart:
-        "${kubectl} -n ${lib.escapeShellArg restart.namespace} rollout restart ${lib.escapeShellArg restart.resource}"
-      ) image.restartKube;
+      restartKubeCommands = lib.concatMapStringsSep "\n" (restart: ''
+        restart_namespace=${lib.escapeShellArg restart.namespace}
+        restart_resource=${lib.escapeShellArg restart.resource}
+        log "restart_resource=$restart_namespace/$restart_resource action=resolve_selector"
+        selector="$(${kubectl} -n "$restart_namespace" get "$restart_resource" -o json | jq -r '.spec.selector.matchLabels // empty | to_entries | map("\(.key)=\(.value)") | join(",")')"
+        if [ -z "$selector" ]; then
+          echo "No pod selector found for $restart_namespace/$restart_resource" >&2
+          log "restart_resource=$restart_namespace/$restart_resource selector=<missing> action=fail"
+          exit 1
+        fi
+        log "restart_resource=$restart_namespace/$restart_resource selector=$selector action=delete_pods"
+        ${kubectl} -n "$restart_namespace" delete pod -l "$selector" --ignore-not-found
+      '') image.restartKube;
       after = [
         "network-online.target"
       ]
@@ -152,9 +161,22 @@ let
       imagePresentCheck =
         if image.importToK3s then
           ''
-            if ${k3sCtr} ls | grep -q "$image"; then
+            k3s_image_list_file="$state/k3s-images.txt"
+            if ${k3sCtr} ls > "$k3s_image_list_file"; then
+              log "k3s_image_list_status=ok file=$k3s_image_list_file"
+            else
+              log "k3s_image_list_status=failed"
+              exit 1
+            fi
+
+            image_matches="$(grep -F "$image" "$k3s_image_list_file" || true)"
+            if [ -n "$image_matches" ]; then
+              while IFS= read -r image_match; do
+                log "image_match=$image_match"
+              done <<< "$image_matches"
               image_present=1
             else
+              log "image_match=none"
               image_present=0
             fi
           ''
@@ -189,6 +211,7 @@ let
         coreutils
         git
         gnugrep
+        jq
         podman
         skopeo
       ];
@@ -207,8 +230,22 @@ let
         inline_dockerfile="$state/Dockerfile"
         built_revision_file="$state/built-revision"
         image=${lib.escapeShellArg image.image}
+        image_name=${lib.escapeShellArg name}
         image_tar=${lib.escapeShellArg imageTar}
         branch=${lib.escapeShellArg image.branch}
+
+        log() {
+          printf '%s\n' "[local-docker-image:$image_name] $*"
+        }
+
+        log "start image=$image state=$state import_to_k3s=${lib.boolToString image.importToK3s} branch=$branch"
+        log "config repo=${
+          if image.repo == null then "<none>" else image.repo
+        } context=${image.context} dockerfile=${
+          if image.dockerfile == null then "<none>" else image.dockerfile
+        } dockerfile_text=${lib.boolToString (image.dockerfileText != null)} base_image=${
+          if image.baseImage == null then "<none>" else image.baseImage
+        }"
 
         mkdir -p "$state"
         ${gitAuthSetup}
@@ -216,17 +253,22 @@ let
         revision=""
         ${lib.optionalString (image.repo != null) ''
           if [ ! -d "$src/.git" ]; then
+            log "repo_status=missing action=clone repo=${image.repo}"
             rm -rf "$src"
             git clone --depth=1 --branch "$branch" ${lib.escapeShellArg image.repo} "$src"
           else
+            current_head="$(git -C "$src" rev-parse HEAD || true)"
+            log "repo_status=present current_head=$current_head action=fetch_checkout repo=${image.repo}"
             git -C "$src" fetch --depth=1 origin "$branch"
             git -C "$src" checkout --force "origin/$branch"
           fi
 
           build_context="$src/${image.context}"
           revision="$(git -C "$src" rev-parse HEAD)"
+          log "repo_revision=$revision build_context=$build_context"
         ''}
         ${lib.optionalString (image.repo == null) ''
+          log "repo_status=none action=create_empty_context"
           rm -rf "$build_context"
           mkdir -p "$build_context"
         ''}
@@ -234,31 +276,70 @@ let
           cp ${inlineDockerfile} "$inline_dockerfile"
           dockerfile_revision="$(sha256sum "$inline_dockerfile" | cut -d " " -f 1)"
           revision="$revision:$dockerfile_revision"
+          log "dockerfile_revision=$dockerfile_revision inline_dockerfile=$inline_dockerfile"
         ''}
         ${lib.optionalString (image.baseImage != null) ''
           base_digest="$(skopeo inspect --format '{{.Digest}}' docker://${lib.escapeShellArg image.baseImage})"
           revision="$revision:$base_digest"
+          log "base_image=${image.baseImage} base_digest=$base_digest"
         ''}
 
         ${imagePresentCheck}
+        log "image_present=$image_present image=$image"
 
-        if [ -f "$built_revision_file" ] \
-          && [ "$(cat "$built_revision_file")" = "$revision" ] \
-          && [ "$image_present" = 1 ]; then
+        if [ -f "$built_revision_file" ]; then
+          built_revision="$(cat "$built_revision_file")"
+          log "stored_revision=$built_revision file=$built_revision_file"
+        else
+          built_revision=""
+          log "stored_revision=<missing> file=$built_revision_file"
+        fi
+
+        rebuild_reasons=()
+        if [ "$built_revision" != "$revision" ]; then
+          rebuild_reasons+=("revision_changed")
+        fi
+        if [ "$image_present" != 1 ]; then
+          rebuild_reasons+=("image_missing")
+        fi
+        if [ "''${#rebuild_reasons[@]}" -eq 0 ]; then
+          log "decision=skip reason=current desired_revision=$revision"
+        else
+          log "decision=build reasons=''${rebuild_reasons[*]} desired_revision=$revision stored_revision=$built_revision image_present=$image_present"
+        fi
+
+        if [ "''${#rebuild_reasons[@]}" -eq 0 ]; then
           echo "Local Docker image $image is current at $revision"
           exit 0
         fi
 
+        log "build_start image=$image build_context=$build_context"
         podman build --pull=always -t "$image" ${dockerfileArg} "$build_context"
+        log "build_done image=$image"
         ${lib.optionalString image.importToK3s ''
+          log "import_start image=$image tar=$image_tar"
           rm -f "$image_tar"
           podman save "$image" -o "$image_tar"
           ${k3sCtr} import "$image_tar"
           rm -f "$image_tar"
+          log "import_done image=$image"
+        ''}
+        ${lib.optionalString (image.postBuildCommands != "") ''
+          log "post_build_start"
         ''}
         ${image.postBuildCommands}
+        ${lib.optionalString (image.postBuildCommands != "") ''
+          log "post_build_done"
+        ''}
+        ${lib.optionalString (image.restartKube != [ ]) ''
+          log "restart_kube_start count=${toString (builtins.length image.restartKube)}"
+        ''}
         ${restartKubeCommands}
+        ${lib.optionalString (image.restartKube != [ ]) ''
+          log "restart_kube_done"
+        ''}
         printf '%s\n' "$revision" > "$built_revision_file"
+        log "stored_revision_updated=$revision file=$built_revision_file"
 
         echo "Built $image from $revision"
       '';

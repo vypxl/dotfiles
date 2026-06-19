@@ -130,7 +130,8 @@
   my.localDockerImages.images.hermes = {
     image = "localhost/hermes-agent:latest";
     dockerfileText = ''
-      FROM docker.io/nousresearch/hermes-agent:latest
+      ARG BASE_IMAGE=docker.io/nousresearch/hermes-agent:latest
+      FROM ''${BASE_IMAGE}
 
       # s6-overlay images must finish as root: /init chowns /opt/data and
       # supervised services drop to the hermes user via s6-setuidgid.
@@ -146,7 +147,8 @@
       RUN uv pip install --no-cache-dir -e '.[hindsight]' \
         && chown -R hermes:hermes /opt/hermes/.venv
     '';
-    baseImage = "docker.io/nousresearch/hermes-agent:latest";
+    baseImage = "docker.io/nousresearch/hermes-agent";
+    baseImageTagPattern = "^v[0-9]+\\.[0-9]+\\.[0-9]+(\\.[0-9]+)?$";
     schedule = "daily";
     importToK3s = true;
     restartKube = [

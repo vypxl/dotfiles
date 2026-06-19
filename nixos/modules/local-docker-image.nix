@@ -53,6 +53,12 @@ let
           description = "Optional base image whose digest is included in rebuild detection.";
         };
 
+        baseImageTagPattern = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = "Optional regular expression for resolving the newest version tag for baseImage.";
+        };
+
         image = mkOption {
           type = types.str;
           description = "Local image tag to build and import.";
@@ -121,9 +127,9 @@ let
   mkStateDir = name: "/var/lib/local-docker-images/${name}";
 
   mkImageService =
-    name: image:
+    name: image: ensureOnly:
     let
-      serviceName = mkServiceName name;
+      serviceName = if ensureOnly then "${mkServiceName name}-ensure" else mkServiceName name;
       stateDir = mkStateDir name;
       imageTar = "${stateDir}/image.tar";
       inlineDockerfile =
@@ -202,9 +208,9 @@ let
     in
     {
       description = "Build and import local Docker image ${name}";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = lib.optional (!ensureOnly) "multi-user.target";
       inherit after requires;
-      before = image.before;
+      before = lib.optionals (!ensureOnly) image.before;
       wants = [ "network-online.target" ];
 
       path = with pkgs; [
@@ -233,18 +239,22 @@ let
         image_name=${lib.escapeShellArg name}
         image_tar=${lib.escapeShellArg imageTar}
         branch=${lib.escapeShellArg image.branch}
+        ensure_only=${if ensureOnly then "1" else "0"}
+        build_args=()
 
         log() {
           printf '%s\n' "[local-docker-image:$image_name] $*"
         }
 
-        log "start image=$image state=$state import_to_k3s=${lib.boolToString image.importToK3s} branch=$branch"
+        log "start image=$image state=$state import_to_k3s=${lib.boolToString image.importToK3s} branch=$branch ensure_only=$ensure_only"
         log "config repo=${
           if image.repo == null then "<none>" else image.repo
         } context=${image.context} dockerfile=${
           if image.dockerfile == null then "<none>" else image.dockerfile
         } dockerfile_text=${lib.boolToString (image.dockerfileText != null)} base_image=${
           if image.baseImage == null then "<none>" else image.baseImage
+        } base_image_tag_pattern=${
+          if image.baseImageTagPattern == null then "<none>" else image.baseImageTagPattern
         }"
 
         mkdir -p "$state"
@@ -279,9 +289,34 @@ let
           log "dockerfile_revision=$dockerfile_revision inline_dockerfile=$inline_dockerfile"
         ''}
         ${lib.optionalString (image.baseImage != null) ''
-          base_digest="$(skopeo inspect --format '{{.Digest}}' docker://${lib.escapeShellArg image.baseImage})"
-          revision="$revision:$base_digest"
-          log "base_image=${image.baseImage} base_digest=$base_digest"
+          base_image=${lib.escapeShellArg image.baseImage}
+          resolved_base_image="$base_image"
+          ${lib.optionalString (image.baseImageTagPattern != null) ''
+            base_tag_pattern=${lib.escapeShellArg image.baseImageTagPattern}
+            tags_file="$state/base-image-tags.txt"
+            if skopeo list-tags "docker://$base_image" > "$tags_file"; then
+              log "base_tags_status=ok image=$base_image file=$tags_file"
+            else
+              log "base_tags_status=failed image=$base_image"
+              exit 1
+            fi
+            latest_tag="$(
+              jq -r '.Tags[]' "$tags_file" \
+                | grep -E "$base_tag_pattern" \
+                | sort -V \
+                | tail -n 1
+            )"
+            if [ -z "$latest_tag" ]; then
+              log "base_tag_resolve=failed image=$base_image pattern=$base_tag_pattern"
+              exit 1
+            fi
+            resolved_base_image="$base_image:$latest_tag"
+            log "base_tag_resolve=ok image=$base_image pattern=$base_tag_pattern latest_tag=$latest_tag resolved_base_image=$resolved_base_image"
+            build_args+=("--build-arg" "BASE_IMAGE=$resolved_base_image")
+          ''}
+          base_digest="$(skopeo inspect --format '{{.Digest}}' "docker://$resolved_base_image")"
+          revision="$revision:$resolved_base_image@$base_digest"
+          log "base_image=$base_image resolved_base_image=$resolved_base_image base_digest=$base_digest"
         ''}
 
         ${imagePresentCheck}
@@ -296,7 +331,7 @@ let
         fi
 
         rebuild_reasons=()
-        if [ "$built_revision" != "$revision" ]; then
+        if [ "$built_revision" != "$revision" ] && [ "$ensure_only" != 1 ]; then
           rebuild_reasons+=("revision_changed")
         fi
         if [ "$image_present" != 1 ]; then
@@ -314,7 +349,7 @@ let
         fi
 
         log "build_start image=$image build_context=$build_context"
-        podman build --pull=always -t "$image" ${dockerfileArg} "$build_context"
+        podman build --pull=always -t "$image" "''${build_args[@]}" ${dockerfileArg} "$build_context"
         log "build_done image=$image"
         ${lib.optionalString image.importToK3s ''
           log "import_start image=$image tar=$image_tar"
@@ -361,6 +396,9 @@ let
     };
 
   imageServiceNames = map (name: "${mkServiceName name}.service") (lib.attrNames cfg.images);
+  imageEnsureServiceNames = map (name: "${mkServiceName name}-ensure.service") (
+    lib.attrNames cfg.images
+  );
 in
 {
   options.my.localDockerImages = with lib; {
@@ -401,11 +439,14 @@ in
       name: _: "d ${mkStateDir name} 0755 root root - -"
     ) cfg.images;
 
-    systemd.services =
-      lib.mapAttrs' (
-        name: image: lib.nameValuePair (mkServiceName name) (mkImageService name image)
-      ) cfg.images
-      // {
+    systemd.services = lib.mkMerge [
+      (lib.mapAttrs' (
+        name: image: lib.nameValuePair (mkServiceName name) (mkImageService name image false)
+      ) cfg.images)
+      (lib.mapAttrs' (
+        name: image: lib.nameValuePair "${mkServiceName name}-ensure" (mkImageService name image true)
+      ) cfg.images)
+      {
         local-docker-images-ensure = {
           description = "Ensure local Docker images are present in k3s";
           after = [ "k3s.service" ];
@@ -420,7 +461,7 @@ in
 
           script = ''
             set -euo pipefail
-            systemctl start ${lib.concatMapStringsSep " " lib.escapeShellArg imageServiceNames}
+            systemctl start ${lib.concatMapStringsSep " " lib.escapeShellArg imageEnsureServiceNames}
           '';
         };
 
@@ -442,7 +483,8 @@ in
             podman builder prune --all --force
           '';
         };
-      };
+      }
+    ];
 
     systemd.timers =
       lib.mapAttrs' (

@@ -351,10 +351,10 @@ resource "oci_core_instance" "armada" {
     remote_data_volume_type             = "PARAVIRTUALIZED"
   }
   shape_config {
-    memory_in_gbs = 24
+    memory_in_gbs = 12
     nvmes         = 0
-    ocpus         = 4
-    vcpus         = 4
+    ocpus         = 2
+    vcpus         = 2
   }
   source_details {
     boot_volume_size_in_gbs         = "153"

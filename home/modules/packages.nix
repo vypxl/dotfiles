@@ -114,7 +114,7 @@ let
     lua-language-server
     nixd
     nil
-    nixfmt-rfc-style
+    nixfmt
     pyright
     marksman
     rubyPackages.solargraph

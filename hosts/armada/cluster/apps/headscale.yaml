@@ -53,6 +53,91 @@ data:
       pkce:
         enabled: true
 ---
+# ─── Headplane Config ────────────────────────────────────────────────────────
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: headplane-config
+  namespace: default
+data:
+  config.yaml: |
+    ---
+    server:
+      host: "0.0.0.0"
+      port: 3000
+      base_url: "https://headscale.${DOMAIN}"
+      cookie_secure: true
+      data_path: "/var/lib/headplane"
+
+    headscale:
+      url: "http://127.0.0.1:8080"
+      public_url: "https://headscale.${DOMAIN}"
+      config_path: "/etc/headscale/config.yaml"
+
+    integration:
+      kubernetes:
+        enabled: true
+        pod_name: "headscale-0"
+
+    oidc:
+      enabled: true
+      issuer: "https://id.${DOMAIN}"
+      use_pkce: true
+      scope: "openid email profile"
+---
+# ─── Headplane RBAC ──────────────────────────────────────────────────────────
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: headplane
+  namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: headplane
+  namespace: default
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: headplane
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: headplane
+subjects:
+  - kind: ServiceAccount
+    name: headplane
+    namespace: default
+---
+# ─── Headscale CORS Middleware ───────────────────────────────────────────────
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: headscale-cors
+  namespace: default
+spec:
+  headers:
+    accessControlAllowHeaders:
+      - "*"
+    accessControlAllowMethods:
+      - GET
+      - POST
+      - PUT
+    accessControlAllowOriginList:
+      - "https://headscale.${DOMAIN}"
+    accessControlMaxAge: 100
+    addVaryHeader: true
+---
 # ─── Headscale StatefulSet ───────────────────────────────────────────────────
 apiVersion: apps/v1
 kind: StatefulSet
@@ -77,6 +162,8 @@ spec:
       labels:
         app.kubernetes.io/name: headscale
     spec:
+      shareProcessNamespace: true
+      serviceAccountName: headplane
       securityContext:
         fsGroup: 1000
       containers:
@@ -134,10 +221,53 @@ spec:
               path: /health
               port: http
             periodSeconds: 10
+        - name: headplane
+          image: ghcr.io/tale/headplane:latest
+          imagePullPolicy: Always
+          env:
+            - name: HEADPLANE_LOAD_ENV_OVERRIDES
+              value: "true"
+          envFrom:
+            - secretRef:
+                name: headplane
+          ports:
+            - name: admin
+              containerPort: 3000
+              protocol: TCP
+          volumeMounts:
+            - name: headplane-config
+              mountPath: /etc/headplane
+              readOnly: true
+            - name: config
+              mountPath: /etc/headscale
+              readOnly: true
+            - name: headplane-data
+              mountPath: /var/lib/headplane
+          resources:
+            limits:
+              memory: 256Mi
+              cpu: 500m
+            requests:
+              memory: 128Mi
+              cpu: 10m
+          startupProbe:
+            exec:
+              command:
+                - /bin/hp_healthcheck
+            failureThreshold: 30
+            periodSeconds: 10
+          livenessProbe:
+            exec:
+              command:
+                - /bin/hp_healthcheck
+            periodSeconds: 30
       volumes:
         - name: config
           configMap:
             name: headscale-config
+        - name: headplane-config
+          configMap:
+            name: headplane-config
         - name: run
           emptyDir: {}
   volumeClaimTemplates:
@@ -148,6 +278,13 @@ spec:
         resources:
           requests:
             storage: 2Gi
+    - metadata:
+        name: headplane-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
 ---
 # ─── Headscale Service ───────────────────────────────────────────────────────
 apiVersion: v1
@@ -164,6 +301,9 @@ spec:
     - name: http
       port: 8080
       targetPort: http
+    - name: admin
+      port: 3000
+      targetPort: admin
     - name: metrics
       port: 9090
       targetPort: metrics
@@ -180,14 +320,22 @@ metadata:
     gethomepage.dev/group: "Network"
     gethomepage.dev/name: "Headscale"
     gethomepage.dev/icon: "headscale"
-    gethomepage.dev/href: "https://headscale.${DOMAIN}"
+    gethomepage.dev/href: "https://headscale.${DOMAIN}/admin"
     gethomepage.dev/description: "Tailscale control server"
+    traefik.ingress.kubernetes.io/router.middlewares: default-headscale-cors@kubernetescrd
 spec:
   ingressClassName: traefik
   rules:
     - host: "headscale.${DOMAIN}"
       http:
         paths:
+          - path: /admin
+            pathType: Prefix
+            backend:
+              service:
+                name: headscale
+                port:
+                  number: 3000
           - path: /
             pathType: Prefix
             backend:

@@ -37,8 +37,14 @@ spec:
               value: "0.0.0.0"
             - name: HERMES_DASHBOARD_PORT
               value: "9119"
-            - name: HERMES_DASHBOARD_INSECURE
-              value: "1"
+            - name: HERMES_DASHBOARD_OIDC_ISSUER
+              value: "https://id.lab.vypxl.io"
+            - name: HERMES_DASHBOARD_OIDC_CLIENT_ID
+              value: "hermes"
+            - name: HERMES_DASHBOARD_OIDC_SCOPES
+              value: "openid profile email"
+            - name: HERMES_DASHBOARD_PUBLIC_URL
+              value: "https://hermes.lab.vypxl.io"
             - name: API_SERVER_ENABLED
               value: "false"
           envFrom:

@@ -227,6 +227,11 @@ spec:
           env:
             - name: HEADPLANE_LOAD_ENV_OVERRIDES
               value: "true"
+            - name: HEADPLANE_OIDC__HEADSCALE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: headplane
+                  key: HEADPLANE_HEADSCALE__API_KEY
           envFrom:
             - secretRef:
                 name: headplane

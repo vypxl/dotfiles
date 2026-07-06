@@ -37,6 +37,7 @@ in
         commit.gpgSign = true;
 
         diff.colorMoved = "default";
+        diff.algorithm = "histogram";
 
         gpg.ssh.allowedSignersFile = "${config.home.homeDirectory}/.ssh/allowed_signers";
 

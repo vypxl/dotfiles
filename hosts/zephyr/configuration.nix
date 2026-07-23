@@ -14,6 +14,12 @@
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  # TODO: Remove this override once these upstream NVIDIA issues are closed:
+  # https://github.com/NVIDIA/open-gpu-kernel-modules/issues/1167
+  # https://github.com/NVIDIA/open-gpu-kernel-modules/issues/1177
+  # https://github.com/NVIDIA/open-gpu-kernel-modules/issues/1205
+  hardware.nvidia.open = false;
+
   my.bundle.desktop.enable = true;
 
   my.niri.enable = true;

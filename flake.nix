@@ -19,9 +19,6 @@
     disko.url = "github:nix-community/disko/ff442f5d1425feb86344c028298548024f21256d";
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
-    hermes-agent.url = "github:NousResearch/hermes-agent";
-    hermes-agent.inputs.nixpkgs.follows = "nixpkgs";
-
     dankMaterialShell = {
       url = "github:AvengeMedia/DankMaterialShell/stable";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -37,7 +34,6 @@
       flake-utils,
       nix-index-database,
       sops-nix,
-      hermes-agent,
       disko,
       dankMaterialShell,
       ...
@@ -65,7 +61,6 @@
             nix-index-database.nixosModules.nix-index
             sops-nix.nixosModules.sops
             disko.nixosModules.disko
-            hermes-agent.nixosModules.default
             ./hosts/${hostname}/configuration.nix
           ]
           ++ nixpkgs.lib.optionals withHome [

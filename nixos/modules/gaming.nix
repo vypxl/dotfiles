@@ -18,6 +18,8 @@ in
       remotePlay.openFirewall = true;
     };
 
+    hardware.xone.enable = true;
+
     environment.systemPackages = with pkgs; [
       protonup-qt
       prismlauncher # minecraft

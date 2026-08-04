@@ -10,6 +10,7 @@
     ../../nixos/modules/oracle-cloud.nix
   ];
 
+  my.auto-upgrade.enable = true;
   my.bundle.default.enable = true;
   my.networking.enable = false;
   my.oracleCloud.enable = true;

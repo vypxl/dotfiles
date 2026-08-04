@@ -43,7 +43,7 @@ in
 
   config = lib.mkMerge [
     (lib.mkIf cfg.default.enable {
-      my.auto-upgrade.enable = lib.mkDefault true;
+      my.auto-upgrade.enable = lib.mkDefault false;
       my.base.enable = lib.mkDefault true;
       my.boot.enable = lib.mkDefault true;
       my.docker.enable = lib.mkDefault true;

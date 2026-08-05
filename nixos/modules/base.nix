@@ -49,7 +49,7 @@ in
 
     programs.appimage = lib.mkIf isX86Linux {
       enable = true;
-      binfmt = true;
+      binfmt = false;
       package = pkgs.appimage-run.override {
         extraPkgs = pkgs: [
           pkgs.icu

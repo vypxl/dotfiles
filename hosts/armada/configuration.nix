@@ -34,6 +34,7 @@
     defaultSopsFile = ./secrets.yaml;
     age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
     secrets.flux-github-token = { };
+    secrets.ts-preauth-key-armada = { };
 
     # nix CLI parses /etc/nix/nix.conf as the invoking user; !include fails silently
     # if the file is root-only (0400). Wheel must be able to read this fragment.
@@ -59,6 +60,15 @@
       allowedTCPPorts = [ 25565 ];
       rejectPackets = true;
     };
+  };
+
+  services.tailscale = {
+    enable = true;
+    openFirewall = true;
+    authKeyFile = config.sops.secrets.ts-preauth-key-armada.path;
+    extraUpFlags = [
+      "--login-server=https://headscale.lab.vypxl.io"
+    ];
   };
 
   time.timeZone = "Europe/Zurich";

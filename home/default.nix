@@ -34,6 +34,7 @@ in
     ./modules/vim.nix
     ./modules/waybar.nix
     ./modules/wlogout.nix
+    ./modules/xdg.nix
     ./modules/xkb.nix
     ./modules/yamllint.nix
     ./modules/zed.nix
@@ -83,6 +84,7 @@ in
       my.gnome-keyring.enable = true;
       my.kitty.enable = true;
       my.syncthing.enable = true;
+      my.xdg.enable = true;
       my.xkb.enable = true;
       my.zed.enable = true;
 

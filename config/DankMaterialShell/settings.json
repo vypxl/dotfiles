@@ -419,11 +419,6 @@
   "fadeToDpmsEnabled": true,
   "fadeToDpmsGracePeriod": 5,
   "launchPrefix": "",
-  "brightnessDevicePins": {},
-  "wifiNetworkPins": {},
-  "bluetoothDevicePins": {},
-  "audioInputDevicePins": {},
-  "audioOutputDevicePins": {},
   "gtkThemingEnabled": false,
   "qtThemingEnabled": false,
   "syncModeWithPortal": true,
@@ -704,7 +699,8 @@
       "popupGapsManual": 4,
       "maximizeDetection": true,
       "clickThrough": false,
-      "widgetPadding": 4
+      "widgetPadding": 4,
+      "shadowIntensity": 0
     }
   ],
   "desktopClockEnabled": false,
@@ -795,7 +791,7 @@
   "launcherPluginVisibility": {},
   "launcherPluginOrder": [],
   "frameEnabled": false,
-  "frameThickness": 16,
+  "frameThickness": 2,
   "frameRounding": 23,
   "frameColor": "",
   "frameOpacity": 1,
@@ -807,11 +803,11 @@
   "frameBlurEnabled": true,
   "frameCloseGaps": true,
   "frameLauncherEmergeSide": "bottom",
-  "frameLauncherArcExtender": false,
+  "frameLauncherArcExtender": true,
   "frameLauncherEdgeHover": false,
   "frameMode": "connected",
   "barInsetPaddingShared": -1,
   "barInsetPaddingSyncAll": false,
-  "frameBarInsetPadding": -1,
-  "configVersion": 12
+  "frameBarInsetPadding": 0,
+  "configVersion": 13
 }

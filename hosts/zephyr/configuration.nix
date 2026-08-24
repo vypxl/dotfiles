@@ -12,7 +12,7 @@
     }/asus/zephyrus/ga403"
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_7_1;
 
   # TODO: Remove this override once these upstream NVIDIA issues are closed:
   # https://github.com/NVIDIA/open-gpu-kernel-modules/issues/1167

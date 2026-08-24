@@ -21,6 +21,7 @@
   hardware.nvidia.open = false;
 
   my.bundle.desktop.enable = true;
+  my.agentmemory.enable = true;
 
   my.niri.enable = true;
   my.hyprland.enable = false;

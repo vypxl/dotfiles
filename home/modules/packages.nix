@@ -91,6 +91,7 @@ let
     obsidian
     pavucontrol
     ripdrag
+    satty # screenshot editor
     spotifywm
     vlc
     vscodium-fhs

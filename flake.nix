@@ -23,11 +23,17 @@
       url = "github:AvengeMedia/DankMaterialShell/stable";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    cbm = {
+      url = "github:DeusData/codebase-memory-mcp";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
     {
       self,
+      cbm,
       home-manager,
       nixpkgs,
       nixpkgs-unstable,
@@ -45,6 +51,7 @@
           config.allowUnfree = true;
           config.android_sdk.accept_license = true;
         };
+        codebase-memory-mcp = cbm.packages.${system}.default;
       };
       machine =
         {

@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "cbm": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1788852901,
+        "narHash": "sha256-/Xa2LcmZY5OcC5E4gJSo5ryLWOhAkEDrVb07tbxFnmM=",
+        "owner": "DeusData",
+        "repo": "codebase-memory-mcp",
+        "rev": "161df2bdb1f4e28734f326a73f6e7989418f1288",
+        "type": "github"
+      },
+      "original": {
+        "owner": "DeusData",
+        "repo": "codebase-memory-mcp",
+        "type": "github"
+      }
+    },
     "dankMaterialShell": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -152,6 +172,7 @@
     },
     "root": {
       "inputs": {
+        "cbm": "cbm",
         "dankMaterialShell": "dankMaterialShell",
         "disko": "disko",
         "flake-utils": "flake-utils",

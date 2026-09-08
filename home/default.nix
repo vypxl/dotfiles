@@ -92,6 +92,7 @@ in
       my.packages.lsp = true;
       my.packages.languages = true;
       my.packages.util = true;
+      my.packages.ai = true;
     })
   ];
 }

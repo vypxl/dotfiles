@@ -7,9 +7,11 @@
 }:
 with pkgs;
 let
-  npx-shim = { package, name }: pkgs.writeShellScriptBin name ''
-    exec npx -y ${package} "$@"
-  '';
+  npx-shim =
+    { package, name }:
+    pkgs.writeShellScriptBin name ''
+      exec npx -y ${package} "$@"
+    '';
   base = [
     just
     inetutils
@@ -70,11 +72,15 @@ let
     keymapp
     poppler-utils
     qmk
-    unstable.aichat
-
-    unstable.cursor-cli
-    (npx-shim { package = "@openai/codex"; name = "codex"; })
     (npx-shim { package = "@schpet/linear-cli"; name = "linear"; })
+  ];
+  ai = [
+    bubblewrap
+    codebase-memory-mcp
+    unstable.aichat
+    unstable.cursor-cli
+    (npx-shim { package = "@agentmemory/agentmemory"; name = "agentmemory"; })
+    (npx-shim { package = "@openai/codex"; name = "codex"; })
   ];
   graphical = [
     brave
@@ -156,15 +162,21 @@ in
     lsp = mkEnableOption "lsp";
     languages = mkEnableOption "languages";
     util = mkEnableOption "util";
+    ai = mkEnableOption "ai";
   };
 
   config = {
+    # This workaround is here because CBM references this hardcoded location :/
+    home.file.".local/bin/codebase-memory-mcp".source =
+      lib.mkIf cfg.ai "${pkgs.codebase-memory-mcp}/bin/codebase-memory-mcp";
+
     home.packages = lib.lists.concatLists [
       (if cfg.base then base else [ ])
       (if cfg.graphical then graphical else [ ])
       (if cfg.lsp then lsp else [ ])
       (if cfg.languages then languages else [ ])
       (if cfg.util then util else [ ])
+      (if cfg.ai then ai else [ ])
       (lib.attrsets.attrByPath [ hostname ] [ ] per-host)
     ];
   };

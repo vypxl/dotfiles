@@ -5,6 +5,5 @@ resources:
   - cluster-issuer.yaml
   - secrets.yaml
   - pocket-id.yaml
-  - lldap.yaml
   - tinyauth.yaml
   - middleware.yaml

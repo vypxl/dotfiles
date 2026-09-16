@@ -1,60 +1,51 @@
 {
-  "context_servers": {
-    "postgres-context-server": {
-      "enabled": true,
-      "settings": {
-        "database_url": "postgresql://postgres:postgres@localhost:54322/postgres",
-      },
+  "diff_view_style": "unified",
+  "cli_default_open_behavior": "existing_window",
+  "project_panel": {
+    "dock": "left"
+  },
+  "outline_panel": {
+    "dock": "left"
+  },
+  "collaboration_panel": {
+    "dock": "left"
+  },
+  "git_panel": {
+    "dock": "left"
+  },
+  "edit_predictions": {
+    "provider": "zed"
+  },
+  "agent_servers": {
+    "codex-acp": {
+      "type": "registry"
     },
+    "opencode": {
+      "type": "registry"
+    },
+  },
+  "context_servers": {
     "context7-mcp": {
+      "enabled": false,
       "command": "context7-mcp",
       "args": [],
     },
-    "chrome-devtools-mcp": {
-      "command": "npx",
-      "args": [
-        "chrome-devtools-mcp@latest",
-        "--executablePath=/etc/profiles/per-user/thomas/bin/brave",
-        "--headless",
-      ],
-    },
-    "linear-mcp": {
-      "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.linear.app/mcp"],
-    },
-  },
-  "features": {
-    "edit_prediction_provider": "zed",
   },
   "agent": {
-    "favorite_models": [
-      {
-        "provider": "anthropic",
-        "model": "claude-opus-4-5-thinking-latest",
-      },
-      {
-        "provider": "google",
-        "model": "gemini-3-pro-preview",
-      },
-      {
-        "provider": "google",
-        "model": "gemini-3-flash-preview",
-      },
-      {
-        "provider": "openai",
-        "model": "gpt-5.2",
-      },
-    ],
-    "always_allow_tool_actions": true,
-    "default_profile": "write",
-    "default_model": {
-      "provider": "anthropic",
-      "model": "claude-opus-4-5-thinking-latest",
-    },
     "inline_assistant_model": {
-      "provider": "anthropic",
-      "model": "claude-sonnet-4-5-latest",
+      "provider": "openai",
+      "model": "gpt-5.6-sol",
+      "enable_thinking": false
     },
+    "dock": "right",
+    "default_model": {
+      "effort": "medium",
+      "provider": "openai",
+      "model": "gpt-5.6-sol",
+      "enable_thinking": true
+    },
+    "favorite_models": [],
+    "model_parameters": [],
   },
   "telemetry": {
     "diagnostics": false,

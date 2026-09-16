@@ -108,8 +108,6 @@ let
         restartIfChanged = true; # Auto-restart dms.service when dankMaterialShell changes
       };
 
-      dgop.package = pkgs.unstable.dgop;
-
       # Core features
       enableSystemMonitoring = true; # System monitoring widgets (dgop)
       # enableClipboard = true; # Clipboard history manager

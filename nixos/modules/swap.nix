@@ -16,13 +16,13 @@ in
     swapDevices = [
       {
         device = "/var/lib/swapfile";
-        size = 16 * 1024;
+        size = 32 * 1024;
         options = [ "discard" ];
       }
     ];
 
     boot.kernel.sysctl = {
-      "vm.swappiness" = 30;
+      "vm.swappiness" = 60;
     };
 
     boot.kernelParams = [

@@ -23,6 +23,19 @@
   my.bundle.desktop.enable = true;
   my.agentmemory.enable = true;
 
+  # Kill user applications under sustained memory pressure before the desktop freezes.
+  systemd.oomd.enable = true;
+  systemd.user.slices.app.sliceConfig = {
+    ManagedOOMMemoryPressure = "kill";
+    ManagedOOMMemoryPressureLimit = "60%";
+  };
+  systemd.user.slices.background.sliceConfig = {
+    ManagedOOMMemoryPressure = "kill";
+    ManagedOOMMemoryPressureLimit = "60%";
+  };
+  # Prefer the compositor and session services when applications saturate the CPU.
+  systemd.user.slices.session.sliceConfig.CPUWeight = 200;
+
   my.niri.enable = true;
   my.hyprland.enable = false;
 

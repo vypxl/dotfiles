@@ -14,6 +14,9 @@
 
   boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_18;
 
+  # Avoid extra encryption queues on the NVMe SSD.
+  boot.initrd.luks.devices."luks-86a0f0c7-80ae-4439-b070-341dbd247bf3".bypassWorkqueues = true;
+
   # TODO: Remove this override once these upstream NVIDIA issues are closed:
   # https://github.com/NVIDIA/open-gpu-kernel-modules/issues/1167
   # https://github.com/NVIDIA/open-gpu-kernel-modules/issues/1177

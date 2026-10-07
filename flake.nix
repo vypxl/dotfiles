@@ -10,6 +10,7 @@
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
     flake-utils.url = "github:numtide/flake-utils";
+    kache.url = "github:kunobi-ninja/kache/v0.28.1";
 
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
@@ -42,6 +43,7 @@
       sops-nix,
       disko,
       dankMaterialShell,
+      kache,
       ...
     }@attrs:
     let
@@ -73,7 +75,7 @@
           ++ nixpkgs.lib.optionals withHome [
             home-manager.nixosModules.default
             {
-              home-manager.extraSpecialArgs = { inherit hostname dankMaterialShell; };
+              home-manager.extraSpecialArgs = { inherit hostname dankMaterialShell kache; };
               home-manager.backupFileExtension = "hmbak";
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;

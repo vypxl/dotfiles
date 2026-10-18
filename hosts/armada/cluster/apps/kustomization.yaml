@@ -6,6 +6,7 @@ resources:
   - auth/
   - bifrost.yaml
   - minecraft.yaml
+  - morgaraks-dungeon.yaml
   - papra.yaml
   - postgres.yaml
   - headscale.yaml

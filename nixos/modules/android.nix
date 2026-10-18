@@ -8,7 +8,6 @@ in
   };
 
   config = lib.mkIf cfg.android.enable {
-    programs.adb.enable = true;
     users.users.thomas.extraGroups = [
       "adbusers"
       "kvm"

@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 {
   imports = [
     ./hardware-configuration.nix
@@ -17,6 +17,13 @@
   my.android.enable = true;
 
   my.gaming.enable = true;
+
+  hardware.graphics = {
+    enable = true;
+    extraPackages = [ pkgs.mesa.opencl ];
+  };
+
+  environment.variables.RUSTICL_ENABLE = "radeonsi";
 
   networking.hostName = "slate";
   time.timeZone = "Europe/Zurich";

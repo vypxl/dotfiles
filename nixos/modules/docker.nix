@@ -49,7 +49,7 @@ in
       with pkgs;
       lib.mkMerge [
         (lib.mkIf (cfg.docker.backend == "podman") [
-          podman-compose
+          docker-compose
           podman-tui
         ])
         (lib.mkIf (cfg.docker.backend == "docker") [ docker-compose ])

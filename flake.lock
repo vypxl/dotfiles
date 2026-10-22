@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792547079,
-        "narHash": "sha256-d6F9ZYBGRkvWjmfYYnaum1cCrabf6/RKe+Od6fKzDps=",
+        "lastModified": 1792630498,
+        "narHash": "sha256-zNrjdAwhW/5E7eoTQ5/tU5TkJEl+AGQYoCMaTJHBLCw=",
         "owner": "DeusData",
         "repo": "codebase-memory-mcp",
-        "rev": "3457b21b0a3d75960c07ed3ec666a9e684985ef9",
+        "rev": "10ab613de30dfd573d0b251cd0ad648e1c7e5204",
         "type": "github"
       },
       "original": {
@@ -210,11 +210,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1792503283,
-        "narHash": "sha256-vhe2jyvRCgufWPqDuDq1S3t3ypE+ka46IFutV02xKso=",
+        "lastModified": 1792615934,
+        "narHash": "sha256-MlvRfa1O5Cqc2/a+gG+l9TSuowEoCKCmrJ1d9oAVm0I=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "cd4ea8d57de16f4810bc5f14207bac45fbf19f67",
+        "rev": "da6dc0e7b26060f2f71ce3ef7088fb56ee44fa36",
         "type": "github"
       },
       "original": {
@@ -266,11 +266,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792056300,
-        "narHash": "sha256-YU1LjDe1o2Ymg5zEiCHbmMXLkDCtxHQRiVqZ3nC5GGk=",
+        "lastModified": 1792308394,
+        "narHash": "sha256-r4G33ygU307QCwyngAS6E9BMhnCRPyZrL7UxRCMrqo0=",
         "owner": "Mic92",
         "repo": "sops-nix",
-        "rev": "44931708c62937c2b1bf7953902989fa5bb9ee1b",
+        "rev": "a1438ca361b05d1e70854d5495abcb34fdf6ff47",
         "type": "github"
       },
       "original": {

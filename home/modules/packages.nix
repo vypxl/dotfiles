@@ -76,7 +76,6 @@ let
   ];
   ai = [
     bubblewrap
-    codebase-memory-mcp
     unstable.aichat
     unstable.cursor-cli
     (npx-shim { package = "@agentmemory/agentmemory"; name = "agentmemory"; })
@@ -166,10 +165,6 @@ in
   };
 
   config = {
-    # This workaround is here because CBM references this hardcoded location :/
-    home.file.".local/bin/codebase-memory-mcp".source =
-      lib.mkIf cfg.ai "${pkgs.codebase-memory-mcp}/bin/codebase-memory-mcp";
-
     home.packages = lib.lists.concatLists [
       (if cfg.base then base else [ ])
       (if cfg.graphical then graphical else [ ])

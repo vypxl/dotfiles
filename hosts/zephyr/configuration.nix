@@ -48,9 +48,12 @@
   my.networking.dns.enable = false;
   my.gaming.enable = true;
 
+  virtualisation.containers.containersConf.settings.network.default_rootless_network_cmd = "slirp4netns";
+
   environment.systemPackages = with pkgs; [
     _1password-gui
     _1password-cli
+    slirp4netns
     unstable.stretchly
   ];
 

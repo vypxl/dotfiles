@@ -37,7 +37,7 @@ return {
   { "lewis6991/gitsigns.nvim", event = "VeryLazy", opts = {} },
 
   -- Colorful braces and begin end blocks
-  { "HiPhish/rainbow-delimiters.nvim", event = "BufEnter" },
+  { "HiPhish/rainbow-delimiters.nvim", event = "BufEnter", submodules = false },
 
   -- Tabs
   {

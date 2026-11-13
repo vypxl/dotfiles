@@ -85,6 +85,7 @@ let
     brave
     bruno
     firefox
+    unstable.chatgpt
     unstable.darktable
     unstable.ferdium
     unstable.godot

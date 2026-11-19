@@ -66,7 +66,7 @@ let
   ];
   util = [
     imagemagick
-    opencode
+    llm-agents.opencode
     pandoc
     ffmpeg
     keymapp
@@ -77,15 +77,15 @@ let
   ai = [
     bubblewrap
     unstable.aichat
-    unstable.cursor-cli
-    (npx-shim { package = "@agentmemory/agentmemory"; name = "agentmemory"; })
-    (npx-shim { package = "@openai/codex"; name = "codex"; })
+    llm-agents.cursor-agent
+    llm-agents.codex
+    llm-agents.orca
   ];
   graphical = [
     brave
     bruno
     firefox
-    unstable.chatgpt
+    llm-agents.chatgpt
     unstable.darktable
     unstable.ferdium
     unstable.godot

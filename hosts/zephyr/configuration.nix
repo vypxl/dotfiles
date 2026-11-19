@@ -24,7 +24,6 @@
   hardware.nvidia.open = false;
 
   my.bundle.desktop.enable = true;
-  my.agentmemory.enable = false;
 
   # Kill user applications under sustained memory pressure before the desktop freezes.
   systemd.oomd.enable = true;

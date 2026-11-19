@@ -1,4 +1,11 @@
 {
+  nixConfig = {
+    extra-substituters = [ "https://cache.numtide.com" ];
+    extra-trusted-public-keys = [
+      "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
+    ];
+  };
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -11,6 +18,7 @@
 
     flake-utils.url = "github:numtide/flake-utils";
     kache.url = "github:kunobi-ninja/kache/v0.28.1";
+    llm-agents.url = "github:numtide/llm-agents.nix";
 
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
@@ -38,6 +46,7 @@
       disko,
       dankMaterialShell,
       kache,
+      llm-agents,
       ...
     }@attrs:
     let
@@ -47,6 +56,12 @@
           config.allowUnfree = true;
           config.android_sdk.accept_license = true;
         };
+        llm-agents =
+          (import llm-agents.inputs.nixpkgs {
+            inherit system;
+            overlays = [ llm-agents.overlays.shared-nixpkgs ];
+            config.allowUnfree = true;
+          }).llm-agents;
       };
       machine =
         {

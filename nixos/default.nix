@@ -4,7 +4,6 @@ let
 in
 {
   imports = [
-    ./modules/agentmemory.nix
     ./modules/android.nix
     ./modules/audio.nix
     ./modules/auto-upgrade.nix

@@ -76,16 +76,20 @@ let
   ];
   ai = [
     bubblewrap
+    llm-agents.antigravity-cli
     unstable.aichat
+    unstable.code-cursor
     llm-agents.cursor-agent
+    llm-agents.chatgpt
     llm-agents.codex
+    llm-agents.opencode2
+    llm-agents.opencode2-desktop
     llm-agents.orca
   ];
   graphical = [
     brave
     bruno
     firefox
-    llm-agents.chatgpt
     unstable.darktable
     unstable.ferdium
     unstable.godot

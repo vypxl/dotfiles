@@ -17,11 +17,13 @@
   # Avoid extra encryption queues on the NVMe SSD.
   boot.initrd.luks.devices."luks-86a0f0c7-80ae-4439-b070-341dbd247bf3".bypassWorkqueues = true;
 
-  # TODO: Remove this override once these upstream NVIDIA issues are closed:
-  # https://github.com/NVIDIA/open-gpu-kernel-modules/issues/1167
-  # https://github.com/NVIDIA/open-gpu-kernel-modules/issues/1177
-  # https://github.com/NVIDIA/open-gpu-kernel-modules/issues/1205
-  hardware.nvidia.open = false;
+  # Prevent WD PC SN5000S (15b7:5036) NVMe controller timeouts/resets on deep power-state transitions.
+  boot.kernelParams = [
+    "nvme_core.default_ps_max_latency_us=0"
+  ];
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x15b7", ATTR{device}=="0x5036", ATTR{link/l1_2_aspm}="0"
+  '';
 
   my.bundle.desktop.enable = true;
 

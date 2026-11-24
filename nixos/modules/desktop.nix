@@ -28,11 +28,16 @@ in
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
     fonts.packages = with pkgs; [
+      texlivePackages.xcharter.tex
+      literata
       noto-fonts
       noto-fonts-color-emoji
       fira-code
       fira-code-symbols
       nerd-fonts.fira-code
+      lxgw-wenkai
+      noto-fonts-cjk-sans-static
+      noto-fonts-cjk-serif-static
     ];
 
     services.playerctld.enable = true;
